@@ -74,7 +74,7 @@ class CreateCommand
      */
     public function parseResponse($responseLine, $responseData)
     {
-//        unset($responseData['@attributes']);
-        dump($responseData);
+        $this->workflow->setId($responseData['@attributes']['workflow-id']);
+        return $this->workflow;
     }
 }

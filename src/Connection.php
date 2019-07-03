@@ -20,11 +20,12 @@ class Connection
 
     // responses which are global errors, mapped to their exception short-names
     private static $_errorResponses = array(
-        Response::RESPONSE_OUT_OF_MEMORY   => 'OutOfMemory',
-        Response::RESPONSE_INTERNAL_ERROR  => 'InternalError',
-        Response::RESPONSE_DRAINING        => 'Draining',
-        Response::RESPONSE_BAD_FORMAT      => 'BadFormat',
-        Response::RESPONSE_UNKNOWN_COMMAND => 'UnknownCommand',
+        Response::RESPONSE_OUT_OF_MEMORY                    => 'OutOfMemory',
+        Response::RESPONSE_INTERNAL_ERROR                   => 'InternalError',
+        Response::RESPONSE_DRAINING                         => 'Draining',
+        Response::RESPONSE_BAD_FORMAT                       => 'BadFormat',
+        Response::RESPONSE_UNKNOWN_COMMAND                  => 'UnknownCommand',
+        Response::RESPONSE_WORKFLOW_ALREADY_EXISTS          => 'DuplicateEntry',
     );
 
     // responses which are followed by data
@@ -130,18 +131,18 @@ class Connection
         $xml = simplexml_load_string($responseLine);
         $json = json_encode($xml);
         $responseLine = json_decode($json,TRUE);
-
+//        dump($responseLine);
         $responseName = preg_replace('#^(\S+).*$#s', '$1', $responseLine["@attributes"]['status']);
-        if ($responseName === "KO" && isset(self::$_errorResponses[$responseLine['@attributes']['error']])) {
+        if ($responseName === "KO") {
             $exception = sprintf(
                 '\Pheanstalk\Exception\Server%sException',
-                self::$_errorResponses[$responseLine['@attributes']['error']]
+                self::$_errorResponses[$responseLine['@attributes']['error-code']] ?? ''
             );
-
             throw new $exception(sprintf(
-                "%s in response to '%s'",
+                "%s while executing %s : %s",
                 $responseLine['@attributes']['error'],
-                $command
+                $command,
+                $action
             ));
         }
 

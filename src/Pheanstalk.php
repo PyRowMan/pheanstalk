@@ -3,7 +3,9 @@
 namespace Pheanstalk;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Pheanstalk\Command\CreateCommand;
 use Pheanstalk\Command\ReleaseCommand;
+use Pheanstalk\Exception\ServerDuplicateEntryException;
 use Pheanstalk\Structure\Job;
 use Pheanstalk\Structure\Task;
 use Pheanstalk\Structure\Workflow;
@@ -70,9 +72,9 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
-    public function delete($job)
+    public function delete(Workflow $workflow)
     {
-        $this->_dispatch(new Command\DeleteCommand($job));
+        $this->_dispatch(new Command\DeleteCommand($workflow));
 
         return $this;
     }
@@ -433,23 +435,36 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
-    public function create(Workflow $workflow)
+    public function create(Workflow $workflow, $force = false): Workflow
     {
-        $this->_dispatch(
-            new Command\CreateCommand($workflow)
-        );
+        try{
+            $workflow = $this->_dispatch(new Command\CreateCommand($workflow));
+        } catch(ServerDuplicateEntryException $e) {
+            if ($force) {
+                $workflows = $this->_dispatch(new Command\ListWorkflowsCommand());
+                $workflowToDelete = $workflows->filter(function(Workflow $listedWorkflow) use ($workflow) {
+                    return $listedWorkflow->getName() === $workflow->getName()
+                        && $listedWorkflow->getGroup() === $workflow->getGroup();
+                })->first();
+                $this->delete($workflowToDelete);
 
-        return $this;
+                return $this->create($workflow);
+            }
+            throw $e;
+        }
+
+        return $workflow;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function createTask(string $name, string $group, string $path, $queue = 'default', $comment = null)
+    public function createTask(string $name, string $group, string $path, $queue = 'default', $comment = null): Workflow
     {
         $task = new Task($path, $queue);
         $job = new Job(new ArrayCollection([$task]));
         $workflow = new Workflow($name, $group, new ArrayCollection([$job]), $comment);
+
         return $this->create($workflow);
     }
 }

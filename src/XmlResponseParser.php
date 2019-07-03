@@ -27,16 +27,8 @@ class XmlResponseParser
                 $responseLine
             ));
         }
-
-//        if (!preg_match('#^OK \d+$#', $responseLine)) {
-//            throw new Exception\ServerException(sprintf(
-//                'Unhandled response: %s',
-//                $responseLine
-//            ));
-//        }
         unset($responseData['@attributes']);
         $content = $responseData;
-//        dump($content);
         return new Response\ArrayResponse('OK', $responseData);
     }
 

@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Workflow
 {
+    /** @var null|string */
+    private $id;
     /** @var $name string */
     private $name;
 
@@ -19,6 +21,16 @@ class Workflow
 
     /** @var null|string $comment */
     private $comment;
+
+    /** @var null|int $boundToSchedule */
+    private $boundToSchedule;
+
+    /** @var null|int $lastcommit */
+    private $lastcommit;
+
+    /** @var null|int $modified */
+    private $modified;
+
 
     /**
      * Job constructor.
@@ -34,6 +46,25 @@ class Workflow
         $this->group = $group;
         $this->setJobs($jobs);
         $this->comment = $comment;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string|null $id
+     *
+     * @return Workflow
+     */
+    public function setId(?string $id): Workflow
+    {
+        $this->id = $id;
+        return $this;
     }
 
     /**
@@ -133,6 +164,63 @@ class Workflow
     public function removeJob(Job $job): Workflow
     {
         $this->jobs->removeElement($job);
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getBoundToSchedule(): ?int
+    {
+        return $this->boundToSchedule;
+    }
+
+    /**
+     * @param int|null $boundToSchedule
+     *
+     * @return Workflow
+     */
+    public function setBoundToSchedule(?int $boundToSchedule): Workflow
+    {
+        $this->boundToSchedule = $boundToSchedule;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLastcommit(): ?int
+    {
+        return $this->lastcommit;
+    }
+
+    /**
+     * @param int|null $lastcommit
+     *
+     * @return Workflow
+     */
+    public function setLastcommit(?int $lastcommit): Workflow
+    {
+        $this->lastcommit = $lastcommit;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getModified(): ?int
+    {
+        return $this->modified;
+    }
+
+    /**
+     * @param int|null $modified
+     *
+     * @return Workflow
+     */
+    public function setModified(?int $modified): Workflow
+    {
+        $this->modified = $modified;
         return $this;
     }
 

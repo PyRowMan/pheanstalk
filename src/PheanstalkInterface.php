@@ -40,11 +40,11 @@ interface PheanstalkInterface
     /**
      * Permanently deletes a job.
      *
-     * @param object $job Job
+     * @param Workflow $workflow
      *
      * @return $this
      */
-    public function delete($job);
+    public function delete(Workflow $workflow);
 
     /**
      * Remove the specified tube from the watchlist.
@@ -329,12 +329,11 @@ interface PheanstalkInterface
      * Create a workflow on the queue.
      *
      * @param Workflow  $data     The workflow to create
-     * @param string    $name     The name of the workflow
-     * @param string    $group    The group of the workflow
+     * @param null|bool (optional) $force Will erase already existent old workflow if already exists
      *
-     * @return int The new job ID
+     * @return Workflow The newly created workflow
      */
-    public function create(Workflow $data);
+    public function create(Workflow $data, $force = false): Workflow;
 
     /**
      * @param string        $name                   The name of the linked workflow
@@ -342,6 +341,8 @@ interface PheanstalkInterface
      * @param string        $path                   The command that will be executed by the workflow
      * @param null|string   $queue      (optional)  The queue of the workflow
      * @param null|string   $comment    (optional)  The comment of the workflow
+     *
+     * @return Workflow The newly created workflow
      */
-    public function createTask(string $name, string $group, string $path, $queue = 'default', $comment = null);
+    public function createTask(string $name, string $group, string $path, $queue = 'default', $comment = null): Workflow;
 }
