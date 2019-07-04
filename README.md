@@ -11,7 +11,7 @@ and PSR-4 autoloader standard.
 This project is a fork from the [original Pheanstalk][3] wich is a client for the beanstalkd workqueue.  
 Special thanks to [Paul Annesley][2]; the original creator of the library.
 
-  [1]: http://www.evqueue.net/
+  [1]: https://github.com/coldsource/evqueue-core
   [2]: http://paul.annesley.cc/
   [3]: https://github.com/pheanstalk/pheanstalk
 
