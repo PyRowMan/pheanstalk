@@ -59,15 +59,14 @@ interface PheanstalkInterface
     public function ignore($tube);
 
     /**
-     * Kicks buried or delayed jobs into a 'ready' state.
-     * If there are buried jobs, it will kick up to $max of them.
-     * Otherwise, it will kick up to $max delayed jobs.
+     * Retrieve a workflow by its name, if there is no workflow named after
+     * the arg given in the construct, returns false
      *
-     * @param int $max The maximum jobs to kick
+     * @param string $name The name of the workflow searched
      *
-     * @return int Number of jobs kicked
+     * @return bool|Workflow If exists, the workflow
      */
-    public function kick($max);
+    public function workflowExists($name);
 
     /**
      * A variant of kick that operates with a single job. If the given job
@@ -173,31 +172,11 @@ interface PheanstalkInterface
     /**
      * Puts a job on the queue.
      *
-     * @param string $data     The job data
-     * @param int    $priority From 0 (most urgent) to 0xFFFFFFFF (least urgent)
-     * @param int    $delay    Seconds to wait before job becomes ready
-     * @param int    $ttr      Time To Run: seconds a job can be reserved for
+     * @param Workflow $workflow     The Workflow
      *
      * @return int The new job ID
      */
-    public function put($data, $priority = self::DEFAULT_PRIORITY, $delay = self::DEFAULT_DELAY, $ttr = self::DEFAULT_TTR);
-
-    /**
-     * Puts a job on the queue using specified tube.
-     *
-     * Using this method is equivalent to calling useTube() then put(), with
-     * the added benefit that it will not execute the USE command if the client
-     * is already using the specified tube.
-     *
-     * @param string $tube     The tube to use
-     * @param string $data     The job data
-     * @param int    $priority From 0 (most urgent) to 0xFFFFFFFF (least urgent)
-     * @param int    $delay    Seconds to wait before job becomes ready
-     * @param int    $ttr      Time To Run: seconds a job can be reserved for
-     *
-     * @return int The new job ID
-     */
-    public function putInTube($tube, $data, $priority = self::DEFAULT_PRIORITY, $delay = self::DEFAULT_DELAY, $ttr = self::DEFAULT_TTR);
+    public function put(Workflow $workflow);
 
     /**
      * Puts a reserved job back into the ready queue.

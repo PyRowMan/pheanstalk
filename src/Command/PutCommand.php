@@ -3,6 +3,7 @@
 namespace Pheanstalk\Command;
 
 use Pheanstalk\Exception;
+use Pheanstalk\Structure\Workflow;
 use Pheanstalk\XmlResponseParser;
 
 /**
@@ -18,27 +19,20 @@ use Pheanstalk\XmlResponseParser;
  */
 class PutCommand
     extends AbstractCommand
-//    implements \Pheanstalk\ResponseParser
+    implements \Pheanstalk\ResponseParser
 {
-    private $_data;
-    private $_priority;
-    private $_delay;
-    private $_ttr;
+
+    /** @var Workflow $workflow */
+    private $workflow;
 
     /**
-     * Puts a job on the queue.
+     * Puts a workflow in queue.
      *
-     * @param string $data     The job data
-     * @param int    $priority From 0 (most urgent) to 0xFFFFFFFF (least urgent)
-     * @param int    $delay    Seconds to wait before job becomes ready
-     * @param int    $ttr      Time To Run: seconds a job can be reserved for
+     * @param Workflow $workflow     The Workflow
      */
-    public function __construct($data, $priority, $delay, $ttr)
+    public function __construct(Workflow $workflow)
     {
-        $this->_data = $data;
-        $this->_priority = $priority;
-        $this->_delay = $delay;
-        $this->_ttr = $ttr;
+        $this->workflow = $workflow;
     }
 
     /* (non-phpdoc)
@@ -46,28 +40,15 @@ class PutCommand
      */
     public function getCommandLine()
     {
-        return 'task';
-    }
-
-    /* (non-phpdoc)
-     * @see Command::getResponseParser()
-     */
-    public function getResponseParser()
-    {
-        return new XmlResponseParser();
+        return 'instance';
     }
 
     public function getData()
     {
         return [
-            'action' => 'create',
+            'action' => 'launch',
             'attributes' => [
-//                'id' => uniqid(),
-                'name' => $this->_data,
-                'binary' => $this->_data,
-                'parameters_mode' => 'CMDLINE',
-                'output_method' => 'TEXT',
-                'comment' => ' '
+                'name' => $this->workflow->getName(),
             ]
         ];
     }
@@ -75,5 +56,10 @@ class PutCommand
     public function hasData()
     {
         return true;
+    }
+
+    public function parseResponse($responseLine, $responseData)
+    {
+        return $responseData['@attributes'];
     }
 }

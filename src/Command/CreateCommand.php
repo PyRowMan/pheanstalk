@@ -41,14 +41,6 @@ class CreateCommand
     {
         return 'workflow';
     }
-//
-//    /* (non-phpdoc)
-//     * @see Command::getResponseParser()
-//     */
-//    public function getResponseParser()
-//    {
-//        return new XmlResponseParser();
-//    }
 
     public function getData()
     {
