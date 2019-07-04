@@ -4,6 +4,7 @@ namespace Pheanstalk\Command;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\Structure\Queue;
+use Pheanstalk\Structure\Tube;
 use Pheanstalk\XmlResponseParser;
 use Pheanstalk\YamlResponseParser;
 
@@ -48,7 +49,7 @@ class ListTubesCommand
         $queues = [];
         foreach($responseData as $queue ) {
             $queue = $queue['@attributes'];
-            $queueObject = new Queue();
+            $queueObject = new Tube();
             $queueObject
                 ->setId($queue['id'])
                 ->setConcurrency($queue['concurrency'])

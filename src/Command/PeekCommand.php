@@ -31,23 +31,11 @@ class PeekCommand
         self::TYPE_BURIED,
     );
 
-    private $_subcommand;
-    private $_jobId;
-
     /**
      * @param mixed $peekSubject Job ID or self::TYPE_*
      */
-    public function __construct($peekSubject)
+    public function __construct()
     {
-        if (is_int($peekSubject) || ctype_digit($peekSubject)) {
-            $this->_jobId = $peekSubject;
-        } elseif (in_array($peekSubject, $this->_subcommands)) {
-            $this->_subcommand = $peekSubject;
-        } else {
-            throw new Exception\CommandException(sprintf(
-                'Invalid peek subject: %s', $peekSubject
-            ));
-        }
     }
 
     /* (non-phpdoc)
@@ -55,9 +43,6 @@ class PeekCommand
      */
     public function getCommandLine()
     {
-//        return isset($this->_jobId) ?
-//            sprintf('peek %u', $this->_jobId) :
-//            sprintf('peek-%s', $this->_subcommand);
         return 'status';
     }
 
@@ -94,40 +79,33 @@ class PeekCommand
     {
         unset($responseData['@attributes']);
         if (!isset($responseData['workflow'])) {
-            if (isset($this->_jobId)) {
-                $message = sprintf(
-                    '%s: Job %u does not exist.',
-                    $responseLine,
-                    $this->_jobId
-                );
-            } else {
                 $message = sprintf(
                     "%s: There are no jobs in the '%s' status",
                     $responseLine,
                     $this->_subcommand
                 );
-            }
 
             throw new Exception\ServerException($message);
-        } elseif (preg_match('#^OK$#', $responseLine, $matches)) {
-            $responseData = $responseData['workflow'];
-            $responseData = array_column($responseData, '@attributes');
-            $dates = array_column($responseData, 'start_time');
-            $mostRecent = [];
-            foreach($responseData as $date){
-                $curDate = strtotime($date['start_time']);
-                if (!isset($mostRecent['start_time']) || $curDate > strtotime($mostRecent['start_time'])) {
-                    $mostRecent = $date;
-                }
-            }
-            if (empty($responseData)) return $this->parseResponse($responseLine, $responseData);
-            return $this->_createResponse(
-                Response::RESPONSE_FOUND,
-                array(
-                    'id'      => (int) $mostRecent['id'],
-                    'jobdata' => $mostRecent,
-                )
-            );
         }
+
+        $responseData = $responseData['workflow'];
+        $responseData = array_column($responseData, '@attributes');
+        $dates = array_column($responseData, 'start_time');
+        $mostRecent = [];
+        foreach($responseData as $date){
+            $curDate = strtotime($date['start_time']);
+            if (!isset($mostRecent['start_time']) || $curDate < strtotime($mostRecent['start_time'])) {
+                $mostRecent = $date;
+            }
+        }
+        if (empty($responseData)) return $this->parseResponse($responseLine, $responseData);
+        return $this->_createResponse(
+            Response::RESPONSE_FOUND,
+            array(
+                'id'      => (int) $mostRecent['id'],
+                'jobdata' => $mostRecent,
+            )
+        );
+
     }
 }

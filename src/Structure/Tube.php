@@ -4,7 +4,7 @@
 namespace Pheanstalk\Structure;
 
 
-class Queue
+class Tube
 {
 
     /** @var int $id */
@@ -33,9 +33,9 @@ class Queue
     /**
      * @param int $id
      *
-     * @return Queue
+     * @return Tube
      */
-    public function setId(int $id): Queue
+    public function setId(int $id): Tube
     {
         $this->id = $id;
         return $this;
@@ -52,9 +52,9 @@ class Queue
     /**
      * @param int $concurrency
      *
-     * @return Queue
+     * @return Tube
      */
-    public function setConcurrency(int $concurrency): Queue
+    public function setConcurrency(int $concurrency): Tube
     {
         $this->concurrency = $concurrency;
         return $this;
@@ -71,9 +71,9 @@ class Queue
     /**
      * @param string $dynamic
      *
-     * @return Queue
+     * @return Tube
      */
-    public function setDynamic(string $dynamic): Queue
+    public function setDynamic(string $dynamic): Tube
     {
         $this->dynamic = $dynamic;
         return $this;
@@ -90,9 +90,9 @@ class Queue
     /**
      * @param string $name
      *
-     * @return Queue
+     * @return Tube
      */
-    public function setName(string $name): Queue
+    public function setName(string $name): Tube
     {
         $this->name = $name;
         return $this;
@@ -109,9 +109,9 @@ class Queue
     /**
      * @param string $scheduler
      *
-     * @return Queue
+     * @return Tube
      */
-    public function setScheduler(string $scheduler): Queue
+    public function setScheduler(string $scheduler): Tube
     {
         $this->scheduler = $scheduler;
         return $this;

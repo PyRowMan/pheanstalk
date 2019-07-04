@@ -31,6 +31,9 @@ class Pheanstalk implements PheanstalkInterface
     private $_using = PheanstalkInterface::DEFAULT_TUBE;
     private $_watching = array(PheanstalkInterface::DEFAULT_TUBE => true);
 
+    /** @var $currentClass PheanstalkInterface */
+    private $currentClass;
+
     /**
      * @param string $host
      * @param int    $port
@@ -60,15 +63,26 @@ class Pheanstalk implements PheanstalkInterface
         return $this->_connection;
     }
 
-    // ----------------------------------------
+    /**
+     * @return PheanstalkInterface
+     */
+    public function getCurrentClass(): PheanstalkInterface
+    {
+        return $this->currentClass ?? $this;
+    }
 
     /**
-     * {@inheritdoc}
+     * @param PheanstalkInterface $currentClass
+     *
+     * @return Pheanstalk
      */
-    public function bury($job, $priority = PheanstalkInterface::DEFAULT_PRIORITY)
+    public function setCurrentClass(PheanstalkInterface $currentClass): PheanstalkInterface
     {
-        $this->_dispatch(new Command\BuryCommand($job, $priority));
+        $this->currentClass = $currentClass;
+        return $this;
     }
+
+    // ----------------------------------------
 
     /**
      * {@inheritdoc}
@@ -76,19 +90,6 @@ class Pheanstalk implements PheanstalkInterface
     public function delete(Workflow $workflow)
     {
         $this->_dispatch(new Command\DeleteCommand($workflow));
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function ignore($tube)
-    {
-        if (isset($this->_watching[$tube])) {
-            $this->_dispatch(new Command\IgnoreCommand($tube));
-            unset($this->_watching[$tube]);
-        }
 
         return $this;
     }
@@ -104,11 +105,9 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
-    public function kickJob($job)
+    public function tubeExists($name)
     {
-        $this->_dispatch(new Command\KickJobCommand($job));
-
-        return $this;
+        return $this->_dispatch(new Command\TubeExistsCommand($name));
     }
 
     /**
@@ -122,100 +121,9 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
-    public function listTubesWatched($askServer = false)
+    public function peek()
     {
-        if ($askServer) {
-            $response = (array) $this->_dispatch(
-                new Command\ListTubesWatchedCommand()
-            );
-            $this->_watching = array_fill_keys($response, true);
-        }
-
-        return array_keys($this->_watching);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function listTubeUsed($askServer = false)
-    {
-        if ($askServer) {
-            $response = $this->_dispatch(
-                new Command\ListTubeUsedCommand()
-            );
-            $this->_using = $response['tube'];
-        }
-
-        return $this->_using;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function pauseTube($tube, $delay)
-    {
-        $this->_dispatch(new Command\PauseTubeCommand($tube, $delay));
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function resumeTube($tube)
-    {
-        // Pause a tube with zero delay will resume the tube
-        $this->pauseTube($tube, 0);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function peek($jobId)
-    {
-        $response = $this->_dispatch(
-            new Command\PeekCommand($jobId)
-        );
-
-        return $response;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function peekReady($tube = null)
-    {
-        $response = $this->_dispatch(
-            new Command\PeekCommand(Command\PeekCommand::TYPE_READY)
-        );
-
-        return $response;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function peekDelayed($tube = null)
-    {
-
-        $response = $this->_dispatch(
-            new Command\PeekCommand(Command\PeekCommand::TYPE_DELAYED)
-        );
-
-        return $response;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function peekBuried($tube = null)
-    {
-
-        $response = $this->_dispatch(
-            new Command\PeekCommand(Command\PeekCommand::TYPE_BURIED)
-        );
+        $response = $this->_dispatch(new Command\PeekCommand());
 
         return $response;
     }
@@ -227,52 +135,6 @@ class Pheanstalk implements PheanstalkInterface
         $response = $this->_dispatch(new Command\PutCommand($workflow));
 
         return $response['workflow-instance-id'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function release(
-        $job,
-        $priority = PheanstalkInterface::DEFAULT_PRIORITY,
-        $delay = PheanstalkInterface::DEFAULT_DELAY
-    ) {
-        $this->_dispatch(
-            new Command\ReleaseCommand($job, $priority, $delay)
-        );
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function reserve($timeout = null)
-    {
-        $response = $this->_dispatch(
-            new Command\ReserveCommand($timeout)
-        );
-
-        $falseResponses = array(
-            Response::RESPONSE_DEADLINE_SOON,
-            Response::RESPONSE_TIMED_OUT,
-        );
-
-        if (in_array($response->getResponseName(), $falseResponses)) {
-            return false;
-        } else {
-            return new Job($response['id'], $response['jobdata']);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function reserveFromTube($tube, $timeout = null)
-    {
-        $this->watchOnly($tube);
-
-        return $this->reserve($timeout);
     }
 
     /**
@@ -299,57 +161,6 @@ class Pheanstalk implements PheanstalkInterface
         return $this->_dispatch(new Command\StatsCommand());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function touch($job)
-    {
-        $this->_dispatch(new Command\TouchCommand($job));
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function useTube($tube)
-    {
-        if ($this->_using != $tube) {
-            $this->_dispatch(new Command\UseCommand($tube));
-            $this->_using = $tube;
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function watch($tube)
-    {
-        if (!isset($this->_watching[$tube])) {
-            $this->_dispatch(new Command\WatchCommand($tube));
-            $this->_watching[$tube] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function watchOnly($tube)
-    {
-        $this->watch($tube);
-
-        $ignoreTubes = array_diff_key($this->_watching, array($tube => true));
-        foreach ($ignoreTubes as $ignoreTube => $true) {
-            $this->ignore($ignoreTube);
-        }
-
-        return $this;
-    }
-
     // ----------------------------------------
 
     /**
@@ -373,6 +184,19 @@ class Pheanstalk implements PheanstalkInterface
     public function create(Workflow $workflow, $force = false): Workflow
     {
         try{
+            $tubes = [];
+            /** @var Job $job */
+            foreach($workflow->getJobs() as $job) {
+                /** @var Task $task */
+                foreach ($job->getTasks() as $task) {
+                    $tubes = array_merge($tubes, [$task->getQueue()]);
+                }
+            }
+            foreach($tubes as $tube) {
+                if (!$this->getCurrentClass()->tubeExists($tube)) {
+                    //TODO: Create Tube;
+                };
+            }
             $workflow = $this->_dispatch(new Command\CreateCommand($workflow));
         } catch(ServerDuplicateEntryException $e) {
             if ($force) {
@@ -381,9 +205,9 @@ class Pheanstalk implements PheanstalkInterface
                     return $listedWorkflow->getName() === $workflow->getName()
                         && $listedWorkflow->getGroup() === $workflow->getGroup();
                 })->first();
-                $this->delete($workflowToDelete);
+                $this->getCurrentClass()->delete($workflowToDelete);
 
-                return $this->create($workflow);
+                return $this->getCurrentClass()->create($workflow);
             }
             throw $e;
         }
@@ -400,6 +224,6 @@ class Pheanstalk implements PheanstalkInterface
         $job = new Job(new ArrayCollection([$task]));
         $workflow = new Workflow($name, $group, new ArrayCollection([$job]), $comment);
 
-        return $this->create($workflow, true);
+        return $this->getCurrentClass()->create($workflow, true);
     }
 }
