@@ -116,9 +116,7 @@ class Pheanstalk implements PheanstalkInterface
      */
     public function listTubes()
     {
-        return (array) $this->_dispatch(
-            new Command\ListTubesCommand()
-        );
+        return $this->_dispatch(new Command\ListTubesCommand());
     }
 
     /**

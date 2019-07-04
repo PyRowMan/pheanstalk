@@ -2,6 +2,8 @@
 
 namespace Pheanstalk\Command;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Pheanstalk\Structure\Queue;
 use Pheanstalk\XmlResponseParser;
 use Pheanstalk\YamlResponseParser;
 
@@ -16,6 +18,7 @@ use Pheanstalk\YamlResponseParser;
  */
 class ListTubesCommand
     extends AbstractCommand
+    implements \Pheanstalk\ResponseParser
 {
     /* (non-phpdoc)
      * @see Command::getCommandLine()
@@ -25,13 +28,6 @@ class ListTubesCommand
         return 'queuepool';
     }
 
-    /* (non-phpdoc)
-     * @see Command::getResponseParser()
-     */
-    public function getResponseParser()
-    {
-        return new XmlResponseParser();
-    }
 
     public function getData()
     {
@@ -43,5 +39,26 @@ class ListTubesCommand
     public function hasData()
     {
         return true;
+    }
+
+    public function parseResponse($responseLine, $responseData)
+    {
+        $responseData = $responseData['queue'];
+
+        $queues = [];
+        foreach($responseData as $queue ) {
+            $queue = $queue['@attributes'];
+            $queueObject = new Queue();
+            $queueObject
+                ->setId($queue['id'])
+                ->setConcurrency($queue['concurrency'])
+                ->setDynamic($queue['dynamic'])
+                ->setName($queue['name'])
+                ->setScheduler($queue['scheduler'])
+            ;
+            $queues[] = $queueObject;
+        }
+
+        return new ArrayCollection($queues);
     }
 }

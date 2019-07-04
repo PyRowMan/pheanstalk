@@ -2,6 +2,7 @@
 
 namespace Pheanstalk;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\Structure\Workflow;
 
 interface PheanstalkInterface
@@ -82,7 +83,7 @@ interface PheanstalkInterface
     /**
      * The names of all tubes on the server.
      *
-     * @return array
+     * @return ArrayCollection[Queue]
      */
     public function listTubes();
 
