@@ -218,9 +218,9 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
-    public function createTask(string $name, string $group, string $path, $queue = 'default', $comment = null): Workflow
+    public function createTask(string $name, string $group, string $path, $queue = 'default', $user = null, $host = null, $comment = null): Workflow
     {
-        $task = new Task($path, $queue);
+        $task = new Task($path, $queue, $user, $host);
         $job = new Job(new ArrayCollection([$task]));
         $workflow = new Workflow($name, $group, new ArrayCollection([$job]), $comment);
 

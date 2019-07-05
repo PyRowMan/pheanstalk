@@ -130,9 +130,11 @@ interface PheanstalkInterface
      * @param string        $group                  The group of the linked workflow
      * @param string        $path                   The command that will be executed by the workflow
      * @param null|string   $queue      (optional)  The queue of the workflow
+     * @param null|string   $user       (optional)  The user that will execute the command
+     * @param null|string   $host       (optional)  The Ip address where to execute the command
      * @param null|string   $comment    (optional)  The comment of the workflow
      *
      * @return Workflow The newly created workflow
      */
-    public function createTask(string $name, string $group, string $path, $queue = 'default', $comment = null): Workflow;
+    public function createTask(string $name, string $group, string $path, $queue = 'default', $user = null, $host = null, $comment = null): Workflow;
 }

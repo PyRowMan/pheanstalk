@@ -14,21 +14,38 @@ class Task
     const OUTPUT_TEXT = "TEXT";
     const PARAMETER_MODE_CMD = "CMDLINE";
 
+    /** @var string $outputMethod */
     private $outputMethod;
+
+    /** @var string $parametersMode */
     private $parametersMode;
+
+    /** @var string $path */
     private $path;
+
+    /** @var string string $queue */
     private $queue;
 
+    /** @var string|null $host */
+    private $host;
+
+    /** @var string|null $user */
+    private $user;
+
     /**
-     * @param string    $path The command that should be executed by the server
-     * @param string    $queue The queue used by the Task
-     * @param string    $outputMethod   The output mode
-     * @param string    $parametersMode The type of parameters
+     * @param string            $path           The command that should be executed by the server
+     * @param string            $queue          The queue used by the Task
+     * @param string|null       $user           The user that will execute the command
+     * @param string|null       $host           The Ip address where to execute the command
+     * @param string            $outputMethod   The output mode
+     * @param string            $parametersMode The type of parameters
      */
-    public function __construct($path, $queue, $outputMethod = self::OUTPUT_TEXT, $parametersMode = self::PARAMETER_MODE_CMD)
+    public function __construct($path, $queue, $user = null, $host = null, $outputMethod = self::OUTPUT_TEXT, $parametersMode = self::PARAMETER_MODE_CMD)
     {
         $this->path = $path;
         $this->queue = $queue;
+        $this->user = $user;
+        $this->host = $host;
         $this->outputMethod = $outputMethod;
         $this->parametersMode = $parametersMode;
     }
@@ -106,6 +123,44 @@ class Task
     public function setQueue(string $queue): Task
     {
         $this->queue = $queue;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getHost(): ?string
+    {
+        return $this->host;
+    }
+
+    /**
+     * @param string|null $host
+     *
+     * @return Task
+     */
+    public function setHost(?string $host): Task
+    {
+        $this->host = $host;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUser(): ?string
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param string|null $user
+     *
+     * @return Task
+     */
+    public function setUser(?string $user): Task
+    {
+        $this->user = $user;
         return $this;
     }
 

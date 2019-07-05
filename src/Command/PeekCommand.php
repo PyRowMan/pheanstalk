@@ -79,11 +79,7 @@ class PeekCommand
     {
         unset($responseData['@attributes']);
         if (!isset($responseData['workflow'])) {
-                $message = sprintf(
-                    "%s: There are no jobs in the '%s' status",
-                    $responseLine,
-                    $this->_subcommand
-                );
+                $message = "There are no workflow yet";
 
             throw new Exception\ServerException($message);
         }
