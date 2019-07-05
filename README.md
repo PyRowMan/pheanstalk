@@ -37,29 +37,25 @@ use Pheanstalk\Pheanstalk;
 
 $pheanstalk = new Pheanstalk('127.0.0.1');
 
-// ----------------------------------------
-// producer (queues jobs)
 
-$pheanstalk
-  ->useTube('testtube')
-  ->put("job payload goes here\n");
+// Create a simple Worflow with one job inside
 
-// ----------------------------------------
-// worker (performs jobs)
+$workflow = $pheanstalk->createTask('Sleep', 'Test', '/bin/sleep 80');
 
-$job = $pheanstalk
-  ->watch('testtube')
-  ->ignore('default')
-  ->reserve();
+// Put the job into instance execution
 
-echo $job->getData();
-
-$pheanstalk->delete($job);
+$pheanstalk->put($workflow);
 
 // ----------------------------------------
 // check server availability
 
 $pheanstalk->getConnection()->isServiceListening(); // true or false
+
+//-----------------------------------------
+// Delete a job 
+
+if ($workflow = $pheanstalk->workflowExists('Sleep'))
+    $pheanstalk->delete($workflow);
 
 ```
 

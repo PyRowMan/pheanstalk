@@ -7,6 +7,13 @@ namespace Pheanstalk\Structure;
 class Tube
 {
 
+    const SCHEDULER_TYPE_DEFAULT = 'default';
+    const SCHEDULER_TYPE_FIFO = 'fifo';
+    const SCHEDULER_TYPE_PRIO = 'prio';
+
+    const IS_DYNAMIC = 'yes';
+    const IS_NOT_DYNAMIC = 'no';
+
     /** @var int $id */
     private $id;
 
@@ -21,6 +28,22 @@ class Tube
 
     /** @var string $scheduler */
     private $scheduler;
+
+    /**
+     * Tube constructor.
+     *
+     * @param string      $name          The name of the tube
+     * @param int         $concurrency   The number of workflows that can be executed simultaneously
+     * @param string      $scheduler     WIP
+     * @param string|bool $dynamic       Wether the tube is dynamic or not
+     */
+    public function __construct(string $name, int $concurrency, $scheduler = self::SCHEDULER_TYPE_DEFAULT, $dynamic = true)
+    {
+        $this->name = $name;
+        $this->concurrency = $concurrency;
+        $this->scheduler = $scheduler;
+        $this->setDynamic($dynamic);
+    }
 
     /**
      * @return int
@@ -61,20 +84,26 @@ class Tube
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getDynamic(): string
+    public function getDynamic(): bool
     {
-        return $this->dynamic;
+        return $this->dynamic ?? true;
     }
 
     /**
-     * @param string $dynamic
+     * @param string|bool $dynamic
      *
      * @return Tube
      */
-    public function setDynamic(string $dynamic): Tube
+    public function setDynamic($dynamic): Tube
     {
+        if (!is_bool($dynamic)) {
+            if($dynamic === self::IS_NOT_DYNAMIC)
+                $dynamic = false;
+            else
+                $dynamic = true;
+        }
         $this->dynamic = $dynamic;
         return $this;
     }
@@ -103,7 +132,7 @@ class Tube
      */
     public function getScheduler(): string
     {
-        return $this->scheduler;
+        return $this->scheduler ?? self::SCHEDULER_TYPE_DEFAULT;
     }
 
     /**

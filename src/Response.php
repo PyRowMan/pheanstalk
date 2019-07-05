@@ -43,6 +43,7 @@ interface Response
     const RESPONSE_WRONG_NODE = 'WRONG_NODE';
     const RESPONSE_WORKFLOW_ALREADY_EXISTS = 'WORKFLOW_ALREADY_EXISTS';
     const RESPONSE_SQL_ERROR = 'SQL_ERROR';
+    const RESPONSE_SERVER_ERROR = 'SERVER_ERROR';
 
     // command responses
     const RESPONSE_INSERTED = 'INSERTED';

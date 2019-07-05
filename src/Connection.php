@@ -26,6 +26,7 @@ class Connection
         Response::RESPONSE_BAD_FORMAT                       => 'BadFormat',
         Response::RESPONSE_UNKNOWN_COMMAND                  => 'UnknownCommand',
         Response::RESPONSE_WORKFLOW_ALREADY_EXISTS          => 'DuplicateEntry',
+        Response::RESPONSE_SERVER_ERROR                     => '',
     );
 
     // responses which are followed by data
@@ -134,9 +135,10 @@ class Connection
 //        dump($responseLine);
         $responseName = preg_replace('#^(\S+).*$#s', '$1', $responseLine["@attributes"]['status']);
         if ($responseName === "KO") {
+            $exceptionType = $responseLine['@attributes']['error-code'] ?? Response::RESPONSE_SERVER_ERROR;
             $exception = sprintf(
                 '\Pheanstalk\Exception\Server%sException',
-                self::$_errorResponses[$responseLine['@attributes']['error-code']] ?? ''
+                self::$_errorResponses[$exceptionType] ?? ''
             );
             throw new $exception(sprintf(
                 "%s while executing %s : %s",

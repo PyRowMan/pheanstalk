@@ -137,4 +137,13 @@ interface PheanstalkInterface
      * @return Workflow The newly created workflow
      */
     public function createTask(string $name, string $group, string $path, $queue = 'default', $user = null, $host = null, $comment = null): Workflow;
+
+    /**
+     * @param string $name          The name of the tube
+     * @param int    $concurrency   The number of workflows that can be executed simultaneously
+     * @param string $scheduler     WIP
+     *
+     * @return Tube
+     */
+    public function createTube(Tube $tube): Tube;
 }

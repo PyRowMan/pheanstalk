@@ -49,12 +49,10 @@ class ListTubesCommand
         $queues = [];
         foreach($responseData as $queue ) {
             $queue = $queue['@attributes'];
-            $queueObject = new Tube();
+            $queueObject = new Tube($queue['name'], $queue['concurrency']);
             $queueObject
                 ->setId($queue['id'])
-                ->setConcurrency($queue['concurrency'])
                 ->setDynamic($queue['dynamic'])
-                ->setName($queue['name'])
                 ->setScheduler($queue['scheduler'])
             ;
             $queues[] = $queueObject;

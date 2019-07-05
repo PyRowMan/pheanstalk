@@ -9,6 +9,7 @@ use Pheanstalk\Command\WorkflowExistsCommand;
 use Pheanstalk\Exception\ServerDuplicateEntryException;
 use Pheanstalk\Structure\Job;
 use Pheanstalk\Structure\Task;
+use Pheanstalk\Structure\Tube;
 use Pheanstalk\Structure\Workflow;
 
 /**
@@ -194,7 +195,7 @@ class Pheanstalk implements PheanstalkInterface
             }
             foreach($tubes as $tube) {
                 if (!$this->getCurrentClass()->tubeExists($tube)) {
-                    //TODO: Create Tube;
+                    $this->getCurrentClass()->createTube(new Tube($tube, 1));
                 };
             }
             $workflow = $this->_dispatch(new Command\CreateCommand($workflow));
@@ -225,5 +226,10 @@ class Pheanstalk implements PheanstalkInterface
         $workflow = new Workflow($name, $group, new ArrayCollection([$job]), $comment);
 
         return $this->getCurrentClass()->create($workflow, true);
+    }
+
+    public function createTube(Tube $tube): Tube
+    {
+        return $this->_dispatch(new Command\CreateTubeCommand($tube));
     }
 }
