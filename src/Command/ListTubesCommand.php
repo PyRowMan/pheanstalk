@@ -45,10 +45,9 @@ class ListTubesCommand
     public function parseResponse($responseLine, $responseData)
     {
         $responseData = $responseData['queue'];
-
         $queues = [];
         foreach($responseData as $queue ) {
-            $queue = $queue['@attributes'];
+            $queue = $queue['@attributes'] ?? $queue;
             $queueObject = new Tube($queue['name'], $queue['concurrency']);
             $queueObject
                 ->setId($queue['id'])

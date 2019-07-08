@@ -57,7 +57,7 @@ class ListWorkflowsCommand
     {
         $workflows = [];
         foreach ($responseData['workflow'] as $workflow) {
-            $workflow = $workflow['@attributes'];
+            $workflow = $workflow['@attributes'] ?? $workflow;
             $object = new Workflow($workflow['name'], $workflow['group'], new ArrayCollection([]), $workflow['comment']);
             $object
                 ->setId($workflow['id'])
