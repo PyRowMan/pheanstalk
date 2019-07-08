@@ -17,9 +17,7 @@ use Pheanstalk\XmlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class CreateCommand
-    extends AbstractCommand
-    implements \Pheanstalk\ResponseParser
+class CreateCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
     /** @var Workflow $workflow */
     private $workflow;
@@ -44,7 +42,6 @@ class CreateCommand
 
     public function getData()
     {
-//        <workflow><subjobs><job><tasks><task output-method="TEXT" parameters-mode="CMDLINE" path="/bin/sleep 50" queue="default"/></tasks></job></subjobs></workflow>
         return [
             'action' => 'create',
             'attributes' => [

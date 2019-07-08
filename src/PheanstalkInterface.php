@@ -3,6 +3,8 @@
 namespace Pheanstalk;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Pheanstalk\Command\CreateScheduleCommand;
+use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Tube;
 use Pheanstalk\Structure\Workflow;
 
@@ -124,6 +126,17 @@ interface PheanstalkInterface
      * @return Workflow The newly created workflow
      */
     public function create(Workflow $data, $force = false): Workflow;
+
+    /**
+     * @param Workflow      $workflow
+     * @param TimeSchedule  $schedule
+     * @param null          $onFailure
+     * @param null          $active
+     * @param null          $comment
+     *
+     * @return mixed
+     */
+    public function createSchedule(Workflow $workflow, TimeSchedule $schedule, $onFailure = CreateScheduleCommand::FAILURE_TYPE_CONTINUE, $active = true, $comment = null);
 
     /**
      * @param string        $name                   The name of the linked workflow

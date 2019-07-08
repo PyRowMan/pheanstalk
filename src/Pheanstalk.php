@@ -4,11 +4,14 @@ namespace Pheanstalk;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\Command\CreateCommand;
+use Pheanstalk\Command\CreateScheduleCommand;
+use Pheanstalk\Command\ListWorkflowsCommand;
 use Pheanstalk\Command\ReleaseCommand;
 use Pheanstalk\Command\WorkflowExistsCommand;
 use Pheanstalk\Exception\ServerDuplicateEntryException;
 use Pheanstalk\Structure\Job;
 use Pheanstalk\Structure\Task;
+use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Tube;
 use Pheanstalk\Structure\Workflow;
 
@@ -214,6 +217,17 @@ class Pheanstalk implements PheanstalkInterface
         }
 
         return $workflow;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createSchedule(Workflow $workflow, TimeSchedule $schedule, $onFailure = CreateScheduleCommand::FAILURE_TYPE_CONTINUE, $active = true, $comment = null)
+    {
+        $workflowSchedule = $this->_dispatch(
+            new Command\CreateScheduleCommand($workflow, $schedule, $onFailure, $active, $comment)
+        );
+        return $workflowSchedule;
     }
 
     /**
