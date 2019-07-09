@@ -32,18 +32,25 @@ class Task
     /** @var string|null $user */
     private $user;
 
+    /** @var bool */
+    private $useAgent;
+
     /**
      * @param string            $path           The command that should be executed by the server
      * @param string            $queue          The queue used by the Task
+     * @param bool              $useAgent       Tell if you want to use the EvQueue Agent (Used to send status of tasks)
      * @param string|null       $user           The user that will execute the command
      * @param string|null       $host           The Ip address where to execute the command
      * @param string            $outputMethod   The output mode
      * @param string            $parametersMode The type of parameters
      */
-    public function __construct($path, $queue, $user = null, $host = null, $outputMethod = self::OUTPUT_TEXT, $parametersMode = self::PARAMETER_MODE_CMD)
+    public function __construct(
+        $path, $queue, $useAgent = false, $user = null, $host = null, $outputMethod = self::OUTPUT_TEXT,
+        $parametersMode = self::PARAMETER_MODE_CMD)
     {
         $this->path = $path;
         $this->queue = $queue;
+        $this->useAgent = $useAgent;
         $this->user = $user;
         $this->host = $host;
         $this->outputMethod = $outputMethod;
@@ -161,6 +168,25 @@ class Task
     public function setUser(?string $user): Task
     {
         $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUseAgent(): bool
+    {
+        return $this->useAgent;
+    }
+
+    /**
+     * @param bool $agent
+     *
+     * @return Task
+     */
+    public function setUseAgent(bool $agent): Task
+    {
+        $this->useAgent = $agent;
         return $this;
     }
 
