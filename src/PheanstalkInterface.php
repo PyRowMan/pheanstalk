@@ -60,6 +60,16 @@ interface PheanstalkInterface
     public function workflowExists($name);
 
     /**
+     * Retrieve a workflow by its id, if there isn't for
+     * the id given in the construct, returns false
+     *
+     * @param Workflow $workflow The workflow searched searched
+     *
+     * @return bool|Workflow If exists, the worflow
+     */
+    public function getWorkflow(Workflow $workflow);
+
+    /**
      * Retrieve a tube by its name, if there is no tube named after
      * the arg given in the construct, returns false
      *

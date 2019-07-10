@@ -10,6 +10,7 @@ class Workflow
 {
     /** @var null|string */
     private $id;
+
     /** @var $name string */
     private $name;
 
@@ -30,7 +31,6 @@ class Workflow
 
     /** @var null|int $modified */
     private $modified;
-
 
     /**
      * Job constructor.
@@ -243,4 +243,5 @@ class Workflow
         $dom->appendChild($root);
         return $dom;
     }
+
 }
