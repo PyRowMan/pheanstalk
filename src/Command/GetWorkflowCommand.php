@@ -32,33 +32,34 @@ class GetWorkflowCommand extends AbstractCommand implements \Pheanstalk\Response
         $this->workflow = $workflow;
     }
 
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'workflow';
     }
 
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
+    {
+        return 'get';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
     {
         return [
-            'action' => 'get',
-            "attributes" => [
-                'id' => $this->workflow->getId()
-            ],
-            "parameters" => [
-            ]
+            'id' => $this->workflow->getId()
         ];
     }
 
-    public function hasData()
-    {
-        return true;
-    }
-
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @inheritDoc
      */
     public function parseResponse($responseLine, $responseData)
     {

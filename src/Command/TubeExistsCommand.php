@@ -29,8 +29,8 @@ class TubeExistsCommand extends ListTubesCommand
         $this->name = $name;
     }
 
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @inheritDoc
      */
     public function parseResponse($responseLine, $responseData)
     {

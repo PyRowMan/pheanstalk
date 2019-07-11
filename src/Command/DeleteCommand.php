@@ -30,31 +30,34 @@ class DeleteCommand
         $this->workflow = $workflow;
     }
 
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'workflow';
     }
 
-    public function hasData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
     {
-        return true;
+        return 'delete';
     }
 
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
     {
         return [
-            'action' => 'delete',
-            'attributes' => [
-                'id' => $this->workflow->getId()
-            ]
+            'id' => $this->workflow->getId()
         ];
     }
 
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @inheritDoc
      */
     public function parseResponse($responseLine, $responseData)
     {

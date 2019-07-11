@@ -55,36 +55,39 @@ class CreateScheduleCommand extends AbstractCommand implements \Pheanstalk\Respo
         $this->comment = $comment ?? $this->workflow->getComment();
     }
 
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'workflow_schedule';
     }
 
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
     {
-        return [
-            'action' => 'create',
-            'attributes' => [
-                'workflow_id' => $this->workflow->getId(),
-                'schedule' => $this->schedule->__toString(),
-                "onfailure" => $this->onFailure,
-                'active' => $this->active,
-                'comment' => $this->comment,
-                'node' => "any"
-            ]
+        return 'create';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
+    {
+        return[
+            'workflow_id' => $this->workflow->getId(),
+            'schedule' => $this->schedule->__toString(),
+            "onfailure" => $this->onFailure,
+            'active' => $this->active,
+            'comment' => $this->comment,
+            'node' => "any"
         ];
     }
 
-    public function hasData()
-    {
-        return true;
-    }
-
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @inheritDoc
      */
     public function parseResponse($responseLine, $responseData)
     {

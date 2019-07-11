@@ -32,34 +32,37 @@ class CreateCommand extends AbstractCommand implements \Pheanstalk\ResponseParse
         $this->workflow = $workflow;
     }
 
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'workflow';
     }
 
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
+    {
+        return 'create';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
     {
         return [
-            'action' => 'create',
-            'attributes' => [
-                'name' => $this->workflow->getName(),
-                "group" => $this->workflow->getGroup(),
-                'content' => base64_encode($this->workflow->getXml()->saveXML()),
-                'comment' => $this->workflow->getComment()
-            ]
+            'name' => $this->workflow->getName(),
+            "group" => $this->workflow->getGroup(),
+            'content' => base64_encode($this->workflow->getXml()->saveXML()),
+            'comment' => $this->workflow->getComment()
         ];
     }
 
-    public function hasData()
-    {
-        return true;
-    }
-
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @inheritDoc
      */
     public function parseResponse($responseLine, $responseData)
     {

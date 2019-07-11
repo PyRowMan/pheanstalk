@@ -21,35 +21,24 @@ use Pheanstalk\XmlResponseParser;
 class ListWorkflowsCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
 
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'workflows';
     }
-    /* (non-phpdoc)
-     * @see Command::getResponseParser()
+
+    /**
+     * @inheritDoc
      */
-//    public function getResponseParser()
-//    {
-//        return new XmlResponseParser();
-//    }
-
-    public function getData()
+    public function getAction(): string
     {
-        return [
-            'action' => 'list'
-        ];
+        return 'list';
     }
 
-    public function hasData()
-    {
-        return true;
-    }
-
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @inheritDoc
      */
     public function parseResponse($responseLine, $responseData)
     {

@@ -31,37 +31,37 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
         $this->workflow = $workflow;
     }
 
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'status';
     }
 
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
+    {
+        return 'query';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
     {
         return [
-            'action' => 'query',
-            "attributes" => [
 //                'id' => $this->workflow->getId()
-                'filter_workflow_name' => $this->workflow->getName(),
+            'filter_workflow_name' => $this->workflow->getName(),
 //                'filter_status' => "EXECUTING",
-                'type' => "workflows"
-            ],
-            "parameters" => [
-//                'filter_workflow_id' => $this->workflow->getId()
-            ]
+            'type' => "workflows"
         ];
     }
 
-    public function hasData()
-    {
-        return true;
-    }
-
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @inheritDoc
      */
     public function parseResponse($responseLine, $responseData)
     {

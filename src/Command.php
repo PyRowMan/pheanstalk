@@ -28,36 +28,32 @@ interface Command
     const COMMAND_LIST_TUBES_WATCHED = 'list-tubes-watched';
 
     /**
-     * The command line, without trailing CRLF.
+     * The group of the command line.
      *
      * @return string
      */
-    public function getCommandLine();
+    public function getGroup(): string;
 
     /**
-     * Whether the command is followed by data.
-     *
-     * @return bool
-     */
-    public function hasData();
-
-    /**
-     * The binary data to follow the command.
-     *
-     * @throws Exception\CommandException If command has no data
+     * The Action of the command line.
      *
      * @return string
      */
-    public function getData();
+    public function getAction(): string;
 
     /**
-     * The length of the binary data in bytes.
+     * The filters of the command line.
      *
-     * @throws Exception\CommandException If command has no data
-     *
-     * @return int
+     * @return array
      */
-    public function getDataLength();
+    public function getFilters(): array;
+
+    /**
+     * the parameters of the command line.
+     *
+     * @return array
+     */
+    public function getParameters(): array;
 
     /**
      * The response parser for the command.
