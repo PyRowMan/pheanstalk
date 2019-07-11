@@ -16,20 +16,8 @@ use Pheanstalk\XmlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class PeekCommand
-    extends AbstractCommand
-    implements \Pheanstalk\ResponseParser
+class PeekCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
-    const TYPE_ID = 'id';
-    const TYPE_READY = 'ready';
-    const TYPE_DELAYED = 'delayed';
-    const TYPE_BURIED = 'buried';
-
-    private $_subcommands = array(
-        self::TYPE_READY,
-        self::TYPE_DELAYED,
-        self::TYPE_BURIED,
-    );
 
     /**
      * @param mixed $peekSubject Job ID or self::TYPE_*

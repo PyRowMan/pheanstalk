@@ -103,7 +103,18 @@ class Pheanstalk implements PheanstalkInterface
      */
     public function workflowExists($name)
     {
-        return $this->_dispatch(new Command\WorkflowExistsCommand($name));
+        $workflow = $this->_dispatch(new Command\WorkflowExistsCommand($name));
+        if ($workflow instanceof Workflow)
+            return $this->getCurrentClass()->getWorkflow($workflow);
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getWorkflow(Workflow $workflow)
+    {
+        return $this->_dispatch(new Command\GetWorkflowCommand($workflow));
     }
 
     /**

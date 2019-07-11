@@ -18,9 +18,7 @@ use Pheanstalk\XmlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class ListWorkflowsCommand
-    extends AbstractCommand
-    implements \Pheanstalk\ResponseParser
+class ListWorkflowsCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
 
     /* (non-phpdoc)
