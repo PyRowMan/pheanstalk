@@ -116,6 +116,12 @@ class Pheanstalk implements PheanstalkInterface
     {
         return $this->_dispatch(new Command\GetWorkflowCommand($workflow));
     }
+    
+    /**  */
+    public function getWorkflowInstances(Workflow $workflow)
+    {
+        return $this->_dispatch(new Command\GetWorkflowInstancesCommand($workflow));
+    }
 
     /**
      * {@inheritdoc}
