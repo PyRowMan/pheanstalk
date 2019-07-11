@@ -4,6 +4,7 @@ namespace Pheanstalk\Command;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\Structure\Workflow;
+use Pheanstalk\Structure\WorkflowInstance;
 
 /**
  * The 'GetWorkflow' command.
@@ -30,67 +31,55 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
         $this->workflow = $workflow;
     }
 
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
-        return 'instances';
+        return 'status';
     }
 
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
+    {
+        return 'query';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
     {
         return [
-            'action' => 'list',
-            "attributes" => [
 //                'id' => $this->workflow->getId()
-                'filter_workflow_name' => $this->workflow->getName()
-            ],
-            "parameters" => [
-//                'filter_workflow_id' => $this->workflow->getId()
-            ]
+            'filter_workflow_name' => $this->workflow->getName(),
+//                'filter_status' => "EXECUTING",
+            'type' => "workflows"
         ];
     }
 
-    public function hasData()
-    {
-        return true;
-    }
-
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @inheritDoc
      */
     public function parseResponse($responseLine, $responseData)
     {
+        if (!(isset($responseData['workflow'])))
+            return new ArrayCollection([]);
 
-//        foreach ($responseData['workflow'] as $workflow) {
+        $instances = $responseData['workflow'] ;
+        $instances = isset($instances['tags']) ? [$instances['@attributes']] : $instances;
+        $workflowInstances = [];
+        foreach($instances as $instance) {
+            $instance = $instance['@attributes'] ?? $instance;
+            if (isset($instance['start_time'])) $instance['start_time'] = new \DateTime($instance['start_time']);
+            if (isset($instance['end_time'])) $instance['end_time'] = new \DateTime($instance['end_time']);
+            foreach($instance as $key => $val)
+                if (ctype_digit($val)) $instance[$key] = (int) $instance[$key];
+            $workflowInstances[] = new WorkflowInstance($instance);
+        }
 
-        $workflow = $responseData['workflow'];
-        $workflow = $workflow['@attributes'] ?? $workflow;
-//        $this->workflow
-//            ->setEndTime(new \DateTime($workflow['end_time']))
-//            ->setStartTime(new \DateTime($workflow['start_time']))
-//            ->setEvqid((int) $workflow['evqid'])
-//            ->setQueuedTasks((int) $workflow['queued_tasks'])
-//            ->setRunningTasks((int) $workflow['running_tasks'])
-//            ->setStatus($workflow['status'])
-//            ->setErrors((int) $workflow['errors'])
-//        ;
-
-//        dump($workflow);
-//        dump($responseData['workflow'], $workflow);
-//        $object = new Workflow($workflow['name'], $workflow['group'], new ArrayCollection([]), $workflow['comment']);
-//        $object
-//            ->setId($workflow['id'])
-//            ->setBoundToSchedule((int) $workflow['bound-to-schedule'])
-//            ->setLastcommit((int) $workflow['lastcommit'])
-//            ->setModified((int) $workflow['modified'])
-//        ;
-//        $workflows[] = $object;
-//        }
-//        return new ArrayCollection($workflows);
-        dump($this->workflow, $workflow, $responseData);
-
-        return $this->workflow;
+        return new ArrayCollection($workflowInstances);
     }
 }

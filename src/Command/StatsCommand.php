@@ -14,37 +14,39 @@ use Pheanstalk\YamlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class StatsCommand
-    extends AbstractCommand
+class StatsCommand extends AbstractCommand
 {
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'statistics';
     }
 
-    /* (non-phpdoc)
-     * @see Command::getResponseParser()
+    /**
+     * @inheritDoc
      */
     public function getResponseParser()
     {
         return new XmlResponseParser();
     }
 
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
     {
-        return [
-            'action' => 'query',
-            'attributes' => [
-                'type' => 'global'
-            ]
-        ];
+        return 'query';
     }
 
-    public function hasData()
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
     {
-        return true;
+        return [
+            'type' => 'global'
+        ];
     }
 }

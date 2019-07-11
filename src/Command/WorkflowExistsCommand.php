@@ -29,8 +29,8 @@ class WorkflowExistsCommand extends ListWorkflowsCommand
         $this->name = $name;
     }
 
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @inheritDoc
      */
     public function parseResponse($responseLine, $responseData)
     {

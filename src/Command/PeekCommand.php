@@ -20,48 +20,45 @@ class PeekCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
 
     /**
-     * @param mixed $peekSubject Job ID or self::TYPE_*
+     * @inheritDoc
      */
-    public function __construct()
-    {
-    }
-
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
-     */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'status';
     }
 
-    /* (non-phpdoc)
-     * @see Command::getResponseParser()
+    /**
+     * @inheritDoc
      */
     public function getResponseParser()
     {
         return $this;
     }
 
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
+    {
+        return 'query';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
     {
         return [
-            'action' => 'query',
-            "attributes" => [
-                'type' => "workflows"
-            ],
-//            "parameters" => [
-//                "STATUS" => "EXECUTING"
-//            ]
+            'type' => "workflows"
         ];
     }
 
-    public function hasData()
-    {
-        return true;
-    }
-
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @param string $responseLine
+     * @param string $responseData
+     *
+     * @return object
+     * @throws Exception\ServerException
      */
     public function parseResponse($responseLine, $responseData)
     {

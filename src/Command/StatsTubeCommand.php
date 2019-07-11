@@ -27,34 +27,37 @@ class StatsTubeCommand
         $this->_tube = $tube;
     }
 
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'queue';
     }
 
-    /* (non-phpdoc)
-     * @see Command::getResponseParser()
+    /**
+     * @inheritDoc
      */
     public function getResponseParser()
     {
         return new XmlResponseParser();
     }
 
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
     {
-        return [
-            'action' => 'get',
-            'attributes' => [
-                'id' => $this->_tube
-            ]
-        ];
+        return 'get';
     }
 
-    public function hasData()
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
     {
-        return true;
+        return [
+            'id' => $this->_tube
+        ];
     }
 }

@@ -17,9 +17,7 @@ use Pheanstalk\XmlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class PutCommand
-    extends AbstractCommand
-    implements \Pheanstalk\ResponseParser
+class PutCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
 
     /** @var Workflow $workflow */
@@ -35,29 +33,35 @@ class PutCommand
         $this->workflow = $workflow;
     }
 
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'instance';
     }
 
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
+    {
+        return 'launch';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
     {
         return [
-            'action' => 'launch',
-            'attributes' => [
-                'name' => $this->workflow->getName(),
-            ]
+            'name' => $this->workflow->getName(),
         ];
     }
 
-    public function hasData()
-    {
-        return true;
-    }
-
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
         return $responseData['@attributes'];

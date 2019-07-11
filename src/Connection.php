@@ -103,28 +103,17 @@ class Connection
     }
 
     /**
-     * @param object $command Command
+     * @param Command $command
      *
      * @throws Exception\ClientException
      *
      * @return object Response
      */
-    public function dispatchCommand($command)
+    public function dispatchCommand(Command $command)
     {
         $socket = $this->_getSocket();
 
-        $name = $command->getCommandLine();
-
-        if ($command->hasData()) {
-            $action = ($command->getData()['action']) ?? false;
-            $attributes = ($command->getData()['attributes']) ?? [];
-            $parameters = ($command->getData()['parameters']) ?? [];
-        } else {
-            $action = false;
-            $attributes = [];
-            $parameters = [];
-        }
-        $dom = $this->build_query($name, $action, $attributes, $parameters);
+        $dom = $this->build_query($command->getGroup(), $command->getAction(), $command->getFilters(), $command->getParameters());
         $xml = $dom->saveXML();
         $socket->write($xml);
 
@@ -132,7 +121,6 @@ class Connection
         $xml = simplexml_load_string($responseLine);
         $json = json_encode($xml);
         $responseLine = json_decode($json,TRUE);
-//        dump($responseLine);
         $responseName = preg_replace('#^(\S+).*$#s', '$1', $responseLine["@attributes"]['status']);
         if ($responseName === "KO") {
             $exceptionType = $responseLine['@attributes']['error-code'] ?? Response::RESPONSE_SERVER_ERROR;
@@ -144,7 +132,7 @@ class Connection
                 "%s while executing %s : %s",
                 $responseLine['@attributes']['error'],
                 $command,
-                $action
+                $command->getAction()
             ));
         }
 

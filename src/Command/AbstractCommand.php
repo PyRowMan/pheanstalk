@@ -12,35 +12,27 @@ use Pheanstalk\Response;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-abstract class AbstractCommand
-    implements Command
+abstract class AbstractCommand implements Command
 {
-    /* (non-phpdoc)
-     * @see Command::hasData()
+
+    /**
+     * @inheritDoc
      */
-    public function hasData()
+    public function getFilters(): array
     {
-        return false;
+        return [];
     }
 
-    /* (non-phpdoc)
-     * @see Command::getData()
+    /**
+     * @inheritDoc
      */
-    public function getData()
+    public function getParameters(): array
     {
-        throw new Exception\CommandException('Command has no data');
+        return [];
     }
 
-    /* (non-phpdoc)
-     * @see Command::getDataLength()
-     */
-    public function getDataLength()
-    {
-        throw new Exception\CommandException('Command has no data');
-    }
-
-    /* (non-phpdoc)
-     * @see Command::getResponseParser()
+    /**
+     * @inheritDoc
      */
     public function getResponseParser()
     {
@@ -48,16 +40,6 @@ abstract class AbstractCommand
         // a) implement ResponseParser
         // b) override this getResponseParser method
         return $this;
-    }
-
-    /**
-     * The string representation of the object.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getCommandLine();
     }
 
     // ----------------------------------------

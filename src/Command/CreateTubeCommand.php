@@ -34,34 +34,37 @@ class CreateTubeCommand extends AbstractCommand implements \Pheanstalk\ResponseP
         $this->tube = $tube;
     }
 
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'queue';
     }
 
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
+    {
+        return 'create';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
     {
         return [
-            'action' => 'create',
-            'attributes' => [
-                'name' => $this->tube->getName(),
-                "concurrency" => $this->tube->getConcurrency(),
-                'scheduler' => $this->tube->getScheduler(),
-                'dynamic' => $this->tube->getDynamic(),
-            ]
+            'name' => $this->tube->getName(),
+            "concurrency" => $this->tube->getConcurrency(),
+            'scheduler' => $this->tube->getScheduler(),
+            'dynamic' => $this->tube->getDynamic(),
         ];
     }
 
-    public function hasData()
-    {
-        return true;
-    }
-
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @inheritDoc
      */
     public function parseResponse($responseLine, $responseData)
     {

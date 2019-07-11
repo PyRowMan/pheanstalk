@@ -17,31 +17,27 @@ use Pheanstalk\YamlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class ListTubesCommand
-    extends AbstractCommand
-    implements \Pheanstalk\ResponseParser
+class ListTubesCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
-    /* (non-phpdoc)
-     * @see Command::getCommandLine()
+    /**
+     * @inheritDoc
      */
-    public function getCommandLine()
+    public function getGroup(): string
     {
         return 'queuepool';
     }
 
-
-    public function getData()
+    /**
+     * @inheritDoc
+     */
+    public function getAction(): string
     {
-        return [
-            'action' => 'list'
-        ];
+        return 'list';
     }
 
-    public function hasData()
-    {
-        return true;
-    }
-
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
         $responseData = $responseData['queue'];
