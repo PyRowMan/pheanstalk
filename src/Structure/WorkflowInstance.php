@@ -4,6 +4,7 @@
 namespace Pheanstalk\Structure;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\Exception\ServerBadFormatException;
 
 class WorkflowInstance
@@ -57,8 +58,13 @@ class WorkflowInstance
     /** @var int|null $retryingTasks */
     private $retryingTasks;
 
+
+    /** @var ArrayCollection[JobInstance] */
+    private $jobInstances;
+
     public function __construct(array $params)
     {
+        $this->jobInstances = new ArrayCollection([]);
         $thisObject = new \ReflectionClass($this);
         $properties = $thisObject->getProperties();
             foreach ($properties as $property) {
@@ -66,16 +72,15 @@ class WorkflowInstance
                 if (isset($params[$snakeProperty]))
                     $this->{$property->getName()} = $params[$snakeProperty];
             }
-//            if (!is_null($this->getRunningTasks()) && !is_null($this->getQueuedTasks())) {
-                if (!is_null($this->getRunningTasks()) && !is_null($this->getQueuedTasks()) && $this->getRunningTasks() - $this->getQueuedTasks() > 0 )
-                    $this->setStatus(self::STATUS_RUNNING);
-                if (!is_null($this->getQueuedTasks()) && $this->getQueuedTasks() > 0 )
-                    $this->setStatus(self::STATUS_QUEUED);
-                if (!is_null($this->getRetryingTasks()) && $this->getRetryingTasks() > 0)
-                    $this->setStatus(self::STATUS_RETRYING);
-                if (!is_null($this->getErrors()) && $this->getErrors() > 0)
-                    $this->setStatus(self::STATUS_FAILED);
-//            }
+            if (!is_null($this->getRunningTasks()) && !is_null($this->getQueuedTasks())
+                && $this->getRunningTasks() - $this->getQueuedTasks() > 0 )
+                $this->setStatus(self::STATUS_RUNNING);
+            if (!is_null($this->getQueuedTasks()) && $this->getQueuedTasks() > 0 )
+                $this->setStatus(self::STATUS_QUEUED);
+            if (!is_null($this->getRetryingTasks()) && $this->getRetryingTasks() > 0)
+                $this->setStatus(self::STATUS_RETRYING);
+            if (!is_null($this->getErrors()) && $this->getErrors() > 0)
+                $this->setStatus(self::STATUS_FAILED);
     }
 
     /**
@@ -341,6 +346,49 @@ class WorkflowInstance
     public function setRetryingTasks(?int $retryingTasks): WorkflowInstance
     {
         $this->retryingTasks = $retryingTasks;
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getJobInstances(): ArrayCollection
+    {
+        return $this->jobInstances;
+    }
+
+    /**
+     * @param ArrayCollection $jobInstances
+     *
+     * @return Workflow
+     */
+    public function setJobInstances(ArrayCollection $jobInstances): WorkflowInstance
+    {
+        $this->jobInstances = $jobInstances->filter(function(JobInstance $jobInstance) {
+            return true;
+        });
+        return $this;
+    }
+
+    /**
+     * @param JobInstance $jobInstance
+     *
+     * @return Workflow
+     */
+    public function addJobInstance(JobInstance $jobInstance): WorkflowInstance
+    {
+        $this->jobInstances[] = $jobInstance;
+        return $this;
+    }
+
+    /**
+     * @param JobInstance $jobInstance
+     *
+     * @return Workflow
+     */
+    public function removeJobInstance(JobInstance $jobInstance): WorkflowInstance
+    {
+        $this->jobInstances->removeElement($jobInstance);
         return $this;
     }
 

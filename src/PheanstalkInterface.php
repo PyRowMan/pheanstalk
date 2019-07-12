@@ -3,10 +3,13 @@
 namespace Pheanstalk;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Pheanstalk\Command\CreateScheduleCommand;
+use Pheanstalk\Command\GetWorkflowInstancesCommand;
 use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Tube;
 use Pheanstalk\Structure\Workflow;
+use Pheanstalk\Structure\WorkflowInstance;
 
 interface PheanstalkInterface
 {
@@ -72,11 +75,20 @@ interface PheanstalkInterface
     /**
      * Retrieve instances linked to a workflow
      *
-     * @param Workflow $workflow The workflow we want the instances
+     * @param null|Workflow $workflow The workflow we want the instances
      *
-     * @return bool|Workflow If exists, the worflow
+     * @return Collection If exists, the worflow
      */
-    public function getWorkflowInstances(Workflow $workflow);
+    public function getWorkflowInstances(?Workflow $workflow, string $status = GetWorkflowInstancesCommand::FILTER_EXECUTING);
+
+    /**
+     * Retrieve details of a workflowInstance
+     *
+     * @param null|Workflow $workflow The workflow we want the instances
+     *
+     * @return WorkflowInstance|false
+     */
+    public function getWorkflowInstancesDetails(WorkflowInstance $workflowInstance);
 
     /**
      * Retrieve a tube by its name, if there is no tube named after

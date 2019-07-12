@@ -18,17 +18,24 @@ use Pheanstalk\Structure\WorkflowInstance;
 class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
 
+    const FILTER_EXECUTING = 'EXECUTING';
+    const FILTER_TERMINATED = 'TERMINATED';
+
     /** @var Workflow $workflow */
     private $workflow;
+
+    /** @var string $status */
+    private $status;
 
     /**
      * GetWorkflowCommand constructor.
      *
      * @param Workflow $workflow
      */
-    public function __construct(Workflow $workflow)
+    public function __construct(?Workflow $workflow, $status = self::FILTER_EXECUTING)
     {
         $this->workflow = $workflow;
+        $this->status = $status;
     }
 
     /**
@@ -36,7 +43,7 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
      */
     public function getGroup(): string
     {
-        return 'status';
+        return ($this->status === self::FILTER_EXECUTING) ? 'status' : 'instances';
     }
 
     /**
@@ -44,7 +51,7 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
      */
     public function getAction(): string
     {
-        return 'query';
+        return ($this->status === self::FILTER_EXECUTING) ? 'query' : 'list';
     }
 
     /**
@@ -52,12 +59,14 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
      */
     public function getFilters(): array
     {
-        return [
-//                'id' => $this->workflow->getId()
-            'filter_workflow_name' => $this->workflow->getName(),
-//                'filter_status' => "EXECUTING",
-            'type' => "workflows"
+        $filters = [
+            'type' => "workflows",
+            'filter_status' => $this->status,
         ];
+        if (!empty($this->workflow))
+            $filters['filter_workflow_name'] = $this->workflow->getName();
+
+        return $filters;
     }
 
     /**

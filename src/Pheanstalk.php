@@ -5,6 +5,9 @@ namespace Pheanstalk;
 use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\Command\CreateCommand;
 use Pheanstalk\Command\CreateScheduleCommand;
+use Pheanstalk\Command\GetWorkflowCommand;
+use Pheanstalk\Command\GetWorkflowInstancesCommand;
+use Pheanstalk\Command\GetWorkflowInstancesDetailCommand;
 use Pheanstalk\Command\ListWorkflowsCommand;
 use Pheanstalk\Command\ReleaseCommand;
 use Pheanstalk\Command\WorkflowExistsCommand;
@@ -14,6 +17,7 @@ use Pheanstalk\Structure\Task;
 use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Tube;
 use Pheanstalk\Structure\Workflow;
+use Pheanstalk\Structure\WorkflowInstance;
 
 /**
  * Pheanstalk is a PHP client for the beanstalkd workqueue.
@@ -116,11 +120,27 @@ class Pheanstalk implements PheanstalkInterface
     {
         return $this->_dispatch(new Command\GetWorkflowCommand($workflow));
     }
-    
-    /**  */
-    public function getWorkflowInstances(Workflow $workflow)
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getWorkflowInstances(?Workflow $workflow, string $status = GetWorkflowInstancesCommand::FILTER_EXECUTING)
     {
-        return $this->_dispatch(new Command\GetWorkflowInstancesCommand($workflow));
+        $instances = $this->_dispatch(new Command\GetWorkflowInstancesCommand($workflow, $status));
+        if ($status === GetWorkflowInstancesCommand::FILTER_EXECUTING) {
+            foreach($instances as $instance) {
+                $this->getCurrentClass()->getWorkflowInstancesDetails($instance);
+            }
+        }
+        return $instances;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getWorkflowInstancesDetails(WorkflowInstance $workflowInstance)
+    {
+        return $this->_dispatch(new Command\GetWorkflowInstancesDetailCommand($workflowInstance));
     }
 
     /**
