@@ -21,6 +21,11 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
     const FILTER_EXECUTING = 'EXECUTING';
     const FILTER_TERMINATED = 'TERMINATED';
 
+    const FILTERS = [
+        self::FILTER_EXECUTING,
+        self::FILTER_TERMINATED
+    ];
+
     /** @var Workflow $workflow */
     private $workflow;
 

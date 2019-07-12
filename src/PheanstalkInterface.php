@@ -79,7 +79,7 @@ interface PheanstalkInterface
      *
      * @return Collection If exists, the worflow
      */
-    public function getWorkflowInstances(?Workflow $workflow, string $status = GetWorkflowInstancesCommand::FILTER_EXECUTING);
+    public function getWorkflowInstances(?Workflow $workflow, string $status = null);
 
     /**
      * Retrieve details of a workflowInstance

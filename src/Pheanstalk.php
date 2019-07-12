@@ -124,14 +124,19 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
-    public function getWorkflowInstances(?Workflow $workflow, string $status = GetWorkflowInstancesCommand::FILTER_EXECUTING)
+    public function getWorkflowInstances(?Workflow $workflow, string $status = null)
     {
-        $instances = $this->_dispatch(new Command\GetWorkflowInstancesCommand($workflow, $status));
-        if ($status === GetWorkflowInstancesCommand::FILTER_EXECUTING) {
-            foreach($instances as $instance) {
-                $this->getCurrentClass()->getWorkflowInstancesDetails($instance);
+        $status = empty($status) ? GetWorkflowInstancesDetailCommand::FILTERS : [$status];
+        $instances = new ArrayCollection([]);
+        foreach($status as $stat) {
+            $instances[strtolower($stat)] = $this->_dispatch(new Command\GetWorkflowInstancesCommand($workflow, $stat));
+            if ($status === GetWorkflowInstancesCommand::FILTER_EXECUTING) {
+                foreach($instances as $instance) {
+                    $this->getCurrentClass()->getWorkflowInstancesDetails($instance);
+                }
             }
         }
+
         return $instances;
     }
 
