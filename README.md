@@ -2,8 +2,7 @@ Pyrowman/Pheanstalk
 ==========
 
 
-Pheanstalk is a pure PHP 5.3+ client for the [evqueue workqueue][1].  It has
-been actively developed, and used in production by many, since late 2008.
+Pheanstalk is a pure PHP 7.1+ client for the [evqueue workqueue][1].
 
 Pheanstalk 3.0 introduces PHP namespaces, PSR-1 and PSR-2 coding standards,
 and PSR-4 autoloader standard.
@@ -58,8 +57,8 @@ $workflowSchedule = $pheanstalk->createSchedule($workflow, new TimeSchedule());
 
 //-----------------------------------------
 // Getting infos on the execution of a workflow
-
-$workflowInstances = $pheanstalk->getWorkflowInstances($workflow);
+$workflowInstancesExecuting = $pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
+$workflowInstancesTerminated = $pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_TERMINATED);
 
 //-----------------------------------------
 // Delete a job 
