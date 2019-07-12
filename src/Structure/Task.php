@@ -15,25 +15,25 @@ class Task
     const PARAMETER_MODE_CMD = "CMDLINE";
 
     /** @var string $outputMethod */
-    private $outputMethod;
+    protected $outputMethod;
 
     /** @var string $parametersMode */
-    private $parametersMode;
+    protected $parametersMode;
 
     /** @var string $path */
-    private $path;
+    protected $path;
 
     /** @var string string $queue */
-    private $queue;
+    protected $queue;
 
     /** @var string|null $host */
-    private $host;
+    protected $host;
 
     /** @var string|null $user */
-    private $user;
+    protected $user;
 
     /** @var bool */
-    private $useAgent;
+    protected $useAgent;
 
     /**
      * @param string            $path           The command that should be executed by the server

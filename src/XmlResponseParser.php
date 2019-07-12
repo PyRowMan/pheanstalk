@@ -12,8 +12,7 @@ namespace Pheanstalk;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class XmlResponseParser
-    implements \Pheanstalk\ResponseParser
+class XmlResponseParser implements \Pheanstalk\ResponseParser
 {
 
     /* (non-phpdoc)
