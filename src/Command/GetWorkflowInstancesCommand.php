@@ -32,15 +32,19 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
     /** @var string $status */
     private $status;
 
+    /** @var int $page */
+    private $page;
+
     /**
      * GetWorkflowCommand constructor.
      *
      * @param Workflow $workflow
      */
-    public function __construct(?Workflow $workflow, $status = self::FILTER_EXECUTING)
+    public function __construct(?Workflow $workflow, $status = self::FILTER_EXECUTING, int $page = 1)
     {
         $this->workflow = $workflow;
         $this->status = $status;
+        $this->page = $page;
     }
 
     /**
@@ -64,12 +68,16 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
      */
     public function getFilters(): array
     {
+        $limit = 30;
+        $offset = ($this->page - 1) * $limit;
         $filters = [
             'type' => "workflows",
             'filter_status' => $this->status,
+            'offset' => $offset,
+            'limit' => $limit
         ];
         if (!empty($this->workflow))
-            $filters['filter_workflow_name'] = $this->workflow->getName();
+            $filters['filter_workflow'] = $this->workflow->getName();
 
         return $filters;
     }
@@ -79,12 +87,13 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
      */
     public function parseResponse($responseLine, $responseData)
     {
+
         if (!(isset($responseData['workflow'])))
             return new ArrayCollection([]);
 
         $instances = $responseData['workflow'] ;
         $instances = isset($instances['tags']) ? [$instances['@attributes']] : $instances;
-        $workflowInstances = [];
+        $workflowInstances = new ArrayCollection([]);
         foreach($instances as $instance) {
             $instance = $instance['@attributes'] ?? $instance;
             if (isset($instance['start_time'])) $instance['start_time'] = new \DateTime($instance['start_time']);
@@ -93,7 +102,11 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
                 if (ctype_digit($val)) $instance[$key] = (int) $instance[$key];
             $workflowInstances[] = new WorkflowInstance($instance);
         }
-
-        return new ArrayCollection($workflowInstances);
+        $collection['rows'] = (int) (isset($responseData['@attributes']['rows'])) ?
+            (int) $responseData['@attributes']['rows'] :
+            $workflowInstances->count();
+        $collection['page'] = $this->page;
+        $collection['workflow_instances'] = $workflowInstances;
+        return new ArrayCollection($collection);
     }
 }

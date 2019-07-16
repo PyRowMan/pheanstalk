@@ -29,6 +29,7 @@ class GetWorkflowInstancesDetailCommand extends GetWorkflowInstancesCommand
      */
     public function __construct(WorkflowInstance $workflowInstance)
     {
+//        dump($workflowInstance);
         $this->workflowInstance = $workflowInstance;
     }
 

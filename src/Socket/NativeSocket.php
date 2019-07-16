@@ -107,26 +107,38 @@ class NativeSocket implements Socket
         return $response;
     }
 
-    /* (non-phpdoc)
-     * @see Socket::write()
+    /**
+     * Request a socket until the returned datas are a valid xml string
+     * @param null $length
+     *
+     * @return string
+     * @throws Exception\SocketException
      */
     public function getLine($length = null)
-    {
-        $timeout = ini_get('default_socket_timeout');
+        {
+        $timeout = (int) 5;
         $timer   = microtime(true);
+        $data = '';
+        libxml_use_internal_errors(true);
         do {
-            $data = isset($length) ?
-                $this->_wrapper()->fgets($this->_socket, $length) :
-                $this->_wrapper()->fgets($this->_socket);
-
-            if ($this->_wrapper()->feof($this->_socket)) {
-                throw new Exception\SocketException('Socket closed by server!');
+            libxml_clear_errors();
+            try{
+                $data .= isset($length) ?
+                    $this->_wrapper()->fgets($this->_socket, $length) :
+                    $this->_wrapper()->fgets($this->_socket);
+                $xml = new \SimpleXMLElement($data);
+            } catch (\Exception $e) {
+                $error = (string) (isset($xml['error'])) ? $xml['error'] : 'Socket closed by server!';
+                throw new Exception\SocketException($error);
             }
-            if (($data === false) && microtime(true) - $timer > $timeout) {
+            simplexml_load_string($data);
+            if (!empty(libxml_get_errors()) && microtime(true) - $timer > $timeout) {
                 $this->disconnect();
                 throw new Exception\SocketException('Socket timed out!');
             }
-        } while ($data === false);
+        } while (!empty(libxml_get_errors()));
+
+        libxml_clear_errors();
 
         return rtrim($data);
     }

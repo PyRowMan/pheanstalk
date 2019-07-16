@@ -44,13 +44,15 @@ class Pheanstalk implements PheanstalkInterface
 
     /**
      * @param string $host
+     * @param string $user
+     * @param string $password
      * @param int    $port
      * @param int    $connectTimeout
      * @param bool   $connectPersistent
      */
-    public function __construct($host, $port = PheanstalkInterface::DEFAULT_PORT, $connectTimeout = null, $connectPersistent = false)
+    public function __construct($host, $user = null, $password = null, $port = PheanstalkInterface::DEFAULT_PORT, $connectTimeout = null, $connectPersistent = false)
     {
-        $this->setConnection(new Connection($host, $port, $connectTimeout, $connectPersistent));
+        $this->setConnection(new Connection($host, $user, $password, $port, $connectTimeout, $connectPersistent));
     }
 
     /**
@@ -130,11 +132,15 @@ class Pheanstalk implements PheanstalkInterface
         $instances = new ArrayCollection([]);
         foreach($status as $stat) {
             $instances[strtolower($stat)] = $this->_dispatch(new Command\GetWorkflowInstancesCommand($workflow, $stat));
-            if ($stat === GetWorkflowInstancesCommand::FILTER_EXECUTING) {
-                foreach($instances[strtolower($stat)] as $instance) {
-                    $this->getCurrentClass()->getWorkflowInstancesDetails($instance);
+//            if ($stat === GetWorkflowInstancesCommand::FILTER_EXECUTING) {
+                /** @var ArrayCollection $workflowCollection */
+                $workflowCollection = $instances[strtolower($stat)]->get('workflow_instances');
+                if (!empty($workflowCollection)) {
+                    foreach($workflowCollection as $instance) {
+                        $this->getCurrentClass()->getWorkflowInstancesDetails($instance);
+                    }
                 }
-            }
+//            }
         }
 
         return $instances;

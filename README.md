@@ -35,7 +35,7 @@ Usage Example
 
 use Pheanstalk\Pheanstalk;
 
-$pheanstalk = new Pheanstalk('127.0.0.1');
+$pheanstalk = new Pheanstalk('127.0.0.1', 'admin', 'admin');
 
 
 // Create a simple Worflow with one job inside

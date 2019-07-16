@@ -41,14 +41,18 @@ class Connection
     private $_port;
     private $_connectTimeout;
     private $_connectPersistent;
+    protected $user;
+    protected $password;
 
     /**
      * @param string $hostname
+     * @param string $user
+     * @param string $password
      * @param int    $port
      * @param float  $connectTimeout
      * @param bool   $connectPersistent
      */
-    public function __construct($hostname, $port, $connectTimeout = null, $connectPersistent = false)
+    public function __construct($hostname, $user = null, $password = null, $port = 5000, $connectTimeout = null, $connectPersistent = false)
     {
         if (is_null($connectTimeout) || !is_numeric($connectTimeout)) {
             $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
@@ -56,6 +60,8 @@ class Connection
 
         $this->_hostname = $hostname;
         $this->_port = $port;
+        $this->user = $user;
+        $this->password = $password;
         $this->_connectTimeout = $connectTimeout;
         $this->_connectPersistent = $connectPersistent;
     }
@@ -118,7 +124,10 @@ class Connection
         $socket->write($xml);
 
         $responseLine = $socket->getLine();
-        $xml = simplexml_load_string($responseLine);
+        if ($command->getGroup() . ':' . $command->getAction() === 'instance:query') {
+//            dump($responseLine, $command->getGroup() . ':' . $command->getAction());
+        }
+        $xml = new \SimpleXMLElement($responseLine);
         $json = json_encode($xml);
         $responseLine = json_decode($json,TRUE);
         $responseName = preg_replace('#^(\S+).*$#s', '$1', $responseLine["@attributes"]['status']);
@@ -196,10 +205,12 @@ class Connection
             $response = $this->_socket->getLine();
             $xml = new \SimpleXMLElement($response);
             $challenge = (string) $xml['challenge'];
-            $hmac = hash_hmac("sha1", hex2bin($challenge), sha1('admin', true));
-            $dom = $this->build_query('auth', false, ["response" => $hmac, "user" => 'admin']);
-            $this->_socket->write($dom->saveXML());
-            $recv = $this->_socket->getLine();
+            if (!empty($challenge)) {
+                $hmac = hash_hmac("sha1", hex2bin($challenge), sha1($this->password, true));
+                $dom = $this->build_query('auth', false, ["response" => $hmac, "user" => $this->user]);
+                $this->_socket->write($dom->saveXML());
+                $recv = $this->_socket->getLine();
+            }
         }
 
         return $this->_socket;
