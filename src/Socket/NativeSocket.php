@@ -122,19 +122,20 @@ class NativeSocket implements Socket
         libxml_use_internal_errors(true);
         do {
             libxml_clear_errors();
-            try{
                 $data .= isset($length) ?
                     $this->_wrapper()->fgets($this->_socket, $length) :
                     $this->_wrapper()->fgets($this->_socket);
-                $xml = new \SimpleXMLElement($data);
-            } catch (\Exception $e) {
-                $error = (string) (isset($xml['error'])) ? $xml['error'] : 'Socket closed by server!';
-                throw new Exception\SocketException($error);
-            }
             simplexml_load_string($data);
             if (!empty(libxml_get_errors()) && microtime(true) - $timer > $timeout) {
                 $this->disconnect();
                 throw new Exception\SocketException('Socket timed out!');
+            } elseif(empty(libxml_get_errors())) {
+                try{
+                    $xml = new \SimpleXMLElement($data);
+                } catch (\Exception $e) {
+                    $error = (string) (isset($xml['error'])) ? $xml['error'] : 'Socket closed by server!';
+                    throw new Exception\SocketException($error);
+                }
             }
         } while (!empty(libxml_get_errors()));
 
