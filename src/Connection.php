@@ -138,9 +138,9 @@ class Connection
                 self::$_errorResponses[$exceptionType] ?? ''
             );
             throw new $exception(sprintf(
-                "%s while executing %s : %s",
+                "%s while executing %s:%s",
                 $responseLine['@attributes']['error'],
-                $command,
+                $command->getGroup(),
                 $command->getAction()
             ));
         }

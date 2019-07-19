@@ -54,7 +54,7 @@ $pheanstalk->getConnection()->isServiceListening(); // true or false
 // Add a scheduler for the job (by default in continous)
 
 $workflowSchedule = $pheanstalk->createSchedule($workflow, new TimeSchedule());
-        
+
 //-----------------------------------------
 // Edit a workflow
 

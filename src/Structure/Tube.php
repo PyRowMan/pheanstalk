@@ -84,11 +84,12 @@ class Tube
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function getDynamic(): bool
+    public function getDynamic(): string
     {
-        return $this->dynamic ?? true;
+        $dynamic = $this->dynamic ?? true;
+        return ($dynamic) ? self::IS_DYNAMIC : self::IS_NOT_DYNAMIC;
     }
 
     /**

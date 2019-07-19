@@ -5,6 +5,7 @@ namespace Pheanstalk;
 use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\Command\CreateCommand;
 use Pheanstalk\Command\CreateScheduleCommand;
+use Pheanstalk\Command\CreateTubeCommand;
 use Pheanstalk\Command\GetWorkflowCommand;
 use Pheanstalk\Command\GetWorkflowInstancesCommand;
 use Pheanstalk\Command\GetWorkflowInstancesDetailCommand;
@@ -302,5 +303,10 @@ class Pheanstalk implements PheanstalkInterface
     public function createTube(Tube $tube): Tube
     {
         return $this->_dispatch(new Command\CreateTubeCommand($tube));
+    }
+
+    public function updateTube(Tube $tube): Tube
+    {
+        return $this->_dispatch(new Command\UpdateTubeCommand($tube));
     }
 }

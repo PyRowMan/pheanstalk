@@ -166,7 +166,7 @@ interface PheanstalkInterface
      * @return Workflow The updated workflow
      */
     public function update(Workflow $workflow):Workflow;
-    
+
     /**
      * @param Workflow      $workflow
      * @param TimeSchedule  $schedule
@@ -194,10 +194,15 @@ interface PheanstalkInterface
 
     /**
      * @param string $name          The name of the tube
-     * @param int    $concurrency   The number of workflows that can be executed simultaneously
-     * @param string $scheduler     WIP
      *
      * @return Tube
      */
     public function createTube(Tube $tube): Tube;
+
+    /**
+     * @param string $name          The name of the tube
+     *
+     * @return Tube
+     */
+    public function updateTube(Tube $tube): Tube;
 }
