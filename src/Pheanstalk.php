@@ -134,7 +134,7 @@ class Pheanstalk implements PheanstalkInterface
             $instances[strtolower($stat)] = $this->_dispatch(new Command\GetWorkflowInstancesCommand($workflow, $stat));
 //            if ($stat === GetWorkflowInstancesCommand::FILTER_EXECUTING) {
                 /** @var ArrayCollection $workflowCollection */
-                $workflowCollection = $instances[strtolower($stat)]->get('workflow_instances');<
+                $workflowCollection = $instances[strtolower($stat)]->get('workflow_instances');
                 if (!empty($workflowCollection)) {
                     foreach($workflowCollection as $instance) {
                         $this->getCurrentClass()->getWorkflowInstancesDetails($instance);
@@ -264,6 +264,15 @@ class Pheanstalk implements PheanstalkInterface
             throw $e;
         }
 
+        return $workflow;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Workflow $workflow): Workflow
+    {
+        $workflow = $this->_dispatch(new Command\UpdateCommand($workflow));
         return $workflow;
     }
 

@@ -159,6 +159,15 @@ interface PheanstalkInterface
     public function create(Workflow $data, $force = false): Workflow;
 
     /**
+     * Updates a workflow.
+     *
+     * @param Workflow  $data     The workflow to create
+     *
+     * @return Workflow The updated workflow
+     */
+    public function update(Workflow $workflow):Workflow;
+    
+    /**
      * @param Workflow      $workflow
      * @param TimeSchedule  $schedule
      * @param null          $onFailure

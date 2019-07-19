@@ -7,15 +7,15 @@ use Pheanstalk\Response;
 use Pheanstalk\Structure\Workflow;
 
 /**
- * The 'delete' command.
+ * The 'update' command.
  *
- * Permanently deletes an already-reserved job.
+ * Update an existing job.
  *
- * @author  Paul Annesley
+ * @author  Valentin Corre
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class DeleteCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class UpdateCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
     /** @var Workflow $workflow */
     private $workflow;
@@ -41,7 +41,7 @@ class DeleteCommand extends AbstractCommand implements \Pheanstalk\ResponseParse
      */
     public function getAction(): string
     {
-        return 'delete';
+        return 'edit';
     }
 
     /**
@@ -50,7 +50,11 @@ class DeleteCommand extends AbstractCommand implements \Pheanstalk\ResponseParse
     public function getFilters(): array
     {
         return [
-            'id' => $this->workflow->getId()
+            'id' => $this->workflow->getId(),
+            'name' => $this->workflow->getName(),
+            "group" => $this->workflow->getGroup(),
+            'content' => base64_encode($this->workflow->getXml()->saveXML()),
+            'comment' => $this->workflow->getComment()
         ];
     }
 
@@ -59,6 +63,6 @@ class DeleteCommand extends AbstractCommand implements \Pheanstalk\ResponseParse
      */
     public function parseResponse($responseLine, $responseData)
     {
-        return $this->_createResponse($responseLine);
+        return $this->workflow;
     }
 }
