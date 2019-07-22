@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Pheanstalk\Command\CreateScheduleCommand;
 use Pheanstalk\Command\GetWorkflowInstancesCommand;
+use Pheanstalk\Structure\TaskInstance;
 use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Tube;
 use Pheanstalk\Structure\Workflow;
@@ -39,6 +40,9 @@ interface PheanstalkInterface
      */
     public function setCurrentClass(PheanstalkInterface $currentClass): PheanstalkInterface;
 
+    /**
+     * @return PheanstalkInterface
+     */
     public function getCurrentClass(): PheanstalkInterface;
 
     // ----------------------------------------
@@ -77,7 +81,7 @@ interface PheanstalkInterface
      *
      * @param null|Workflow $workflow The workflow we want the instances
      *
-     * @return Collection If exists, the worflow
+     * @return ArrayCollection
      */
     public function getWorkflowInstances(?Workflow $workflow, string $status = null);
 
@@ -205,4 +209,23 @@ interface PheanstalkInterface
      * @return Tube
      */
     public function updateTube(Tube $tube): Tube;
+
+    /**
+     * Cancel a running workflow instance
+     *
+     * @param WorkflowInstance $workflowInstance
+     *
+     * @return mixed
+     */
+    public function cancel(WorkflowInstance $workflowInstance);
+
+    /**
+     * Kills a running workflow instance
+     *
+     * @param WorkflowInstance $workflowInstance
+     * @param TaskInstance $taskInstance
+     *
+     * @return mixed
+     */
+    public function kill(WorkflowInstance $workflowInstance, TaskInstance $taskInstance);
 }

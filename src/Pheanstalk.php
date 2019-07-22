@@ -11,10 +11,12 @@ use Pheanstalk\Command\GetWorkflowInstancesCommand;
 use Pheanstalk\Command\GetWorkflowInstancesDetailCommand;
 use Pheanstalk\Command\ListWorkflowsCommand;
 use Pheanstalk\Command\ReleaseCommand;
+use Pheanstalk\Command\UpdateTubeCommand;
 use Pheanstalk\Command\WorkflowExistsCommand;
 use Pheanstalk\Exception\ServerDuplicateEntryException;
 use Pheanstalk\Structure\Job;
 use Pheanstalk\Structure\Task;
+use Pheanstalk\Structure\TaskInstance;
 use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Tube;
 use Pheanstalk\Structure\Workflow;
@@ -300,13 +302,35 @@ class Pheanstalk implements PheanstalkInterface
         return $this->getCurrentClass()->create($workflow, true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function createTube(Tube $tube): Tube
     {
         return $this->_dispatch(new Command\CreateTubeCommand($tube));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateTube(Tube $tube): Tube
     {
         return $this->_dispatch(new Command\UpdateTubeCommand($tube));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function cancel(WorkflowInstance $workflowInstance)
+    {
+        return $this->_dispatch(new Command\CancelCommand($workflowInstance));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function kill(WorkflowInstance $workflowInstance, TaskInstance $taskInstance)
+    {
+        return $this->_dispatch(new Command\KillCommand($workflowInstance, $taskInstance));
     }
 }
