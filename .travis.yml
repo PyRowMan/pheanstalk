@@ -12,6 +12,8 @@ addons:
     packages:
       - cmake
       - make
+      - libxerces-c-dev
+      - libpcre++-dev
   mariadb: '10.0'
 
 services: mariadb
