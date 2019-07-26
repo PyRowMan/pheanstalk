@@ -3,7 +3,7 @@ dist: trusty
 matrix:
   include:
     - php: 7.2
-      dist: xenial
+      dist: precise
 php:
   - 7.2
 
@@ -16,8 +16,9 @@ addons:
       - make
       - libxerces-c-dev
       - libpcre++-dev
+      - libmysqlclient-dev
       - libgit2-dev
-  mariadb: '10.0'
+  mariadb: '10.4'
 
 services: mariadb
 
