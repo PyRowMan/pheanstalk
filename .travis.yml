@@ -6,7 +6,6 @@ matrix:
       dist: precise
 php:
   - 7.2
-  - hhvm
 
 addons:
   mariadb: '10.0'
@@ -17,7 +16,7 @@ before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS evqueue;'
   - mysql -e "GRANT ALL PRIVILEGES ON evqueue.* to evqueue@localhost IDENTIFIED BY 'password';"
   - sudo apt-get update -qq
-  - sudo wget http://www.evqueue.net/data/debian9/evqueue-core_2.0_amd64.deb
+  - sudo wget http://www.evqueue.net/data/debian8/evqueue-core_2.0_amd64.deb
   - sudo dpkg -i evqueue-core_2.0_amd64.deb
   - sudo apt-get -f install
   - sudo service evqueue start
