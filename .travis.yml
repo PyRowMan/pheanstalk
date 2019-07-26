@@ -36,7 +36,7 @@ before_install:
   - sudo make
   - sudo groupadd evqueue
   - sudo useradd -m -g evqueue evqueue
-  - sudo /evqueue-core/build/evqueue --config /etc/evqueue.conf
+  - sudo /evqueue-core/build/evqueue --config /etc/evqueue.conf > /dev/null
   - cd ~/PyRowMan/pheanstalk
 
 before_script:
