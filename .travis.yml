@@ -32,8 +32,8 @@ before_install:
   - sudo make
   - sudo groupadd evqueue
   - sudo useradd -m -g evqueue evqueue
-  - sudo apt-get -f install
   - sudo service evqueue start
+  - cd ../../
 
 before_script:
   - travis_retry composer self-update
