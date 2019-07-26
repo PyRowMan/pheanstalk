@@ -34,7 +34,7 @@ before_install:
   - sudo make
   - sudo groupadd evqueue
   - sudo useradd -m -g evqueue evqueue
-  - sudo service evqueue start
+  - sudo /evqueue-core/build/evqueue --config /etc/evqueue.conf > /dev/null
   - cd ../../
 
 before_script:
