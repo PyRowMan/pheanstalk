@@ -8,6 +8,10 @@ php:
   - 7.2
 
 addons:
+  apt:
+    packages:
+      - cmake
+      - make
   mariadb: '10.0'
 
 services: mariadb
@@ -17,7 +21,6 @@ before_install:
   - sudo mysql -e "CREATE USER 'evqueue'@'localhost' IDENTIFIED BY 'password';"
   - sudo mysql -e "GRANT ALL PRIVILEGES ON evqueue.* to 'evqueue'@'localhost' IDENTIFIED BY 'password';"
   - sudo apt-get update -qq
-  - sudo apt-get install -y build-essential cmake git libgit2-dev libxerces-c-dev libpcre++-dev openssh-server
   - sudo git clone https://github.com/coldsource/evqueue-core.git
   - sudo cp tests/evqueue.conf /etc
   - cd evqueue-core
