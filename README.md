@@ -1,6 +1,8 @@
 Pyrowman/Pheanstalk
 ==========
 ![Packagist Version](https://img.shields.io/packagist/v/PyRowMan/pheanstalk)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/PyRowMan/pheanstalk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/PyRowMan/pheanstalk/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/PyRowMan/pheanstalk/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/PyRowMan/pheanstalk/?branch=master)
 [![Build Status](https://travis-ci.org/PyRowMan/pheanstalk.svg?branch=master)](https://travis-ci.org/PyRowMan/pheanstalk)
 
 Pheanstalk is a pure PHP 7.1+ client for the [evqueue workqueue][1].
