@@ -27,7 +27,6 @@ before_install:
   - sudo mysql -e "GRANT ALL PRIVILEGES ON evqueue.* to 'evqueue'@'localhost' IDENTIFIED BY 'password';"
   - sudo git clone https://github.com/coldsource/evqueue-core.git
   - sudo cp tests/evqueue.conf /etc
-  - sudo echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
   - cd evqueue-core
   - sudo mkdir build
   - cd build
