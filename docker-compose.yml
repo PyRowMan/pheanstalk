@@ -1,13 +1,13 @@
 version: "3"
 services:
-   db:
-      image: mysql
-      command: ["--default-authentication-plugin=mysql_native_password"]
-      volumes:
-         - ./dockerfiles/init:/docker-entrypoint-initdb.d
-      environment:
-         MYSQL_ROOT_PASSWORD: 'root'
-         MYSQL_DATABASE: 'evqueue'
+  db:
+    image: mysql
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    volumes:
+       - ./dockerfiles/init:/docker-entrypoint-initdb.d
+    environment:
+       MYSQL_ROOT_PASSWORD: 'root'
+       MYSQL_DATABASE: 'evqueue'
    evqueue:
     build:
       context: ./dockerfiles
@@ -16,6 +16,8 @@ services:
       mysql_host: 'localhost'
       mysql_user: 'root'
       mysql_password: 'root'
+    depends_on:
+      - db
   phpunit:
     build:
       context: ./dockerfiles
