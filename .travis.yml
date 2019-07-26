@@ -25,6 +25,7 @@ before_install:
   - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS evqueue;'
   - sudo mysql -e "CREATE USER 'evqueue'@'localhost' IDENTIFIED BY 'password';"
   - sudo mysql -e "GRANT ALL PRIVILEGES ON evqueue.* to 'evqueue'@'localhost' IDENTIFIED BY 'password';"
+  - cd /
   - sudo git clone https://github.com/coldsource/evqueue-core.git
   - sudo cp tests/evqueue.conf /etc
   - cd evqueue-core
@@ -34,8 +35,9 @@ before_install:
   - sudo make
   - sudo groupadd evqueue
   - sudo useradd -m -g evqueue evqueue
-  - sudo ./evqueue --config /etc/evqueue.conf
-  - cd ../../
+  - sudo /evqueue-core/build/evqueue --config /etc/evqueue.conf
+  - pwd
+  - cd ~/PyRowMan/pheanstalk
 
 before_script:
   - travis_retry composer self-update
