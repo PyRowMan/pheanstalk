@@ -16,7 +16,6 @@ addons:
       - make
       - libxerces-c-dev
       - libpcre++-dev
-      - libmysqlclient-dev
       - libgit2-dev
   mariadb: '10.0'
 
