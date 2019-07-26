@@ -67,20 +67,6 @@ class Connection
     }
 
     /**
-     * Sets a manually created socket, used for unit testing.
-     *
-     * @param Socket $socket
-     *
-     * @return $this
-     */
-    public function setSocket(Socket $socket)
-    {
-        $this->_socket = $socket;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function hasSocket()
@@ -93,16 +79,6 @@ class Connection
      * Subsequent socket operations will create a new connection.
      */
     public function disconnect()
-    {
-        $this->_getSocket()->disconnect();
-        $this->_socket = null;
-    }
-
-    /**
-     * Connect the socket.
-     * Subsequent socket operations will create a new connection.
-     */
-    public function connect()
     {
         $this->_getSocket()->disconnect();
         $this->_socket = null;
