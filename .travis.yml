@@ -10,6 +10,7 @@ php:
 addons:
   apt:
     packages:
+      - apt-utils
       - build-essential
       - cmake
       - make
@@ -23,7 +24,6 @@ before_install:
   - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS evqueue;'
   - sudo mysql -e "CREATE USER 'evqueue'@'localhost' IDENTIFIED BY 'password';"
   - sudo mysql -e "GRANT ALL PRIVILEGES ON evqueue.* to 'evqueue'@'localhost' IDENTIFIED BY 'password';"
-  - sudo apt-get update -qq
   - sudo git clone https://github.com/coldsource/evqueue-core.git
   - sudo cp tests/evqueue.conf /etc
   - cd evqueue-core
