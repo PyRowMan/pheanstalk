@@ -10,6 +10,7 @@ php:
 addons:
   apt:
     packages:
+      - build-essential
       - cmake
       - make
       - libxerces-c-dev
