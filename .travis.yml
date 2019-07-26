@@ -13,9 +13,9 @@ addons:
 services: mariadb
 
 before_install:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS evqueue;'
-  - mysql -e "CREATE USER 'evqueue'@'localhost' IDENTIFIED BY 'password';"
-  - mysql -e "GRANT ALL PRIVILEGES ON evqueue.* to evqueue@localhost IDENTIFIED BY 'password';"
+  - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS evqueue;'
+  - sudo mysql -e "CREATE USER 'evqueue'@'localhost' IDENTIFIED BY 'password';"
+  - sudo mysql -e "GRANT ALL PRIVILEGES ON evqueue.* to evqueue@localhost IDENTIFIED BY 'password';"
   - sudo apt-get update -qq
   - sudo wget http://www.evqueue.net/data/debian8/evqueue-core_2.0_amd64.deb
   - sudo dpkg -i evqueue-core_2.0_amd64.deb
