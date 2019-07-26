@@ -1,6 +1,6 @@
 Pyrowman/Pheanstalk
 ==========
-
+[![Build Status](https://travis-ci.org/PyRowMan/pheanstalk.svg?branch=master)](https://travis-ci.org/PyRowMan/pheanstalk)
 
 Pheanstalk is a pure PHP 7.1+ client for the [evqueue workqueue][1].
 
