@@ -12,5 +12,5 @@ build:
     analysis:
       tests:
         override:
-#          - phpcs-run
+          - phpcs-run
           - php-scrutinizer-run
