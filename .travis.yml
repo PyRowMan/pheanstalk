@@ -8,10 +8,9 @@ php:
   - 7.2
   - hhvm
 before_install:
-  - sudo export DEBIAN_FRONTEND=noninteractive
   - sudo apt-get update -qq
-  - sudo apt-get -yq install mysql-server
-  - sudo apt-get -yq install mariadb-server libmariadbclient-dev-compat
+  - sudo apt-get -qq install mysql-server
+  - sudo apt-get -qq install mariadb-server libmariadbclient-dev-compat
   - sudo wget http://www.evqueue.net/data/debian9/evqueue-core_2.0_amd64.deb
   - sudo dpkg -i evqueue-core_2.0_amd64.deb
   - sudo apt-get -f install
