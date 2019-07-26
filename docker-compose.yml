@@ -1,17 +1,29 @@
 version: "3"
 services:
-#   beanstalk:
-#     build:
-#       context: ./dockerfiles
-#       dockerfile: Dockerfile-beanstalkd
+   db:
+      image: mysql
+      command: ["--default-authentication-plugin=mysql_native_password"]
+      volumes:
+         - ./dockerfiles/init:/docker-entrypoint-initdb.d
+      environment:
+         MYSQL_ROOT_PASSWORD: 'root'
+         MYSQL_DATABASE: 'evqueue'
+   evqueue:
+    build:
+      context: ./dockerfiles
+      dockerfile: Dockerfile-evqueue
+    environment:
+      mysql_host: 'localhost'
+      mysql_user: 'root'
+      mysql_password: 'root'
   phpunit:
     build:
       context: ./dockerfiles
       dockerfile: Dockerfile-phpunit
-#     environment:
-#       SERVER_HOST: beanstalk
-#     depends_on:
-#       - beanstalk
+    environment:
+       SERVER_HOST: evqueue
+     depends_on:
+       - evqueue
     volumes:
       - ./:/app:ro
       - ./tests/coverage:/app/tests/coverage:rw
