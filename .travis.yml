@@ -1,0 +1,25 @@
+language: php
+dist: trusty
+matrix:
+  include:
+    - php: 7.2
+      dist: precise
+php:
+  - 7.2
+  - hhvm
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq mysql-server
+  - sudo apt-get install -qq mariadb-server libmariadbclient-dev-compat
+  - sudo wget http://www.evqueue.net/data/debian9/evqueue-core_2.0_amd64.deb
+  - sudo dpkg -i evqueue-core_2.0_amd64.deb
+  - sudo apt-get -f install
+  - sudo service evqueue start
+  - sudo beanstalkd -l 127.0.0.1 -p 11300 &
+
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer install --no-interaction --prefer-source --dev
+
+script:
+  - vendor/bin/phpunit --configuration phpunit.xml.dist
