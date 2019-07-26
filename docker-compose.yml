@@ -1,17 +1,17 @@
 version: "3"
 services:
-  beanstalk:
-    build:
-      context: ./dockerfiles
-      dockerfile: Dockerfile-beanstalkd
+#   beanstalk:
+#     build:
+#       context: ./dockerfiles
+#       dockerfile: Dockerfile-beanstalkd
   phpunit:
     build:
       context: ./dockerfiles
       dockerfile: Dockerfile-phpunit
-    environment:
-      SERVER_HOST: beanstalk
-    depends_on:
-      - beanstalk
+#     environment:
+#       SERVER_HOST: beanstalk
+#     depends_on:
+#       - beanstalk
     volumes:
       - ./:/app:ro
       - ./tests/coverage:/app/tests/coverage:rw
