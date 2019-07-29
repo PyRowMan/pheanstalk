@@ -61,6 +61,14 @@ class GetWorkflowCommand extends AbstractCommand implements \Pheanstalk\Response
     /**
      * @inheritDoc
      */
+    public function getResponseParser()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
         $workflow = $responseData['workflow'];

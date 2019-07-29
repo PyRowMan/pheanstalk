@@ -89,6 +89,14 @@ class CreateScheduleCommand extends AbstractCommand implements \Pheanstalk\Respo
     /**
      * @inheritDoc
      */
+    public function getResponseParser()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
         return (int) $responseData['@attributes']['schedule-id'];

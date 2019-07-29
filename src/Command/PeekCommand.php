@@ -30,14 +30,6 @@ class PeekCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
     /**
      * @inheritDoc
      */
-    public function getResponseParser()
-    {
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getAction(): string
     {
         return 'query';
@@ -51,6 +43,14 @@ class PeekCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
         return [
             'type' => "workflows"
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getResponseParser()
+    {
+        return $this;
     }
 
     /**

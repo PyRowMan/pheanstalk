@@ -38,6 +38,14 @@ class ListTubesCommand extends AbstractCommand implements \Pheanstalk\ResponsePa
     /**
      * @inheritDoc
      */
+    public function getResponseParser()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
         $responseData = $responseData['queue'];

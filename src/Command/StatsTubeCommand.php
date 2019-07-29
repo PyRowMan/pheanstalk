@@ -37,14 +37,6 @@ class StatsTubeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function getResponseParser()
-    {
-        return new XmlResponseParser();
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getAction(): string
     {
         return 'get';

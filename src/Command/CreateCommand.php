@@ -64,6 +64,14 @@ class CreateCommand extends AbstractCommand implements \Pheanstalk\ResponseParse
     /**
      * @inheritDoc
      */
+    public function getResponseParser()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
         $this->workflow->setId($responseData['@attributes']['workflow-id']);

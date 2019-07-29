@@ -66,6 +66,14 @@ class CreateTubeCommand extends AbstractCommand implements \Pheanstalk\ResponseP
     /**
      * @inheritDoc
      */
+    public function getResponseParser()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
         $this->tube->setId($responseData['@attributes']['queue-id']);

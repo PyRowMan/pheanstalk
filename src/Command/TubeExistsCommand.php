@@ -32,6 +32,14 @@ class TubeExistsCommand extends ListTubesCommand
     /**
      * @inheritDoc
      */
+    public function getResponseParser()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
 

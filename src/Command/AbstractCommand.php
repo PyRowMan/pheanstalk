@@ -4,6 +4,7 @@ namespace Pheanstalk\Command;
 
 use Pheanstalk\Command;
 use Pheanstalk\Response;
+use Pheanstalk\XmlResponseParser;
 
 /**
  * Common functionality for Command implementations.
@@ -39,7 +40,7 @@ abstract class AbstractCommand implements Command
         // concrete implementation must either:
         // a) implement ResponseParser
         // b) override this getResponseParser method
-        return $this;
+        return new XmlResponseParser();
     }
 
     // ----------------------------------------

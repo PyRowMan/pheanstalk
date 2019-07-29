@@ -64,6 +64,14 @@ class GetWorkflowInstancesDetailCommand extends GetWorkflowInstancesCommand
     /**
      * @inheritDoc
      */
+    public function getResponseParser()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
 

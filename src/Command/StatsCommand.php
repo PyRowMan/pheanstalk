@@ -27,14 +27,6 @@ class StatsCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function getResponseParser()
-    {
-        return new XmlResponseParser();
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getAction(): string
     {
         return 'query';

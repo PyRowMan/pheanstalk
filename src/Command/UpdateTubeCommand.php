@@ -67,6 +67,14 @@ class UpdateTubeCommand extends AbstractCommand implements \Pheanstalk\ResponseP
     /**
      * @inheritDoc
      */
+    public function getResponseParser()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
         return $this->tube;

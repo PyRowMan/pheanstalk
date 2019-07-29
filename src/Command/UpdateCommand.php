@@ -61,6 +61,14 @@ class UpdateCommand extends AbstractCommand implements \Pheanstalk\ResponseParse
     /**
      * @inheritDoc
      */
+    public function getResponseParser()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
         return $this->workflow;

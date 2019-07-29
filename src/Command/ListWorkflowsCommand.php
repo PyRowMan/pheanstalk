@@ -40,6 +40,14 @@ class ListWorkflowsCommand extends AbstractCommand implements \Pheanstalk\Respon
     /**
      * @inheritDoc
      */
+    public function getResponseParser()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
         $workflows = [];

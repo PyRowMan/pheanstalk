@@ -32,6 +32,14 @@ class WorkflowExistsCommand extends ListWorkflowsCommand
     /**
      * @inheritDoc
      */
+    public function getResponseParser()
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseResponse($responseLine, $responseData)
     {
 
