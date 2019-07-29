@@ -100,9 +100,6 @@ class Connection
         $socket->write($xml);
 
         $responseLine = $socket->getLine();
-        if ($command->getGroup() . ':' . $command->getAction() === 'instance:query') {
-//            dump($responseLine, $command->getGroup() . ':' . $command->getAction());
-        }
         $xml = new \SimpleXMLElement($responseLine);
         $json = json_encode($xml);
         $responseLine = json_decode($json,TRUE);
