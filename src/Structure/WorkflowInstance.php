@@ -124,7 +124,7 @@ class WorkflowInstance
      */
     public function getErrors(): ?int
     {
-        return $this->errors;
+        return $this->errors ?? 0;
     }
 
     /**
@@ -261,23 +261,22 @@ class WorkflowInstance
     }
 
     /**
-     * @return WorkflowInstance
+     *
      */
-    public function updateStatus(): WorkflowInstance
+    public function updateStatus()
     {
-
-        if (!is_null($this->getQueuedTasks()) && $this->getQueuedTasks() > 0) {
-            $this->setStatus(self::STATUS_QUEUED);
-        } else if (!is_null($this->getRunningTasks()) && $this->getRunningTasks()) {
+        if ($this->getRunningTasks() > 0) {
             $this->setStatus(self::STATUS_RUNNING);
         }
-        if (!is_null($this->getRetryingTasks()) && $this->getRetryingTasks() > 0) {
+        if ($this->getQueuedTasks() > 0) {
+            $this->setStatus(self::STATUS_QUEUED);
+        }
+        if ($this->getRetryingTasks() > 0) {
             $this->setStatus(self::STATUS_RETRYING);
         }
-        if (!is_null($this->getErrors()) && $this->getErrors() > 0) {
+        if ($this->getErrors() > 0) {
             $this->setStatus(self::STATUS_FAILED);
         }
-        return $this;
     }
 
     /**
@@ -315,7 +314,7 @@ class WorkflowInstance
      */
     public function getQueuedTasks(): ?int
     {
-        return $this->queuedTasks;
+        return $this->queuedTasks ?? 0;
     }
 
     /**
@@ -334,7 +333,7 @@ class WorkflowInstance
      */
     public function getRunningTasks(): ?int
     {
-        return $this->runningTasks;
+        return $this->runningTasks ?? 0;
     }
 
     /**
@@ -353,7 +352,7 @@ class WorkflowInstance
      */
     public function getRetryingTasks(): ?int
     {
-        return $this->retryingTasks;
+        return $this->retryingTasks ?? 0;
     }
 
     /**
