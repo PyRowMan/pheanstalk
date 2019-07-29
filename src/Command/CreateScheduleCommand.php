@@ -51,7 +51,7 @@ class CreateScheduleCommand extends AbstractCommand implements \Pheanstalk\Respo
         $this->workflow = $workflow;
         $this->schedule = $schedule;
         $this->onFailure = $onFailure ?? self::FAILURE_TYPE_CONTINUE;
-        $this->active = $active ?? true ;
+        $this->active = $active ?? true;
         $this->comment = $comment ?? $this->workflow->getComment();
     }
 
