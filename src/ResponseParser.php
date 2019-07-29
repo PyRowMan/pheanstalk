@@ -17,7 +17,7 @@ interface ResponseParser
      * @param string $responseLine Without trailing CRLF
      * @param string $responseData (null if no data)
      *
-     * @return Response
+     * @return mixed
      */
     public function parseResponse($responseLine, $responseData);
 }
