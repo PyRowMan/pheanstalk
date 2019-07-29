@@ -42,7 +42,7 @@ class ListTubesCommand extends AbstractCommand implements \Pheanstalk\ResponsePa
     {
         $responseData = $responseData['queue'];
         $queues = [];
-        foreach($responseData as $queue ) {
+        foreach ($responseData as $queue) {
             $queue = $queue['@attributes'] ?? $queue;
             $queueObject = new Tube($queue['name'], $queue['concurrency']);
             $queueObject

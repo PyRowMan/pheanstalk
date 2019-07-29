@@ -45,9 +45,14 @@ class Task
      * @param string            $parametersMode The type of parameters
      */
     public function __construct(
-        $path, $queue, $useAgent = false, $user = null, $host = null, $outputMethod = self::OUTPUT_TEXT,
-        $parametersMode = self::PARAMETER_MODE_CMD)
-    {
+        $path,
+        $queue,
+        $useAgent = false,
+        $user = null,
+        $host = null,
+        $outputMethod = self::OUTPUT_TEXT,
+        $parametersMode = self::PARAMETER_MODE_CMD
+    ) {
         $this->path = $path;
         $this->queue = $queue;
         $this->useAgent = $useAgent;
@@ -199,8 +204,7 @@ class Task
         $reflection = new \ReflectionClass($this);
         $dom = new \DOMDocument("1.0", "utf-8");
         $root = $dom->createElement("task");
-        foreach($reflection->getProperties() as $property)
-        {
+        foreach ($reflection->getProperties() as $property) {
             $value = $this->{'get' . ucfirst($property->getName())}();
             $root->setAttribute($this->from_camel_case($property->getName()), $value);
         }
@@ -208,7 +212,8 @@ class Task
         return $dom;
     }
 
-    function from_camel_case($input) {
+    function from_camel_case($input)
+    {
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
         $ret = $matches[0];
         foreach ($ret as &$match) {

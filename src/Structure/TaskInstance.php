@@ -39,8 +39,9 @@ class TaskInstance extends Task
         $properties = $thisObject->getProperties();
         foreach ($properties as $property) {
             $snakeProperty = $this->from_camel_case($property->getName());
-            if (isset($params[$snakeProperty]))
+            if (isset($params[$snakeProperty])) {
                 $this->{$property->getName()} = $params[$snakeProperty];
+            }
         }
     }
 

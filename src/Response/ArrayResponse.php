@@ -11,9 +11,7 @@ use Pheanstalk\Response;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class ArrayResponse
-    extends \ArrayObject
-    implements Response
+class ArrayResponse extends \ArrayObject implements Response
 {
     private $_name;
 

@@ -3,7 +3,6 @@
 
 namespace Pheanstalk\Structure;
 
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\Exception\ServerBadFormatException;
 
@@ -67,20 +66,25 @@ class WorkflowInstance
         $this->jobInstances = new ArrayCollection([]);
         $thisObject = new \ReflectionClass($this);
         $properties = $thisObject->getProperties();
-            foreach ($properties as $property) {
-                $snakeProperty = $this->from_camel_case($property->getName());
-                if (isset($params[$snakeProperty]))
-                    $this->{$property->getName()} = $params[$snakeProperty];
+        foreach ($properties as $property) {
+            $snakeProperty = $this->from_camel_case($property->getName());
+            if (isset($params[$snakeProperty])) {
+                $this->{$property->getName()} = $params[$snakeProperty];
             }
-            if (!is_null($this->getRunningTasks()) && !is_null($this->getQueuedTasks())
-                && $this->getRunningTasks() - $this->getQueuedTasks() > 0 )
-                $this->setStatus(self::STATUS_RUNNING);
-            if (!is_null($this->getQueuedTasks()) && $this->getQueuedTasks() > 0 )
-                $this->setStatus(self::STATUS_QUEUED);
-            if (!is_null($this->getRetryingTasks()) && $this->getRetryingTasks() > 0)
-                $this->setStatus(self::STATUS_RETRYING);
-            if (!is_null($this->getErrors()) && $this->getErrors() > 0)
-                $this->setStatus(self::STATUS_FAILED);
+        }
+        if (!is_null($this->getRunningTasks()) && !is_null($this->getQueuedTasks())
+                && $this->getRunningTasks() - $this->getQueuedTasks() > 0 ) {
+            $this->setStatus(self::STATUS_RUNNING);
+        }
+        if (!is_null($this->getQueuedTasks()) && $this->getQueuedTasks() > 0) {
+            $this->setStatus(self::STATUS_QUEUED);
+        }
+        if (!is_null($this->getRetryingTasks()) && $this->getRetryingTasks() > 0) {
+            $this->setStatus(self::STATUS_RETRYING);
+        }
+        if (!is_null($this->getErrors()) && $this->getErrors() > 0) {
+            $this->setStatus(self::STATUS_FAILED);
+        }
     }
 
     /**
@@ -364,7 +368,7 @@ class WorkflowInstance
      */
     public function setJobInstances(ArrayCollection $jobInstances): WorkflowInstance
     {
-        $this->jobInstances = $jobInstances->filter(function(JobInstance $jobInstance) {
+        $this->jobInstances = $jobInstances->filter(function (JobInstance $jobInstance) {
             return true;
         });
         return $this;
@@ -392,13 +396,13 @@ class WorkflowInstance
         return $this;
     }
 
-    private function from_camel_case($input) {
+    private function from_camel_case($input)
+    {
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
         $ret = $matches[0];
         foreach ($ret as &$match) {
             $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
         }
         return implode('_', $ret);
-}
-
+    }
 }

@@ -35,7 +35,7 @@ class Job
      */
     public function setTasks(ArrayCollection $tasks): Job
     {
-        $this->tasks = $tasks->filter(function(Task $task) {
+        $this->tasks = $tasks->filter(function (Task $task) {
             return true;
         });
         return $this;
@@ -73,11 +73,10 @@ class Job
         $root = $dom->createElement("job");
         $tasks = $dom->createElement("tasks");
         /** @var Task $task */
-        foreach($this->getTasks() as $task) {
+        foreach ($this->getTasks() as $task) {
             $taskItem = $dom->createElement("task");
             $taskNode = $task->getXml()->getElementsByTagName('task')->item(0);
             $tasks->appendChild($dom->importNode($taskNode, true));
-
         }
         $root->appendChild($tasks);
         $dom->appendChild($root);

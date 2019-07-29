@@ -73,20 +73,21 @@ class PeekCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
         $responseData = array_column($responseData, '@attributes');
         $dates = array_column($responseData, 'start_time');
         $mostRecent = [];
-        foreach($responseData as $date){
+        foreach ($responseData as $date) {
             $curDate = strtotime($date['start_time']);
             if (!isset($mostRecent['start_time']) || $curDate < strtotime($mostRecent['start_time'])) {
                 $mostRecent = $date;
             }
         }
-        if (empty($responseData)) return $this->parseResponse($responseLine, $responseData);
+        if (empty($responseData)) {
+            return $this->parseResponse($responseLine, $responseData);
+        }
         return $this->_createResponse(
             Response::RESPONSE_FOUND,
-            array(
+            [
                 'id'      => (int) $mostRecent['id'],
                 'jobdata' => $mostRecent,
-            )
+            ]
         );
-
     }
 }

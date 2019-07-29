@@ -67,19 +67,25 @@ class GetWorkflowInstancesDetailCommand extends GetWorkflowInstancesCommand
     public function parseResponse($responseLine, $responseData)
     {
 
-        if (!(isset($responseData['workflow'])))
+        if (!(isset($responseData['workflow']))) {
             return false;
+        }
 
         $subjobs = $responseData['workflow']['subjobs'];
         $jobInstances = new ArrayCollection([]);
-        foreach($subjobs as $subjob) {
+        foreach ($subjobs as $subjob) {
             $taskInstances = new ArrayCollection([]);
-            foreach($subjob['tasks'] as $tasks) {
+            foreach ($subjob['tasks'] as $tasks) {
                 $task = $tasks['@attributes'];
 
-                if (isset($task['execution_time'])) $task['execution_time'] = new \DateTime($task['execution_time']);
-                foreach($task as $key => $val)
-                    if (ctype_digit($val)) $task[$key] = (int) $task[$key];
+                if (isset($task['execution_time'])) {
+                    $task['execution_time'] = new \DateTime($task['execution_time']);
+                }
+                foreach ($task as $key => $val) {
+                    if (ctype_digit($val)) {
+                        $task[$key] = (int) $task[$key];
+                    }
+                }
                 $taskInstances[] = new TaskInstance($task);
             }
             $jobInstances[] = new JobInstance($taskInstances);

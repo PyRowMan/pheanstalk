@@ -3,7 +3,6 @@
 
 namespace Pheanstalk\Structure;
 
-
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Workflow
@@ -139,7 +138,7 @@ class Workflow
      */
     public function setJobs(ArrayCollection $jobs): Workflow
     {
-        $this->jobs = $jobs->filter(function(Job $job) {
+        $this->jobs = $jobs->filter(function (Job $job) {
             return true;
         });
         return $this;
@@ -234,14 +233,12 @@ class Workflow
         $root = $dom->createElement("workflow");
         $subjobs = $dom->createElement("subjobs");
         /** @var Job $job*/
-        foreach($this->getJobs() as $job) {
+        foreach ($this->getJobs() as $job) {
             $jobNode = $job->getXml()->getElementsByTagName('job')->item(0);
             $subjobs->appendChild($dom->importNode($jobNode, true));
-
         }
         $root->appendChild($subjobs);
         $dom->appendChild($root);
         return $dom;
     }
-
 }

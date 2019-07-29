@@ -52,7 +52,7 @@ abstract class AbstractCommand implements Command
      *
      * @return object Response
      */
-    protected function _createResponse($name, $data = array())
+    protected function _createResponse($name, $data = [])
     {
         return new Response\ArrayResponse($name, $data);
     }

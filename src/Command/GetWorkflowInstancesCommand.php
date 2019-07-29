@@ -76,8 +76,9 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
             'offset' => $offset,
             'limit' => $limit
         ];
-        if (!empty($this->workflow))
+        if (!empty($this->workflow)) {
             $filters['filter_workflow'] = $this->workflow->getName();
+        }
 
         return $filters;
     }
@@ -88,18 +89,26 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
     public function parseResponse($responseLine, $responseData)
     {
 
-        if (!(isset($responseData['workflow'])))
+        if (!(isset($responseData['workflow']))) {
             return new ArrayCollection([]);
+        }
 
         $instances = $responseData['workflow'] ;
         $instances = isset($instances['tags']) ? [$instances['@attributes']] : $instances;
         $workflowInstances = new ArrayCollection([]);
-        foreach($instances as $instance) {
+        foreach ($instances as $instance) {
             $instance = $instance['@attributes'] ?? $instance;
-            if (isset($instance['start_time'])) $instance['start_time'] = new \DateTime($instance['start_time']);
-            if (isset($instance['end_time'])) $instance['end_time'] = new \DateTime($instance['end_time']);
-            foreach($instance as $key => $val)
-                if (ctype_digit($val)) $instance[$key] = (int) $instance[$key];
+            if (isset($instance['start_time'])) {
+                $instance['start_time'] = new \DateTime($instance['start_time']);
+            }
+            if (isset($instance['end_time'])) {
+                $instance['end_time'] = new \DateTime($instance['end_time']);
+            }
+            foreach ($instance as $key => $val) {
+                if (ctype_digit($val)) {
+                    $instance[$key] = (int) $instance[$key];
+                }
+            }
             $workflowInstances[] = new WorkflowInstance($instance);
         }
         $collection['rows'] = (int) (isset($responseData['@attributes']['rows'])) ?

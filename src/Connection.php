@@ -19,7 +19,7 @@ class Connection
     const DEFAULT_CONNECT_TIMEOUT = 2;
 
     // responses which are global errors, mapped to their exception short-names
-    private static $_errorResponses = array(
+    private static $_errorResponses = [
         Response::RESPONSE_OUT_OF_MEMORY                    => 'OutOfMemory',
         Response::RESPONSE_INTERNAL_ERROR                   => 'InternalError',
         Response::RESPONSE_DRAINING                         => 'Draining',
@@ -27,14 +27,14 @@ class Connection
         Response::RESPONSE_UNKNOWN_COMMAND                  => 'UnknownCommand',
         Response::RESPONSE_WORKFLOW_ALREADY_EXISTS          => 'DuplicateEntry',
         Response::RESPONSE_SERVER_ERROR                     => '',
-    );
+    ];
 
     // responses which are followed by data
-    private static $_dataResponses = array(
+    private static $_dataResponses = [
         Response::RESPONSE_RESERVED,
         Response::RESPONSE_FOUND,
         Response::RESPONSE_OK,
-    );
+    ];
 
     private $_socket;
     private $_hostname;
@@ -102,7 +102,7 @@ class Connection
         $responseLine = $socket->getLine();
         $xml = new \SimpleXMLElement($responseLine);
         $json = json_encode($xml);
-        $responseLine = json_decode($json,TRUE);
+        $responseLine = json_decode($json, true);
         $responseName = preg_replace('#^(\S+).*$#s', '$1', $responseLine["@attributes"]['status']);
         if ($responseName === "KO") {
             $exceptionType = $responseLine['@attributes']['error-code'] ?? Response::RESPONSE_SERVER_ERROR;
@@ -205,11 +205,13 @@ class Connection
      *
      * @return \DOMDocument
      */
-    protected function build_query($name, $action = false, $attributes = [], $parameters = []){
+    protected function build_query($name, $action = false, $attributes = [], $parameters = [])
+    {
         $dom = new \DOMDocument("1.0", "utf-8");
         $root = $dom->createElement($name);
-        if($action)
+        if ($action) {
             $root->setAttribute('action', $action);
+        }
         foreach ($attributes as $key => $value) {
             $root->setAttribute($key, $value);
         }

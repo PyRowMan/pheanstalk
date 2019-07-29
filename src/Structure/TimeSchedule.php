@@ -3,7 +3,6 @@
 
 namespace Pheanstalk\Structure;
 
-
 class TimeSchedule
 {
     const SUM_SUBUNIT_IN_UNIT = 1770;
@@ -66,8 +65,9 @@ class TimeSchedule
      */
     public function setSeconds(array $seconds): TimeSchedule
     {
-        if (count( $seconds ) !== count( array_filter( $seconds, 'is_numeric' )) || array_sum($seconds) > self::SUM_SUBUNIT_IN_UNIT )
+        if (count($seconds) !== count(array_filter($seconds, 'is_numeric')) || array_sum($seconds) > self::SUM_SUBUNIT_IN_UNIT) {
             throw new \Exception('Wrong units of time');
+        }
         $this->seconds = $seconds;
         return $this;
     }
@@ -87,8 +87,9 @@ class TimeSchedule
      */
     public function setMinutes(array $minutes): TimeSchedule
     {
-        if (count( $minutes ) !== count( array_filter( $minutes, 'is_numeric' )) || array_sum($minutes) > self::SUM_SUBUNIT_IN_UNIT )
+        if (count($minutes) !== count(array_filter($minutes, 'is_numeric')) || array_sum($minutes) > self::SUM_SUBUNIT_IN_UNIT) {
             throw new \Exception('Wrong units of time');
+        }
         $this->minutes = $minutes;
         return $this;
     }
@@ -108,8 +109,9 @@ class TimeSchedule
      */
     public function setHours(array $hours): TimeSchedule
     {
-        if (count( $hours ) !== count( array_filter( $hours, 'is_numeric' )) || array_sum($hours) > self::SUM_HOURS )
+        if (count($hours) !== count(array_filter($hours, 'is_numeric')) || array_sum($hours) > self::SUM_HOURS) {
             throw new \Exception('Wrong units of time');
+        }
         $this->hours = $hours;
         return $this;
     }
@@ -129,8 +131,9 @@ class TimeSchedule
      */
     public function setDays(array $days): TimeSchedule
     {
-        if (count( $days ) !== count( array_filter( $days, 'is_numeric' )) || array_sum($days) > self::SUM_DAYS )
+        if (count($days) !== count(array_filter($days, 'is_numeric')) || array_sum($days) > self::SUM_DAYS) {
             throw new \Exception('Wrong units of time');
+        }
         $this->days = $days;
         return $this;
     }
@@ -150,8 +153,9 @@ class TimeSchedule
      */
     public function setMonths(array $months): TimeSchedule
     {
-        if (count( $months ) !== count( array_filter( $months, 'is_numeric' )) || array_sum($months) > self::SUM_MONTHS )
-        throw new \Exception('Wrong units of time');
+        if (count($months) !== count(array_filter($months, 'is_numeric')) || array_sum($months) > self::SUM_MONTHS) {
+            throw new \Exception('Wrong units of time');
+        }
         $this->months = $months;
         return $this;
     }
@@ -184,7 +188,5 @@ class TimeSchedule
             implode(",", $this->getMonths()) . ";" .
             implode(",", $this->getWeekdays())
         ;
-
     }
-
 }

@@ -38,7 +38,7 @@ class WorkflowExistsCommand extends ListWorkflowsCommand
         $workflows = parent::parseResponse($responseLine, $responseData);
 
         $name = $this->name;
-        $matchingWorkflows = $workflows->filter(function(Workflow $workflow) use ($name) {
+        $matchingWorkflows = $workflows->filter(function (Workflow $workflow) use ($name) {
             return $workflow->getName() === $name;
         });
 

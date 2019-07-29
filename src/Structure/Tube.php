@@ -3,7 +3,6 @@
 
 namespace Pheanstalk\Structure;
 
-
 class Tube
 {
 
@@ -100,10 +99,11 @@ class Tube
     public function setDynamic($dynamic): Tube
     {
         if (!is_bool($dynamic)) {
-            if($dynamic === self::IS_NOT_DYNAMIC)
+            if ($dynamic === self::IS_NOT_DYNAMIC) {
                 $dynamic = false;
-            else
+            } else {
                 $dynamic = true;
+            }
         }
         $this->dynamic = $dynamic;
         return $this;
@@ -146,6 +146,4 @@ class Tube
         $this->scheduler = $scheduler;
         return $this;
     }
-
-
 }

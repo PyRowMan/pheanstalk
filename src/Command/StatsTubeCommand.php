@@ -14,8 +14,7 @@ use Pheanstalk\YamlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class StatsTubeCommand
-    extends AbstractCommand
+class StatsTubeCommand extends AbstractCommand
 {
     private $_tube;
 

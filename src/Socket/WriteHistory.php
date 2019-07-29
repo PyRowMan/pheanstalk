@@ -20,7 +20,7 @@ namespace Pheanstalk\Socket;
 class WriteHistory
 {
     private $_limit;
-    private $_data = array();
+    private $_data = [];
 
     /**
      * @param int $limit

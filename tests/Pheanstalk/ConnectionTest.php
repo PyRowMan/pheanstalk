@@ -1,5 +1,6 @@
 <?php
 namespace Pheanstalk;
+
 use Pheanstalk\Command\StatsCommand;
 use Pheanstalk\Exception\ConnectionException;
 use Pheanstalk\Socket\NativeSocket;
@@ -108,11 +109,13 @@ class ConnectionTest extends TestCase
 
     public function testConnectionWillFail()
     {
-        $connection = new Connection(self::SERVER_HOST,
+        $connection = new Connection(
+            self::SERVER_HOST,
             self::SERVER_USER,
             self::SERVER_PASSWORD,
             self::SERVER_PORT + 1,
-            self::CONNECT_TIMEOUT);
+            self::CONNECT_TIMEOUT
+        );
         $this->assertFalse($connection->isServiceListening());
     }
 
@@ -153,8 +156,6 @@ class ConnectionTest extends TestCase
         $pheanstalk->getConnection()->setSocket($socket);
         $command = new StatsCommand();
         $connection->dispatchCommand($command);
-
-
     }
 
     /**
@@ -189,7 +190,7 @@ class ConnectionTest extends TestCase
             self::SERVER_HOST,
             self::SERVER_USER,
             self::SERVER_PASSWORD,
-            self::SERVER_PORT);
+            self::SERVER_PORT
+        );
     }
-
 }

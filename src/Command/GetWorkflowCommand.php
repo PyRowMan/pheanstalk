@@ -67,9 +67,9 @@ class GetWorkflowCommand extends AbstractCommand implements \Pheanstalk\Response
         $jobs = $workflow['workflow']['subjobs'];
         $workflow = $workflow['@attributes'] ?? $workflow;
         $jobObjects = [];
-        foreach($jobs as $job) {
+        foreach ($jobs as $job) {
             $taskObjects = [];
-            foreach($job['tasks'] as $task) {
+            foreach ($job['tasks'] as $task) {
                 $task = $task['@attributes'];
                 $taskObjects[] = new Task($task['path'], $task['queue'], $task['use-agent'], $task['user'], $task['host'], $task['output-method'], $task['parameters-mode']);
             }

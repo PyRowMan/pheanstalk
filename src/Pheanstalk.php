@@ -40,7 +40,7 @@ class Pheanstalk implements PheanstalkInterface
 
     private $_connection;
     private $_using = PheanstalkInterface::DEFAULT_TUBE;
-    private $_watching = array(PheanstalkInterface::DEFAULT_TUBE => true);
+    private $_watching = [PheanstalkInterface::DEFAULT_TUBE => true];
 
     /** @var $currentClass PheanstalkInterface */
     private $currentClass;
@@ -113,8 +113,9 @@ class Pheanstalk implements PheanstalkInterface
     public function workflowExists($name)
     {
         $workflow = $this->_dispatch(new Command\WorkflowExistsCommand($name));
-        if ($workflow instanceof Workflow)
+        if ($workflow instanceof Workflow) {
             return $this->getCurrentClass()->getWorkflow($workflow);
+        }
         return false;
     }
 
@@ -133,16 +134,16 @@ class Pheanstalk implements PheanstalkInterface
     {
         $status = empty($status) ? GetWorkflowInstancesDetailCommand::FILTERS : [$status];
         $instances = new ArrayCollection([]);
-        foreach($status as $stat) {
+        foreach ($status as $stat) {
             $instances[strtolower($stat)] = $this->_dispatch(new Command\GetWorkflowInstancesCommand($workflow, $stat));
 //            if ($stat === GetWorkflowInstancesCommand::FILTER_EXECUTING) {
                 /** @var ArrayCollection $workflowCollection */
                 $workflowCollection = $instances[strtolower($stat)]->get('workflow_instances');
-                if (!empty($workflowCollection)) {
-                    foreach($workflowCollection as $instance) {
-                        $this->getCurrentClass()->getWorkflowInstancesDetails($instance);
-                    }
+            if (!empty($workflowCollection)) {
+                foreach ($workflowCollection as $instance) {
+                    $this->getCurrentClass()->getWorkflowInstancesDetails($instance);
                 }
+            }
 //            }
         }
 
@@ -186,7 +187,8 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
-    public function put(Workflow $workflow) {
+    public function put(Workflow $workflow)
+    {
         $response = $this->_dispatch(new Command\PutCommand($workflow));
 
         return $response['workflow-instance-id'];
@@ -238,25 +240,25 @@ class Pheanstalk implements PheanstalkInterface
      */
     public function create(Workflow $workflow, $force = false): Workflow
     {
-        try{
+        try {
             $tubes = [];
             /** @var Job $job */
-            foreach($workflow->getJobs() as $job) {
+            foreach ($workflow->getJobs() as $job) {
                 /** @var Task $task */
                 foreach ($job->getTasks() as $task) {
                     $tubes = array_merge($tubes, [$task->getQueue()]);
                 }
             }
-            foreach($tubes as $tube) {
+            foreach ($tubes as $tube) {
                 if (!$this->getCurrentClass()->tubeExists($tube)) {
                     $this->getCurrentClass()->createTube(new Tube($tube, 1));
                 };
             }
             $workflow = $this->_dispatch(new Command\CreateCommand($workflow));
-        } catch(ServerDuplicateEntryException $e) {
+        } catch (ServerDuplicateEntryException $e) {
             if ($force) {
                 $workflows = $this->_dispatch(new Command\ListWorkflowsCommand());
-                $workflowToDelete = $workflows->filter(function(Workflow $listedWorkflow) use ($workflow) {
+                $workflowToDelete = $workflows->filter(function (Workflow $listedWorkflow) use ($workflow) {
                     return $listedWorkflow->getName() === $workflow->getName()
                         && $listedWorkflow->getGroup() === $workflow->getGroup();
                 })->first();

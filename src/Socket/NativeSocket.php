@@ -101,7 +101,7 @@ class NativeSocket implements Socket
     public function recv()
     {
         $response = "";
-        while($recv = $this->_wrapper()->fread($this->_socket, 1600)){
+        while ($recv = $this->_wrapper()->fread($this->_socket, 1600)) {
             $response .= $recv;
         }
         return $response;
@@ -115,7 +115,7 @@ class NativeSocket implements Socket
      * @throws Exception\SocketException
      */
     public function getLine($length = null)
-        {
+    {
         $timeout = (int) 5;
         $timer   = microtime(true);
         $data = '';
@@ -129,8 +129,8 @@ class NativeSocket implements Socket
             if (!empty(libxml_get_errors()) && microtime(true) - $timer > $timeout) {
                 $this->disconnect();
                 throw new Exception\SocketException('Socket timed out!');
-            } elseif(empty(libxml_get_errors())) {
-                try{
+            } elseif (empty(libxml_get_errors())) {
+                try {
                     $xml = new \SimpleXMLElement($data);
                 } catch (\Exception $e) {
                     $error = (string) (isset($xml['error'])) ? $xml['error'] : 'Socket closed by server!';
