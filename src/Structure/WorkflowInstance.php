@@ -15,7 +15,7 @@ class WorkflowInstance
     const STATUS_RETRYING = "RETRYING";
     const STATUS_FAILED = "FAILED";
 
-    /** @var $comment|null string */
+    /** @var string|null $comment */
     private $comment;
 
     /** @var \DateTime|null $endTime */
@@ -57,8 +57,7 @@ class WorkflowInstance
     /** @var int|null $retryingTasks */
     private $retryingTasks;
 
-
-    /** @var ArrayCollection[JobInstance] */
+    /** @var ArrayCollection[] */
     private $jobInstances;
 
     public function __construct(array $params)
@@ -67,7 +66,7 @@ class WorkflowInstance
         $thisObject = new \ReflectionClass($this);
         $properties = $thisObject->getProperties();
         foreach ($properties as $property) {
-            $snakeProperty = $this->from_camel_case($property->getName());
+            $snakeProperty = $this->fromCamelCase($property->getName());
             if (isset($params[$snakeProperty])) {
                 $this->{$property->getName()} = $params[$snakeProperty];
             }
@@ -107,9 +106,9 @@ class WorkflowInstance
     }
 
     /**
-     * @return \DateTime
+     * @return null|\DateTime
      */
-    public function getEndTime(): \DateTime
+    public function getEndTime(): ?\DateTime
     {
         return $this->endTime;
     }
@@ -145,9 +144,9 @@ class WorkflowInstance
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getHost(): string
+    public function getHost(): ?string
     {
         return $this->host;
     }
@@ -202,9 +201,9 @@ class WorkflowInstance
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getNodeName(): string
+    public function getNodeName(): ?string
     {
         return $this->nodeName;
     }
@@ -221,9 +220,9 @@ class WorkflowInstance
     }
 
     /**
-     * @return int
+     * @return null|int
      */
-    public function getScheduleId(): int
+    public function getScheduleId(): ?int
     {
         return $this->scheduleId;
     }
@@ -364,7 +363,7 @@ class WorkflowInstance
     /**
      * @param ArrayCollection $jobInstances
      *
-     * @return Workflow
+     * @return WorkflowInstance
      */
     public function setJobInstances(ArrayCollection $jobInstances): WorkflowInstance
     {
@@ -377,7 +376,7 @@ class WorkflowInstance
     /**
      * @param JobInstance $jobInstance
      *
-     * @return Workflow
+     * @return WorkflowInstance
      */
     public function addJobInstance(JobInstance $jobInstance): WorkflowInstance
     {
@@ -388,7 +387,7 @@ class WorkflowInstance
     /**
      * @param JobInstance $jobInstance
      *
-     * @return Workflow
+     * @return WorkflowInstance
      */
     public function removeJobInstance(JobInstance $jobInstance): WorkflowInstance
     {
@@ -396,7 +395,12 @@ class WorkflowInstance
         return $this;
     }
 
-    private function from_camel_case($input)
+    /**
+     * @param $input
+     *
+     * @return string
+     */
+    private function fromCamelCase($input)
     {
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
         $ret = $matches[0];
