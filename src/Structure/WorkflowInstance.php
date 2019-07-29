@@ -265,12 +265,11 @@ class WorkflowInstance
      */
     public function updateStatus(): WorkflowInstance
     {
-        if (!is_null($this->getRunningTasks()) && !is_null($this->getQueuedTasks())
-            && $this->getRunningTasks() - $this->getQueuedTasks() > 0) {
-            $this->setStatus(self::STATUS_RUNNING);
-        }
+
         if (!is_null($this->getQueuedTasks()) && $this->getQueuedTasks() > 0) {
             $this->setStatus(self::STATUS_QUEUED);
+        } else if (!is_null($this->getRunningTasks()) && $this->getRunningTasks()) {
+            $this->setStatus(self::STATUS_RUNNING);
         }
         if (!is_null($this->getRetryingTasks()) && $this->getRetryingTasks() > 0) {
             $this->setStatus(self::STATUS_RETRYING);
