@@ -231,7 +231,7 @@ class WorkflowInstanceTest extends TestCase
         $this->assertSame($workflowInstance->getEndTime(), $date);
     }
 
-    public function test__construct()
+    public function testUpdateStatus()
     {
         $workflowInstance = new WorkflowInstance(['running_tasks' => 2, 'queued_tasks' => 0]);
         $this->assertSame($workflowInstance->getStatus(), WorkflowInstance::STATUS_RUNNING);

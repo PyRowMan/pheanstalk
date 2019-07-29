@@ -78,19 +78,7 @@ class WorkflowInstance
                 $this->{$property->getName()} = $params[$snakeProperty];
             }
         }
-        if (!is_null($this->getRunningTasks()) && !is_null($this->getQueuedTasks())
-                && $this->getRunningTasks() - $this->getQueuedTasks() > 0) {
-            $this->setStatus(self::STATUS_RUNNING);
-        }
-        if (!is_null($this->getQueuedTasks()) && $this->getQueuedTasks() > 0) {
-            $this->setStatus(self::STATUS_QUEUED);
-        }
-        if (!is_null($this->getRetryingTasks()) && $this->getRetryingTasks() > 0) {
-            $this->setStatus(self::STATUS_RETRYING);
-        }
-        if (!is_null($this->getErrors()) && $this->getErrors() > 0) {
-            $this->setStatus(self::STATUS_FAILED);
-        }
+        $this->updateStatus();
     }
 
     /**
@@ -270,6 +258,27 @@ class WorkflowInstance
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    /**
+     * @return WorkflowInstance
+     */
+    public function updateStatus(): WorkflowInstance
+    {
+        if (!is_null($this->getRunningTasks()) && !is_null($this->getQueuedTasks())
+            && $this->getRunningTasks() - $this->getQueuedTasks() > 0) {
+            $this->setStatus(self::STATUS_RUNNING);
+        }
+        if (!is_null($this->getQueuedTasks()) && $this->getQueuedTasks() > 0) {
+            $this->setStatus(self::STATUS_QUEUED);
+        }
+        if (!is_null($this->getRetryingTasks()) && $this->getRetryingTasks() > 0) {
+            $this->setStatus(self::STATUS_RETRYING);
+        }
+        if (!is_null($this->getErrors()) && $this->getErrors() > 0) {
+            $this->setStatus(self::STATUS_FAILED);
+        }
+        return $this;
     }
 
     /**
