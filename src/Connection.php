@@ -80,7 +80,7 @@ class Connection
      */
     public function disconnect()
     {
-        $this->_getSocket()->disconnect();
+        $this->getSocket()->disconnect();
         $this->_socket = null;
     }
 
@@ -93,7 +93,7 @@ class Connection
      */
     public function dispatchCommand(Command $command)
     {
-        $socket = $this->_getSocket();
+        $socket = $this->getSocket();
 
         $dom = $this->build_query($command->getGroup(), $command->getAction(), $command->getFilters(), $command->getParameters());
         $xml = $dom->saveXML();
@@ -169,7 +169,7 @@ class Connection
      *
      * @return Socket
      */
-    private function _getSocket()
+    public function getSocket()
     {
         if (!isset($this->_socket)) {
             $this->_socket = new NativeSocket(
@@ -192,6 +192,22 @@ class Connection
         return $this->_socket;
     }
 
+    /**
+     * @param NativeSocket $socket
+     */
+    public function setSocket(NativeSocket $socket)
+    {
+        $this->_socket = $socket;
+    }
+
+    /**
+     * @param       $name
+     * @param bool  $action
+     * @param array $attributes
+     * @param array $parameters
+     *
+     * @return \DOMDocument
+     */
     protected function build_query($name, $action = false, $attributes = [], $parameters = []){
         $dom = new \DOMDocument("1.0", "utf-8");
         $root = $dom->createElement($name);
@@ -218,7 +234,7 @@ class Connection
     public function isServiceListening()
     {
         try {
-            $this->_getSocket();
+            $this->getSocket();
 
             return true;
         } catch (Exception\ConnectionException $e) {

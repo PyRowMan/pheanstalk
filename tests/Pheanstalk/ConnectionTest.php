@@ -1,5 +1,8 @@
 <?php
 namespace Pheanstalk;
+use Pheanstalk\Command\StatsCommand;
+use Pheanstalk\Exception\ConnectionException;
+use Pheanstalk\Socket\NativeSocket;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -70,18 +73,9 @@ class ConnectionTest extends TestCase
             self::SERVER_PORT,
             self::CONNECT_TIMEOUT
         );
-        $connection = $this->getMockBuilder('\Pheanstalk\Connection')
+        $connection = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $connection->expects($this->any())
-            ->method('getHost')
-            ->will($this->returnValue(self::SERVER_HOST));
-        $connection->expects($this->any())
-            ->method('getPort')
-            ->will($this->returnValue(self::SERVER_PORT));
-        $connection->expects($this->any())
-            ->method('getConnectTimeout')
-            ->will($this->returnValue(self::CONNECT_TIMEOUT));
         $workflow = $pheanstalk->createTask('testconnectionreset', 'testGroup', 'echo "test"');
         $this->assertEquals('testconnectionreset', $workflow->getName());
         $pheanstalk->delete($workflow);
@@ -90,6 +84,36 @@ class ConnectionTest extends TestCase
             ->method('dispatchCommand')
             ->will($this->throwException(new Exception\SocketException('socket error simulated')));
         $workflow = $pheanstalk->workflowExists('testconnectionreset');
+    }
+
+    public function testConfiguration()
+    {
+        $pheanstalk = new Pheanstalk(
+            self::SERVER_HOST,
+            self::SERVER_USER,
+            self::SERVER_PASSWORD,
+            self::SERVER_PORT,
+            self::CONNECT_TIMEOUT
+        );
+        $this->assertSame($pheanstalk->getConnection()->getPort(), self::SERVER_PORT);
+        $this->assertSame($pheanstalk->getConnection()->getHost(), self::SERVER_HOST);
+        $this->assertSame($pheanstalk->getConnection()->getConnectTimeout(), self::CONNECT_TIMEOUT);
+        $this->assertTrue($pheanstalk->getConnection()->isServiceListening());
+        $socket = $this->getMockBuilder(NativeSocket::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pheanstalk->getConnection()->setSocket($socket);
+        $this->assertSame($pheanstalk->getConnection()->getSocket(), $socket);
+    }
+
+    public function testConnectionWillFail()
+    {
+        $connection = new Connection(self::SERVER_HOST,
+            self::SERVER_USER,
+            self::SERVER_PASSWORD,
+            self::SERVER_PORT + 1,
+            self::CONNECT_TIMEOUT);
+        $this->assertFalse($connection->isServiceListening());
     }
 
     public function testDisconnect()
@@ -105,6 +129,58 @@ class ConnectionTest extends TestCase
         $connection->dispatchCommand(new Command\StatsCommand());
         $this->assertTrue($connection->hasSocket());
     }
+
+    /**
+     * @expectedException \Pheanstalk\Exception\ServerUnknownCommandException
+     */
+    public function testServerServerUnknownCommandException()
+    {
+        $pheanstalk = new Pheanstalk(
+            self::SERVER_HOST,
+            self::SERVER_USER,
+            self::SERVER_PASSWORD,
+            self::SERVER_PORT,
+            self::CONNECT_TIMEOUT
+        );
+        $connection = $this->_getConnection();
+        $socket = $this->getMockBuilder(NativeSocket::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $connection->setSocket($socket);
+        $socket->expects($this->once())
+            ->method('getLine')
+            ->will($this->returnValue('<response error="Unknown command or action" error-code="UNKNOWN_COMMAND" node="localhost" status="KO"/>'));
+        $pheanstalk->getConnection()->setSocket($socket);
+        $command = new StatsCommand();
+        $connection->dispatchCommand($command);
+
+
+    }
+
+    /**
+     * @expectedException \Pheanstalk\Exception\ServerException
+     */
+    public function testBuildQuery()
+    {
+        $connection = $this->_getConnection();
+        $command = $this->getMockBuilder(StatsCommand::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $command->expects($this->any())
+            ->method('getAction')
+            ->will($this->returnValue('action'));
+        $command->expects($this->any())
+            ->method('getGroup')
+            ->will($this->returnValue('group'));
+        $command->expects($this->any())
+            ->method('getFilters')
+            ->will($this->returnValue(['one' => 'two']));
+        $command->expects($this->any())
+            ->method('getParameters')
+            ->will($this->returnValue(['one' => 'two']));
+        $response = $connection->dispatchCommand($command);
+    }
+
     // ----------------------------------------
     // private
     private function _getConnection()
@@ -115,4 +191,5 @@ class ConnectionTest extends TestCase
             self::SERVER_PASSWORD,
             self::SERVER_PORT);
     }
+
 }
