@@ -9,3 +9,4 @@ vendor/
 
 .idea
 tests/coverage
+phpunit.xml
