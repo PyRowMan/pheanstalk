@@ -205,7 +205,7 @@ class Task
         $dom = new \DOMDocument("1.0", "utf-8");
         $root = $dom->createElement("task");
         foreach ($reflection->getProperties() as $property) {
-            $value = $this->{'get' . ucfirst($property->getName())}();
+            $value = $this->{'get'.ucfirst($property->getName())}();
             $root->setAttribute($this->from_camel_case($property->getName()), $value);
         }
         $dom->appendChild($root);

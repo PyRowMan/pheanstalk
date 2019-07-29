@@ -93,7 +93,7 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
             return new ArrayCollection([]);
         }
 
-        $instances = $responseData['workflow'] ;
+        $instances = $responseData['workflow'];
         $instances = isset($instances['tags']) ? [$instances['@attributes']] : $instances;
         $workflowInstances = new ArrayCollection([]);
         foreach ($instances as $instance) {
@@ -112,8 +112,7 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
             $workflowInstances[] = new WorkflowInstance($instance);
         }
         $collection['rows'] = (int) (isset($responseData['@attributes']['rows'])) ?
-            (int) $responseData['@attributes']['rows'] :
-            $workflowInstances->count();
+            (int) $responseData['@attributes']['rows'] : $workflowInstances->count();
         $collection['page'] = $this->page;
         $collection['workflow_instances'] = $workflowInstances;
         return new ArrayCollection($collection);

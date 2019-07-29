@@ -181,11 +181,11 @@ class TimeSchedule
 
     public function __toString()
     {
-        return implode(",", $this->getSeconds()) . ";" .
-            implode(",", $this->getMinutes()) . ";" .
-            implode(",", $this->getHours()) . ";" .
-            implode(",", $this->getDays()) . ";" .
-            implode(",", $this->getMonths()) . ";" .
+        return implode(",", $this->getSeconds()).";".
+            implode(",", $this->getMinutes()).";".
+            implode(",", $this->getHours()).";".
+            implode(",", $this->getDays()).";".
+            implode(",", $this->getMonths()).";".
             implode(",", $this->getWeekdays())
         ;
     }

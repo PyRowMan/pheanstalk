@@ -35,7 +35,7 @@ class JobInstance
      */
     public function setTaskInstances(ArrayCollection $taskInstances): JobInstance
     {
-        $this->taskInstances = $taskInstances->filter(function (TaskInstance $taskInstance) {
+        $this->taskInstances = $taskInstances->filter(function(TaskInstance $taskInstance) {
             return true;
         });
         return $this;
