@@ -258,7 +258,7 @@ class Pheanstalk implements PheanstalkInterface
         } catch (ServerDuplicateEntryException $e) {
             if ($force) {
                 $workflows = $this->_dispatch(new Command\ListWorkflowsCommand());
-                $workflowToDelete = $workflows->filter(function (Workflow $listedWorkflow) use ($workflow) {
+                $workflowToDelete = $workflows->filter(function(Workflow $listedWorkflow) use ($workflow) {
                     return $listedWorkflow->getName() === $workflow->getName()
                         && $listedWorkflow->getGroup() === $workflow->getGroup();
                 })->first();

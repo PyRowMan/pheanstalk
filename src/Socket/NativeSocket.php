@@ -123,8 +123,7 @@ class NativeSocket implements Socket
         do {
             libxml_clear_errors();
                 $data .= isset($length) ?
-                    $this->_wrapper()->fgets($this->_socket, $length) :
-                    $this->_wrapper()->fgets($this->_socket);
+                    $this->_wrapper()->fgets($this->_socket, $length) : $this->_wrapper()->fgets($this->_socket);
             simplexml_load_string($data);
             if (!empty(libxml_get_errors()) && microtime(true) - $timer > $timeout) {
                 $this->disconnect();

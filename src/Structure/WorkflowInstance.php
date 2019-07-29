@@ -73,7 +73,7 @@ class WorkflowInstance
             }
         }
         if (!is_null($this->getRunningTasks()) && !is_null($this->getQueuedTasks())
-                && $this->getRunningTasks() - $this->getQueuedTasks() > 0 ) {
+                && $this->getRunningTasks() - $this->getQueuedTasks() > 0) {
             $this->setStatus(self::STATUS_RUNNING);
         }
         if (!is_null($this->getQueuedTasks()) && $this->getQueuedTasks() > 0) {
@@ -368,7 +368,7 @@ class WorkflowInstance
      */
     public function setJobInstances(ArrayCollection $jobInstances): WorkflowInstance
     {
-        $this->jobInstances = $jobInstances->filter(function (JobInstance $jobInstance) {
+        $this->jobInstances = $jobInstances->filter(function(JobInstance $jobInstance) {
             return true;
         });
         return $this;
