@@ -57,9 +57,16 @@ class WorkflowInstance
     /** @var int|null $retryingTasks */
     private $retryingTasks;
 
-    /** @var ArrayCollection[] */
+    /** @var ArrayCollection */
     private $jobInstances;
 
+    /**
+     * WorkflowInstance constructor.
+     *
+     * @param array $params
+     *
+     * @throws \ReflectionException
+     */
     public function __construct(array $params)
     {
         $this->jobInstances = new ArrayCollection([]);
@@ -87,9 +94,9 @@ class WorkflowInstance
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getComment(): string
+    public function getComment(): ?string
     {
         return $this->comment;
     }
