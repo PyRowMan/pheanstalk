@@ -3,7 +3,6 @@
 namespace Pheanstalk\Command;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Pheanstalk\Structure\Queue;
 use Pheanstalk\Structure\Tube;
 use Pheanstalk\XmlResponseParser;
 use Pheanstalk\YamlResponseParser;
