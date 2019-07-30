@@ -19,5 +19,5 @@ interface ResponseParser
      *
      * @return mixed
      */
-    public function parseResponse($responseLine, array $responseData);
+    public function parseResponse($responseLine, $responseData);
 }

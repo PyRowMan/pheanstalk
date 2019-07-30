@@ -22,7 +22,7 @@ class XmlResponseParser implements \Pheanstalk\ResponseParser
      * @throws Exception\ServerException
      * @return array
      */
-    public function parseResponse($responseLine, array $responseData)
+    public function parseResponse($responseLine, $responseData)
     {
         if ($responseLine == Response::RESPONSE_NOT_FOUND) {
             throw new Exception\ServerException(sprintf(

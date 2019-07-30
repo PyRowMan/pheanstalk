@@ -106,6 +106,14 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
+    public function deleteTube(Tube $tube)
+    {
+        return $this->_dispatch(new Command\DeleteTubeCommand($tube));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function workflowExists($name)
     {
         $workflow = $this->_dispatch(new Command\WorkflowExistsCommand($name));

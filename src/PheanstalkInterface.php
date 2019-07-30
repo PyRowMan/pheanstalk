@@ -57,6 +57,15 @@ interface PheanstalkInterface
     public function delete(Workflow $workflow);
 
     /**
+     * Permanently deletes a tube.
+     *
+     * @param Tube $tube
+     *
+     * @return bool
+     */
+    public function deleteTube(Tube $tube);
+
+    /**
      * Retrieve a workflow by its name, if there is no workflow named after
      * the arg given in the construct, returns false
      *
