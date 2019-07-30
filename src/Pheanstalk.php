@@ -36,11 +36,8 @@ use Pheanstalk\Structure\WorkflowInstance;
  */
 class Pheanstalk implements PheanstalkInterface
 {
-    const VERSION = '3.2.1';
 
     private $_connection;
-    private $_using = PheanstalkInterface::DEFAULT_TUBE;
-    private $_watching = [PheanstalkInterface::DEFAULT_TUBE => true];
 
     /** @var $currentClass PheanstalkInterface */
     private $currentClass;
@@ -102,9 +99,7 @@ class Pheanstalk implements PheanstalkInterface
      */
     public function delete(Workflow $workflow)
     {
-        $this->_dispatch(new Command\DeleteCommand($workflow));
-
-        return $this;
+        return $this->_dispatch(new Command\DeleteCommand($workflow));
     }
 
     /**

@@ -57,7 +57,7 @@ class PeekCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
      * @param string $responseLine
      * @param string $responseData
      *
-     * @return object
+     * @return array
      * @throws Exception\ServerException
      */
     public function parseResponse($responseLine, $responseData)
@@ -82,12 +82,12 @@ class PeekCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
         if (empty($responseData)) {
             return $this->parseResponse($responseLine, $responseData);
         }
-        return $this->_createResponse(
+        return [
             Response::RESPONSE_FOUND,
             [
                 'id'      => (int) $mostRecent['id'],
                 'jobdata' => $mostRecent,
             ]
-        );
+        ];
     }
 }

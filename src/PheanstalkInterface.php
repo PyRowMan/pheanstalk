@@ -52,7 +52,7 @@ interface PheanstalkInterface
      *
      * @param Workflow $workflow
      *
-     * @return $this
+     * @return bool
      */
     public function delete(Workflow $workflow);
 

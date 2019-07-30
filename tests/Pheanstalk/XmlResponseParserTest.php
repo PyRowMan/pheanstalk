@@ -17,7 +17,7 @@ class XmlResponseParserTest extends TestCase
         $responseLine = json_decode($json, true);
         $responseName = preg_replace('#^(\S+).*$#s', '$1', $responseLine["@attributes"]['status']);
         $response = $parser->parseResponse($responseName, $responseLine);
-        $this->assertSame('OK', $response->getResponseName());
+        $this->assertIsArray($response);
     }
 
     /**

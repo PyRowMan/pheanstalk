@@ -15,9 +15,9 @@ interface ResponseParser
      * Parses raw response data into a Response object.
      *
      * @param string $responseLine Without trailing CRLF
-     * @param string $responseData (null if no data)
+     * @param array $responseData (null if no data)
      *
      * @return mixed
      */
-    public function parseResponse($responseLine, $responseData);
+    public function parseResponse($responseLine, array $responseData);
 }

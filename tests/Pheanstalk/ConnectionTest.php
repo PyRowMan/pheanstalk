@@ -42,7 +42,7 @@ class ConnectionTest extends TestCase
         $connection = $this->_getConnection();
         $command = new Command\StatsCommand();
         $response = $connection->dispatchCommand($command);
-        $this->assertInstanceOf('\Pheanstalk\Response', $response);
+        $this->assertIsArray($response);
     }
 
     public function testPersistentConnection()
@@ -59,7 +59,7 @@ class ConnectionTest extends TestCase
         );
         $command = new Command\StatsCommand();
         $response = $connection->dispatchCommand($command);
-        $this->assertInstanceOf('\Pheanstalk\Response', $response);
+        $this->assertIsArray($response);
     }
 
     /**

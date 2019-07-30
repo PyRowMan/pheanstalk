@@ -2,8 +2,6 @@
 
 namespace Pheanstalk;
 
-use Pheanstalk\Response\ArrayResponse;
-
 /**
  * A response parser for commands that return a subset of XML.
  *
@@ -19,12 +17,12 @@ class XmlResponseParser implements \Pheanstalk\ResponseParser
 
     /**
      * @param string $responseLine
-     * @param string $responseData
+     * @param array $responseData
      *
      * @throws Exception\ServerException
-     * @return Response\ArrayResponse
+     * @return array
      */
-    public function parseResponse($responseLine, $responseData)
+    public function parseResponse($responseLine, array $responseData)
     {
         if ($responseLine == Response::RESPONSE_NOT_FOUND) {
             throw new Exception\ServerException(sprintf(
@@ -33,7 +31,6 @@ class XmlResponseParser implements \Pheanstalk\ResponseParser
             ));
         }
         unset($responseData['@attributes']);
-        $content = $responseData;
-        return new Response\ArrayResponse('OK', $responseData);
+        return $responseData;
     }
 }

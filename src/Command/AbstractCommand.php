@@ -42,19 +42,4 @@ abstract class AbstractCommand implements Command
         // b) override this getResponseParser method
         return new XmlResponseParser();
     }
-
-    // ----------------------------------------
-    // protected
-
-    /**
-     * Creates a Response for the given data.
-     *
-     * @param array
-     *
-     * @return object Response
-     */
-    protected function _createResponse($name, $data = [])
-    {
-        return new Response\ArrayResponse($name, $data);
-    }
 }
