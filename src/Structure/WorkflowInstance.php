@@ -261,7 +261,7 @@ class WorkflowInstance
     }
 
     /**
-     *
+     * @return void
      */
     public function updateStatus()
     {
@@ -381,9 +381,7 @@ class WorkflowInstance
      */
     public function setJobInstances(ArrayCollection $jobInstances): WorkflowInstance
     {
-        $this->jobInstances = $jobInstances->filter(function(JobInstance $jobInstance) {
-            return true;
-        });
+        $this->jobInstances;
         return $this;
     }
 
