@@ -174,8 +174,8 @@ interface PheanstalkInterface
     /**
      * @param Workflow      $workflow
      * @param TimeSchedule  $schedule
-     * @param null          $onFailure
-     * @param null          $active
+     * @param string|null   $onFailure
+     * @param bool|null     $active
      * @param null          $comment
      *
      * @return mixed
@@ -197,15 +197,17 @@ interface PheanstalkInterface
     public function createTask(string $name, string $group, string $path, $queue = 'default', $useAgent = false, $user = null, $host = null, $comment = null): Workflow;
 
     /**
-     * @param string $name          The name of the tube
+     * @param Tube $tube          The tube to create
      *
+     * @throws Exception\ClientException
      * @return Tube
      */
     public function createTube(Tube $tube): Tube;
 
     /**
-     * @param string $name          The name of the tube
+     * @param Tube $tube          The tube to update
      *
+     * @throws Exception\ClientException
      * @return Tube
      */
     public function updateTube(Tube $tube): Tube;
@@ -214,7 +216,7 @@ interface PheanstalkInterface
      * Cancel a running workflow instance
      *
      * @param WorkflowInstance $workflowInstance
-     *
+     * @throws Exception\ClientException
      * @return mixed
      */
     public function cancel(WorkflowInstance $workflowInstance);
@@ -224,7 +226,7 @@ interface PheanstalkInterface
      *
      * @param WorkflowInstance $workflowInstance
      * @param TaskInstance $taskInstance
-     *
+     * @throws Exception\ClientException
      * @return mixed
      */
     public function kill(WorkflowInstance $workflowInstance, TaskInstance $taskInstance);

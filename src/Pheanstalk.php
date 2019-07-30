@@ -37,7 +37,8 @@ use Pheanstalk\Structure\WorkflowInstance;
 class Pheanstalk implements PheanstalkInterface
 {
 
-    private $_connection;
+    /** @var Connection $connection */
+    private $connection;
 
     /** @var $currentClass PheanstalkInterface */
     private $currentClass;
@@ -60,7 +61,7 @@ class Pheanstalk implements PheanstalkInterface
      */
     public function setConnection(Connection $connection)
     {
-        $this->_connection = $connection;
+        $this->connection = $connection;
 
         return $this;
     }
@@ -70,7 +71,7 @@ class Pheanstalk implements PheanstalkInterface
      */
     public function getConnection()
     {
-        return $this->_connection;
+        return $this->connection;
     }
 
     /**
@@ -221,13 +222,14 @@ class Pheanstalk implements PheanstalkInterface
      * If a SocketException occurs, the connection is reset, and the command is
      * re-attempted once.
      *
+     * @throws Exception\ClientException
      * @param Command $command
      *
-     * @return Response
+     * @return mixed
      */
     private function _dispatch($command)
     {
-        return $this->_connection->dispatchCommand($command);
+        return $this->connection->dispatchCommand($command);
     }
 
     /**
