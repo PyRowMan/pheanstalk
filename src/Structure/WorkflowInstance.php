@@ -58,23 +58,11 @@ class WorkflowInstance extends ParameterManipulations
     private $jobInstances;
 
     /**
-     * WorkflowInstance constructor.
-     *
-     * @param array $params
-     *
-     * @throws \ReflectionException
+     * @inheritDoc
      */
     public function __construct(array $params)
     {
-        $this->jobInstances = new ArrayCollection([]);
-        $thisObject = new \ReflectionClass($this);
-        $properties = $thisObject->getProperties();
-        foreach ($properties as $property) {
-            $snakeProperty = $this->fromCamelCase($property->getName());
-            if (isset($params[$snakeProperty])) {
-                $this->{$property->getName()} = $params[$snakeProperty];
-            }
-        }
+        parent::__construct($params);
         $this->updateStatus();
     }
 
