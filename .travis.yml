@@ -42,7 +42,7 @@ before_script:
   - travis_retry composer install --no-interaction --prefer-source --dev
 
 script:
-  - phpdbg -qrr vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-clover clover.xml
+  - phpdbg -qrr vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-clover clover.xml --coverage-text
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover clover.xml

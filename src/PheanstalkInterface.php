@@ -11,6 +11,7 @@ use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Tube;
 use Pheanstalk\Structure\Workflow;
 use Pheanstalk\Structure\WorkflowInstance;
+use Pheanstalk\Structure\Job;
 
 interface PheanstalkInterface
 {
