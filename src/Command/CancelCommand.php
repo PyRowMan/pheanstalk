@@ -72,6 +72,6 @@ class CancelCommand extends AbstractCommand implements \Pheanstalk\ResponseParse
      */
     public function parseResponse($responseLine, $responseData)
     {
-        return $responseData['@attributes'];
+        return $responseLine === 'OK';
     }
 }

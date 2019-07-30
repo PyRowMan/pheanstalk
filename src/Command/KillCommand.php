@@ -78,6 +78,6 @@ class KillCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
      */
     public function parseResponse($responseLine, $responseData)
     {
-        return $responseData['@attributes'];
+        return $responseLine === 'OK';
     }
 }

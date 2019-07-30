@@ -77,7 +77,7 @@ class ConnectionTest extends TestCase
         $connection = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $workflow = $pheanstalk->createTask('testconnectionreset', 'testGroup', 'echo "test"');
+        $workflow = $pheanstalk->createTask('testconnectionreset', 'testGroup', '/bin/echo "test"');
         $this->assertEquals('testconnectionreset', $workflow->getName());
         $pheanstalk->delete($workflow);
         $pheanstalk->setConnection($connection);

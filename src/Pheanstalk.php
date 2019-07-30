@@ -136,11 +136,10 @@ class Pheanstalk implements PheanstalkInterface
      */
     public function getWorkflowInstances(?Workflow $workflow, string $status = null)
     {
-        $status = empty($status) ? GetWorkflowInstancesDetailCommand::FILTERS : [$status];
+        $paramsStatus = empty($status) ? GetWorkflowInstancesDetailCommand::FILTERS : [$status];
         $instances = new ArrayCollection([]);
-        foreach ($status as $stat) {
+        foreach ($paramsStatus as $stat) {
             $instances[strtolower($stat)] = $this->_dispatch(new Command\GetWorkflowInstancesCommand($workflow, $stat));
-//            if ($stat === GetWorkflowInstancesCommand::FILTER_EXECUTING) {
                 /** @var ArrayCollection $workflowCollection */
                 $workflowCollection = $instances[strtolower($stat)]->get('workflow_instances');
             if (!empty($workflowCollection)) {
@@ -148,7 +147,9 @@ class Pheanstalk implements PheanstalkInterface
                     $this->getCurrentClass()->getWorkflowInstancesDetails($instance);
                 }
             }
-//            }
+        }
+        if (!is_null($status)) {
+            return $instances->get(strtolower($status))->get('workflow_instances');
         }
 
         return $instances;
@@ -201,15 +202,7 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
-    public function statsJob($job)
-    {
-        return $this->_dispatch(new Command\StatsJobCommand($job));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function statsTube($tube)
+    public function statsTube(Tube $tube)
     {
         return $this->_dispatch(new Command\StatsTubeCommand($tube));
     }

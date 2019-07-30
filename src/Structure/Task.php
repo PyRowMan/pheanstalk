@@ -13,6 +13,8 @@ class Task
 {
     const OUTPUT_TEXT = "TEXT";
     const PARAMETER_MODE_CMD = "CMDLINE";
+    const STRING_TRUE = 'yes';
+    const STRING_FALSE = 'no';
 
     /** @var string $outputMethod */
     protected $outputMethod;
@@ -177,10 +179,15 @@ class Task
     }
 
     /**
-     * @return bool
+     * @param bool $string
+     *
+     * @return bool|string
      */
-    public function getUseAgent(): bool
+    public function getUseAgent($string = true)
     {
+        if ($string) {
+            return $this->useAgent ? self::STRING_TRUE : self::STRING_FALSE;
+        }
         return $this->useAgent;
     }
 

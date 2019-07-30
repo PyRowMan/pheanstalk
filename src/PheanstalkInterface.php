@@ -57,14 +57,14 @@ interface PheanstalkInterface
      */
     public function delete(Workflow $workflow);
 
-    /**
-     * Permanently deletes a tube.
-     *
-     * @param Tube $tube
-     *
-     * @return bool
-     */
-    public function deleteTube(Tube $tube);
+//    /**
+//     * Permanently deletes a tube.
+//     *
+//     * @param Tube $tube
+//     *
+//     * @return bool
+//     */
+//    public function deleteTube(Tube $tube);
 
     /**
      * Retrieve a workflow by its name, if there is no workflow named after
@@ -138,22 +138,13 @@ interface PheanstalkInterface
     public function put(Workflow $workflow);
 
     /**
-     * Gives statistical information about the specified job if it exists.
-     *
-     * @param Job|int $job
-     *
-     * @return object
-     */
-    public function statsJob($job);
-
-    /**
      * Gives statistical information about the specified tube if it exists.
      *
-     * @param string $tube
+     * @param Tube $tube
      *
      * @return object
      */
-    public function statsTube($tube);
+    public function statsTube(Tube $tube);
 
     /**
      * Gives statistical information about the beanstalkd system as a whole.

@@ -4,8 +4,11 @@ namespace Pheanstalk;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\Command\GetWorkflowInstancesCommand;
+use Pheanstalk\Structure\JobInstance;
 use Pheanstalk\Structure\Task;
 use Pheanstalk\Structure\Job;
+use Pheanstalk\Structure\TimeSchedule;
+use Pheanstalk\Structure\Tube;
 use Pheanstalk\Structure\Workflow;
 use Pheanstalk\Structure\WorkflowInstance;
 use PHPUnit\Framework\TestCase;
@@ -33,12 +36,12 @@ class PheanstalkTest extends TestCase
      */
     public function testCreate()
     {
-        $task = new Task('echo test', 'testTube');
+        $task = new Task('/bin/echo test', 'testTube');
         $job = new Job(new ArrayCollection([$task]));
         $workflow = new Workflow('testWorkflow', 'tests', new ArrayCollection([$job]), 'testComment');
         $createdWorkflow = $this->pheanstalk->create($workflow);
         $this->assertSame($workflow, $createdWorkflow);
-        $task->setPath('echo second test');
+        $task->setPath('/bin/echo second test');
         $job->setTasks(new ArrayCollection([$task]));
         $workflow->setJobs(new ArrayCollection([$job]));
         $createdWorkflow = $this->pheanstalk->create($workflow, true);
@@ -51,6 +54,13 @@ class PheanstalkTest extends TestCase
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
         $this->assertInstanceOf(Workflow::class, $workflow);
         $this->assertFalse($this->pheanstalk->workflowExists('testNotExistantWorkflow'));
+    }
+
+    public function testUpdate()
+    {
+        $workflow = $this->pheanstalk->workflowExists('testWorkflow');
+        $workflow->setComment('testCommentModified');
+        $this->assertSame($workflow, $this->pheanstalk->update($workflow));
     }
 
     public function testPut()
@@ -74,6 +84,72 @@ class PheanstalkTest extends TestCase
         }
     }
 
+    public function testListTubes()
+    {
+        $tubes = $this->pheanstalk->listTubes();
+        $tubes = $tubes->filter(function(Tube $tube) {
+           return $tube->getName() === 'testTube';
+        });
+        $this->assertFalse($tubes->isEmpty());
+    }
+
+    public function testPeek()
+    {
+        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 1');
+        $this->pheanstalk->put($workflow);
+        $this->assertNotEmpty($this->pheanstalk->peek());
+        $this->assertTrue($this->pheanstalk->delete($workflow));
+    }
+
+    public function testStatsTube()
+    {
+        $tube = $this->pheanstalk->tubeExists('testTube');
+        $this->assertNotEmpty($this->pheanstalk->statsTube($tube));
+    }
+
+    public function testStats()
+    {
+        $this->assertTrue(isset($this->pheanstalk->stats()['statistics']));
+    }
+
+    public function testCreateSchedule()
+    {
+        $workflow = $this->pheanstalk->workflowExists('testWorkflow');
+        $workflowSchedule = $this->pheanstalk->createSchedule($workflow, new TimeSchedule());
+        $this->assertIsInt($workflowSchedule);
+    }
+
+    public function testUpdateTube()
+    {
+        $tube = $this->pheanstalk->tubeExists('testTube');
+        $tube->setName('testTubeModified');
+        $this->assertSame($tube, $this->pheanstalk->updateTube($tube));
+    }
+
+    public function testCancel()
+    {
+        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 1');
+        $this->pheanstalk->put($workflow);
+        $instances = $this->pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
+        $this->assertFalse($instances->isEmpty());
+        $workflowInstance = $instances->first();
+        $this->assertTrue($this->pheanstalk->cancel($workflowInstance));
+    }
+
+    public function testKill()
+    {
+        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 1');
+        $this->pheanstalk->put($workflow);
+        $instances = $this->pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
+        $this->assertFalse($instances->isEmpty());
+        /** @var WorkflowInstance $workflowInstance */
+        $workflowInstance = $instances->first();
+        /** @var JobInstance $jobInstance */
+        $jobInstance = $workflowInstance->getJobInstances()->first();
+        $taskInstance = $jobInstance->getTaskInstances()->first();
+        $this->assertTrue($this->pheanstalk->kill($workflowInstance, $taskInstance));
+    }
+
     public function testDelete()
     {
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
@@ -82,7 +158,7 @@ class PheanstalkTest extends TestCase
 
     public function testDeleteTube()
     {
-        $tube = $this->pheanstalk->tubeExists('testTube');
+        $tube = $this->pheanstalk->tubeExists('testTubeModified');
         $this->assertTrue($this->pheanstalk->deleteTube($tube));
     }
 

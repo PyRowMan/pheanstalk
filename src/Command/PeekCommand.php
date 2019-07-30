@@ -4,7 +4,7 @@ namespace Pheanstalk\Command;
 
 use Pheanstalk\Exception;
 use Pheanstalk\Response;
-use Pheanstalk\XmlResponseParser;
+use Pheanstalk\ResponseParser;
 
 /**
  * The 'peek', 'peek-ready', 'peek-delayed' and 'peek-buried' commands.
@@ -16,7 +16,7 @@ use Pheanstalk\XmlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class PeekCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class PeekCommand extends AbstractCommand implements ResponseParser
 {
 
     /**
@@ -64,14 +64,13 @@ class PeekCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
     {
         unset($responseData['@attributes']);
         if (!isset($responseData['workflow'])) {
-                $message = "There are no workflow yet";
-
-            throw new Exception\ServerException($message);
+            return false;
         }
-
         $responseData = $responseData['workflow'];
+        if (isset($responseData['@attributes'])) {
+            return $this->constructResponse($responseData['@attributes']);
+        }
         $responseData = array_column($responseData, '@attributes');
-        $dates = array_column($responseData, 'start_time');
         $mostRecent = [];
         foreach ($responseData as $date) {
             $curDate = strtotime($date['start_time']);
@@ -82,11 +81,16 @@ class PeekCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
         if (empty($responseData)) {
             return $this->parseResponse($responseLine, $responseData);
         }
+        return $this->constructResponse($mostRecent);
+    }
+
+    protected function constructResponse($response)
+    {
         return [
             Response::RESPONSE_FOUND,
             [
-                'id'      => (int) $mostRecent['id'],
-                'jobdata' => $mostRecent,
+                'id'      => (int) $response['id'],
+                'jobdata' => $response,
             ]
         ];
     }

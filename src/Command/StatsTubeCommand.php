@@ -2,6 +2,7 @@
 
 namespace Pheanstalk\Command;
 
+use Pheanstalk\Structure\Tube;
 use Pheanstalk\XmlResponseParser;
 use Pheanstalk\YamlResponseParser;
 
@@ -16,14 +17,15 @@ use Pheanstalk\YamlResponseParser;
  */
 class StatsTubeCommand extends AbstractCommand
 {
-    private $_tube;
+    /** @var Tube $tube */
+    private $tube;
 
     /**
-     * @param string $tube
+     * @param Tube $tube
      */
-    public function __construct($tube)
+    public function __construct(Tube $tube)
     {
-        $this->_tube = $tube;
+        $this->tube = $tube;
     }
 
     /**
@@ -48,7 +50,7 @@ class StatsTubeCommand extends AbstractCommand
     public function getFilters(): array
     {
         return [
-            'id' => $this->_tube
+            'id' => $this->tube->getId()
         ];
     }
 }
