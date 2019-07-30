@@ -4,12 +4,9 @@
 namespace Pheanstalk\Structure;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Pheanstalk\Exception\ServerBadFormatException;
 
-class WorkflowInstance
+class WorkflowInstance extends ParameterManipulations
 {
-//@running_tasks - @queued_tasks > 0
-
     const STATUS_QUEUED = "QUEUED";
     const STATUS_RUNNING = "RUNNING";
     const STATUS_RETRYING = "RETRYING";
@@ -405,20 +402,5 @@ class WorkflowInstance
     {
         $this->jobInstances->removeElement($jobInstance);
         return $this;
-    }
-
-    /**
-     * @param $input
-     *
-     * @return string
-     */
-    private function fromCamelCase($input)
-    {
-        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
-        $ret = $matches[0];
-        foreach ($ret as &$match) {
-            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
-        }
-        return implode('_', $ret);
     }
 }
