@@ -57,7 +57,7 @@ class PeekCommand extends AbstractCommand implements ResponseParser
      * @param string $responseLine
      * @param string $responseData
      *
-     * @return array
+     * @return array|bool
      * @throws Exception\ServerException
      */
     public function parseResponse($responseLine, $responseData)
@@ -71,19 +71,15 @@ class PeekCommand extends AbstractCommand implements ResponseParser
             return $this->constructResponse($responseData['@attributes']);
         }
         $responseData = array_column($responseData, '@attributes');
-        $mostRecent = [];
-        foreach ($responseData as $date) {
-            $curDate = strtotime($date['start_time']);
-            if (!isset($mostRecent['start_time']) || $curDate < strtotime($mostRecent['start_time'])) {
-                $mostRecent = $date;
-            }
-        }
-        if (empty($responseData)) {
-            return $this->parseResponse($responseLine, $responseData);
-        }
+        $mostRecent = $this->getMostRecentFromArray($responseData);
         return $this->constructResponse($mostRecent);
     }
 
+    /**
+     * @param $response
+     *
+     * @return array
+     */
     protected function constructResponse($response)
     {
         return [
@@ -93,5 +89,22 @@ class PeekCommand extends AbstractCommand implements ResponseParser
                 'jobdata' => $response,
             ]
         ];
+    }
+
+    /**
+     * @param array $datas
+     *
+     * @return array
+     */
+    protected function getMostRecentFromArray(array $datas)
+    {
+        $mostRecent = [];
+        foreach ($datas as $data) {
+            $curDate = strtotime($data['start_time']);
+            if (!isset($mostRecent['start_time']) || $curDate < strtotime($mostRecent['start_time'])) {
+                $mostRecent = $data;
+            }
+        }
+        return $mostRecent;
     }
 }

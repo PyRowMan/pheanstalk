@@ -96,6 +96,12 @@ class PheanstalkTest extends TestCase
     public function testPeek()
     {
         $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 1');
+        $this->assertFalse($this->pheanstalk->peek());
+        $this->pheanstalk->put($workflow);
+        $this->assertNotEmpty($this->pheanstalk->peek());
+        $this->pheanstalk->put($workflow);
+        $this->pheanstalk->put($workflow);
+        $this->pheanstalk->put($workflow);
         $this->pheanstalk->put($workflow);
         $this->assertNotEmpty($this->pheanstalk->peek());
         $this->assertTrue($this->pheanstalk->delete($workflow));
