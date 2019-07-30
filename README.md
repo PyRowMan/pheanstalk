@@ -91,17 +91,18 @@ a pull request to rectify this.
 $ wget http://getcomposer.org/composer.phar
 $ php composer.phar install
 
-$ ./vendor/bin/phpunit
-PHPUnit 4.0.19 by Sebastian Bergmann.
+$ ./vendor/bin/phpunit -c phpunit.xml.dist
+PHPUnit 7.5.14 by Sebastian Bergmann and contributors.
 
-Configuration read from /Users/pda/code/pheanstalk/phpunit.xml.dist
+...................................................               51 / 51 (100%)
 
-................................................................. 65 / 83 ( 78%)
-..................
+Time: 2.47 seconds, Memory: 6.00 MB
 
-Time: 239 ms, Memory: 6.00Mb
+OK (51 tests, 69 assertions)
 
-OK (83 tests, 378 assertions)
+
+Generating code coverage report in HTML format ... done
+
 ```
 
 License
