@@ -29,7 +29,6 @@ class GetWorkflowInstancesDetailCommand extends GetWorkflowInstancesCommand
      */
     public function __construct(WorkflowInstance $workflowInstance)
     {
-//        dump($workflowInstance);
         $this->workflowInstance = $workflowInstance;
     }
 
@@ -74,11 +73,6 @@ class GetWorkflowInstancesDetailCommand extends GetWorkflowInstancesCommand
      */
     public function parseResponse($responseLine, $responseData)
     {
-
-        if (!(isset($responseData['workflow']))) {
-            return false;
-        }
-
         $subjobs = $responseData['workflow']['subjobs'];
         $jobInstances = new ArrayCollection([]);
         foreach ($subjobs as $subjob) {

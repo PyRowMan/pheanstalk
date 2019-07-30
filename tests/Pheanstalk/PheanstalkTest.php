@@ -63,13 +63,24 @@ class PheanstalkTest extends TestCase
         $this->assertSame($workflow, $this->pheanstalk->update($workflow));
     }
 
+    public function testEmptyWorkflowInstances()
+    {
+        $workflow = $this->pheanstalk->workflowExists('testWorkflow');
+        $instances = $this->pheanstalk->getWorkflowInstances($workflow);
+        foreach(GetWorkflowInstancesCommand::FILTERS as $filter) {
+            $this->assertNotNull($FilterInstances = $instances->get(strtolower($filter)));
+            $workflowInstances = $FilterInstances->get('workflow_instances');
+            $this->assertNull($workflowInstances);
+        }
+    }
+
     public function testPut()
     {
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
         $this->assertNotEmpty($this->pheanstalk->put($workflow));
     }
 
-    public function testgetWorkflowInstances()
+    public function testGetWorkflowInstances()
     {
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
         $id = (int) $this->pheanstalk->put($workflow);
@@ -161,6 +172,7 @@ class PheanstalkTest extends TestCase
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
         $this->assertTrue($this->pheanstalk->delete($workflow));
     }
+
 
     public function testDeleteTube()
     {
