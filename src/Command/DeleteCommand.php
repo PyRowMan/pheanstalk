@@ -64,6 +64,7 @@ class DeleteCommand extends AbstractCommand implements \Pheanstalk\ResponseParse
 
     /**
      * @inheritDoc
+     * @return bool
      */
     public function parseResponse($responseLine, $responseData)
     {

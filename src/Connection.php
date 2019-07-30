@@ -89,7 +89,7 @@ class Connection
      *
      * @throws Exception\ClientException
      *
-     * @return object Response
+     * @return mixed
      */
     public function dispatchCommand(Command $command)
     {
