@@ -13,55 +13,56 @@ class WorkflowInstance extends ParameterManipulations
     const STATUS_FAILED = "FAILED";
 
     /** @var string|null $comment */
-    private $comment;
+    protected $comment;
 
     /** @var \DateTime|null $endTime */
-    private $endTime;
+    protected $endTime;
 
     /** @var int|null $errors */
-    private $errors;
+    protected $errors;
 
     /** @var string|null $host */
-    private $host;
+    protected $host;
 
     /** @var int $id */
-    private $id;
+    protected $id;
 
     /** @var string $name */
-    private $name;
+    protected $name;
 
     /** @var string|null $nodeName */
-    private $nodeName;
+    protected $nodeName;
 
     /** @var int|null $scheduleId */
-    private $scheduleId;
+    protected $scheduleId;
 
     /** @var \DateTime $startTime */
-    private $startTime;
+    protected $startTime;
 
     /** @var string $status */
-    private $status;
+    protected $status;
 
     /** @var int|null $evqid */
-    private $evqid;
+    protected $evqid;
 
     /** @var int|null $queuedTasks */
-    private $queuedTasks;
+    protected $queuedTasks;
 
     /** @var int|null $runningTasks */
-    private $runningTasks;
+    protected $runningTasks;
 
     /** @var int|null $retryingTasks */
-    private $retryingTasks;
+    protected $retryingTasks;
 
     /** @var ArrayCollection */
-    private $jobInstances;
+    protected $jobInstances;
 
     /**
      * @inheritDoc
      */
     public function __construct(array $params)
     {
+        $this->jobInstances = new ArrayCollection([]);
         parent::__construct($params);
         $this->updateStatus();
     }
