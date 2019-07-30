@@ -40,7 +40,7 @@ class Pheanstalk implements PheanstalkInterface
     /** @var Connection $connection */
     private $connection;
 
-    /** @var $currentClass PheanstalkInterface */
+    /** @var PheanstalkInterface $currentClass */
     private $currentClass;
 
     /**

@@ -35,14 +35,7 @@ class TaskInstance extends Task
 
     public function __construct(array $params)
     {
-        $thisObject = new \ReflectionClass($this);
-        $properties = $thisObject->getProperties();
-        foreach ($properties as $property) {
-            $snakeProperty = $this->from_camel_case($property->getName());
-            if (isset($params[$snakeProperty])) {
-                $this->{$property->getName()} = $params[$snakeProperty];
-            }
-        }
+        $this->fillWithSnakeParams($params, '-');
     }
 
     /**

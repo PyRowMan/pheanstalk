@@ -9,7 +9,7 @@ namespace Pheanstalk\Structure;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class Task
+class Task extends ParameterManipulations
 {
     const OUTPUT_TEXT = "TEXT";
     const PARAMETER_MODE_CMD = "CMDLINE";
@@ -213,19 +213,9 @@ class Task
         $root = $dom->createElement("task");
         foreach ($reflection->getProperties() as $property) {
             $value = $this->{'get'.ucfirst($property->getName())}();
-            $root->setAttribute($this->from_camel_case($property->getName()), $value);
+            $root->setAttribute($this->fromCamelCase($property->getName(), '-'), $value);
         }
         $dom->appendChild($root);
         return $dom;
-    }
-
-    function from_camel_case($input)
-    {
-        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
-        $ret = $matches[0];
-        foreach ($ret as &$match) {
-            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
-        }
-        return implode('-', $ret);
     }
 }
