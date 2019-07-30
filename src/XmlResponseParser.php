@@ -2,8 +2,10 @@
 
 namespace Pheanstalk;
 
+use Pheanstalk\Response\ArrayResponse;
+
 /**
- * A response parser for commands that return a subset of YAML.
+ * A response parser for commands that return a subset of XML.
  *
  * Expected response is 'OK', 'NOT_FOUND' response is also handled.
  * Parser expects either a YAML list or dictionary, depending on mode.
@@ -15,8 +17,12 @@ namespace Pheanstalk;
 class XmlResponseParser implements \Pheanstalk\ResponseParser
 {
 
-    /* (non-phpdoc)
-     * @see ResponseParser::parseResponse()
+    /**
+     * @param string $responseLine
+     * @param string $responseData
+     *
+     * @throws Exception\ServerException
+     * @return Response\ArrayResponse
      */
     public function parseResponse($responseLine, $responseData)
     {
@@ -29,17 +35,5 @@ class XmlResponseParser implements \Pheanstalk\ResponseParser
         unset($responseData['@attributes']);
         $content = $responseData;
         return new Response\ArrayResponse('OK', $responseData);
-    }
-
-    /**
-     * Callback for array_map to process YAML lines.
-     *
-     * @param string $line
-     *
-     * @return string
-     */
-    private function _mapYamlList($line)
-    {
-        return ltrim($line, '- ');
     }
 }
