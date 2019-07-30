@@ -92,7 +92,11 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
     }
 
     /**
-     * @inheritDoc
+     * @param string $responseLine
+     * @param array  $responseData
+     *
+     * @return ArrayCollection
+     * @throws \ReflectionException
      */
     public function parseResponse($responseLine, $responseData)
     {
@@ -119,10 +123,12 @@ class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk
             }
             $workflowInstances[] = new WorkflowInstance($instance);
         }
-        $collection['rows'] = (int) (isset($responseData['@attributes']['rows'])) ?
-            (int) $responseData['@attributes']['rows'] : $workflowInstances->count();
-        $collection['page'] = $this->page;
-        $collection['workflow_instances'] = $workflowInstances;
+        $collection = [
+            'rows' => (int) (isset($responseData['@attributes']['rows'])) ?
+                (int) $responseData['@attributes']['rows'] : $workflowInstances->count(),
+            'page' => $this->page,
+            'workflow_instances' => $workflowInstances
+        ];
         return new ArrayCollection($collection);
     }
 }

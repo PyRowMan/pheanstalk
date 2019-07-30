@@ -381,7 +381,7 @@ class WorkflowInstance
      */
     public function setJobInstances(ArrayCollection $jobInstances): WorkflowInstance
     {
-        $this->jobInstances;
+        $this->jobInstances = $jobInstances;
         return $this;
     }
 
