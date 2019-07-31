@@ -86,7 +86,7 @@ at 127.0.0.1:5000, which was previously opt-in via `--with-server`.
 Since porting to PHPUnit, all tests are run at once. Feel free to submit
 a pull request to rectify this.
 
-```
+```bash
 # ensure you have Composer set up
 $ wget http://getcomposer.org/composer.phar
 $ php composer.phar install
@@ -94,15 +94,14 @@ $ php composer.phar install
 $ ./vendor/bin/phpunit -c phpunit.xml.dist
 PHPUnit 7.5.14 by Sebastian Bergmann and contributors.
 
-...................................................               51 / 51 (100%)
+...............................................................  63 / 110 ( 57%)
+...............................................                 110 / 110 (100%)
 
-Time: 2.47 seconds, Memory: 6.00 MB
+Time: 6.55 seconds, Memory: 10.00 MB
 
-OK (51 tests, 69 assertions)
-
+OK (110 tests, 161 assertions)
 
 Generating code coverage report in HTML format ... done
-
 ```
 
 License
