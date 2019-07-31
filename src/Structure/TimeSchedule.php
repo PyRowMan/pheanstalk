@@ -7,7 +7,7 @@ class TimeSchedule
 {
     const SUM_SUBUNIT_IN_UNIT = 1770;
     const SUM_HOURS = 276;
-    const SUM_DAYS = 466;
+    const SUM_DAYS = 465;
     const SUM_MONTHS = 66;
     const SUM_WEEKDAYS = 21;
 
