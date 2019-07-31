@@ -155,7 +155,7 @@ class PheanstalkTest extends TestCase
 
     public function testKill()
     {
-        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 1');
+        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 2');
         $this->pheanstalk->put($workflow);
         $instances = $this->pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
         $this->assertFalse($instances->isEmpty());
