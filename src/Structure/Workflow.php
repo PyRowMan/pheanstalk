@@ -39,7 +39,7 @@ class Workflow
      * @param ArrayCollection[Job]  $jobs       The collection of jobs
      * @param null|string           $comment    The comment of the workflow
      */
-    public function __construct(string $name, string $group, ArrayCollection $jobs, ?string $comment)
+    public function __construct(string $name, string $group, ArrayCollection $jobs, ?string $comment = null)
     {
         $this->name = $name;
         $this->group = $group;
