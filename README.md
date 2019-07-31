@@ -81,8 +81,8 @@ if ($workflow = $pheanstalk->workflowExists('Sleep'))
 Running the tests
 -----------------
 
-There is a section of the test suite which depends on a running beanstalkd
-at 127.0.0.1:5000, which was previously opt-in via `--with-server`.
+There is a section of the test suite which depends on a running evqueue
+at 127.0.0.1:5000.
 Since porting to PHPUnit, all tests are run at once. Feel free to submit
 a pull request to rectify this.
 
