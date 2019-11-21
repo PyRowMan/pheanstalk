@@ -29,11 +29,6 @@ class StreamFunctions
 
     // ----------------------------------------
 
-    public function feof($handle)
-    {
-        return feof($handle);
-    }
-
     public function fgets($handle, $length = null)
     {
         if (isset($length)) {
@@ -46,11 +41,6 @@ class StreamFunctions
     public function fopen($filename, $mode)
     {
         return fopen($filename, $mode);
-    }
-
-    public function fread($handle, $length)
-    {
-        return fread($handle, $length);
     }
 
     public function fsockopen($hostname, $port = -1, &$errno = null, &$errstr = null, $timeout = null)
