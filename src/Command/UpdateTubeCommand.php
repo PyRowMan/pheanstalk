@@ -2,11 +2,9 @@
 
 namespace Pheanstalk\Command;
 
-use Pheanstalk\Exception;
-use Pheanstalk\Response;
+use Pheanstalk\ResponseParser;
 use Pheanstalk\Structure\Tube;
 use Pheanstalk\Structure\Workflow;
-use Pheanstalk\XmlResponseParser;
 
 /**
  * The 'UpdateTube' command.
@@ -18,7 +16,7 @@ use Pheanstalk\XmlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class UpdateTubeCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class UpdateTubeCommand extends AbstractCommand implements ResponseParser
 {
 
     /** @var Tube $tube */

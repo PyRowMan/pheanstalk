@@ -3,9 +3,8 @@
 namespace Pheanstalk\Command;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Pheanstalk\ResponseParser;
 use Pheanstalk\Structure\Tube;
-use Pheanstalk\XmlResponseParser;
-use Pheanstalk\YamlResponseParser;
 
 /**
  * The 'list-tubes' command.
@@ -16,7 +15,7 @@ use Pheanstalk\YamlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class ListTubesCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class ListTubesCommand extends AbstractCommand implements ResponseParser
 {
     /**
      * @inheritDoc

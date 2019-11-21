@@ -3,6 +3,7 @@
 namespace Pheanstalk\Command;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Pheanstalk\ResponseParser;
 use Pheanstalk\Structure\Job;
 use Pheanstalk\Structure\Task;
 use Pheanstalk\Structure\Workflow;
@@ -16,7 +17,7 @@ use Pheanstalk\Structure\Workflow;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class GetWorkflowCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class GetWorkflowCommand extends AbstractCommand implements ResponseParser
 {
 
     /** @var Workflow $workflow */

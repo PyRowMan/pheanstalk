@@ -2,11 +2,9 @@
 
 namespace Pheanstalk\Command;
 
-use Pheanstalk\Exception;
-use Pheanstalk\Response;
+use Pheanstalk\ResponseParser;
 use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Workflow;
-use Pheanstalk\XmlResponseParser;
 
 /**
  * The 'CreateSchedule' command.
@@ -18,7 +16,7 @@ use Pheanstalk\XmlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class CreateScheduleCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class CreateScheduleCommand extends AbstractCommand implements ResponseParser
 {
 
     const FAILURE_TYPE_CONTINUE = "CONTINUE";

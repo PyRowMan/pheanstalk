@@ -3,10 +3,8 @@
 namespace Pheanstalk\Command;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Pheanstalk\Exception;
-use Pheanstalk\Response;
+use Pheanstalk\ResponseParser;
 use Pheanstalk\Structure\Workflow;
-use Pheanstalk\XmlResponseParser;
 
 /**
  * The 'ListWorkflows' command.
@@ -18,7 +16,7 @@ use Pheanstalk\XmlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class ListWorkflowsCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class ListWorkflowsCommand extends AbstractCommand implements ResponseParser
 {
 
     /**

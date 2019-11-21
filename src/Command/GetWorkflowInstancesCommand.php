@@ -3,6 +3,7 @@
 namespace Pheanstalk\Command;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Pheanstalk\ResponseParser;
 use Pheanstalk\Structure\Workflow;
 use Pheanstalk\Structure\WorkflowInstance;
 
@@ -15,7 +16,7 @@ use Pheanstalk\Structure\WorkflowInstance;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class GetWorkflowInstancesCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class GetWorkflowInstancesCommand extends AbstractCommand implements ResponseParser
 {
 
     const FILTER_EXECUTING = 'EXECUTING';

@@ -3,8 +3,7 @@
 namespace Pheanstalk\Command;
 
 use Pheanstalk\Command;
-use Pheanstalk\Response;
-use Pheanstalk\XmlResponseParser;
+use Pheanstalk\Parser\XmlResponseParser;
 
 /**
  * Common functionality for Command implementations.

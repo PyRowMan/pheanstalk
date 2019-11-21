@@ -2,8 +2,7 @@
 
 namespace Pheanstalk\Command;
 
-use Pheanstalk\Exception;
-use Pheanstalk\Response;
+use Pheanstalk\ResponseParser;
 use Pheanstalk\Structure\Workflow;
 
 /**
@@ -15,7 +14,7 @@ use Pheanstalk\Structure\Workflow;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class UpdateCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class UpdateCommand extends AbstractCommand implements ResponseParser
 {
     /** @var Workflow $workflow */
     private $workflow;
