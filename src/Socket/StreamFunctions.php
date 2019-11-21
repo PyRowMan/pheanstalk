@@ -29,11 +29,6 @@ class StreamFunctions
 
     // ----------------------------------------
 
-    public function feof($handle)
-    {
-        return feof($handle);
-    }
-
     public function fgets($handle, $length = null)
     {
         if (isset($length)) {
@@ -41,16 +36,6 @@ class StreamFunctions
         } else {
             return fgets($handle);
         }
-    }
-
-    public function fopen($filename, $mode)
-    {
-        return fopen($filename, $mode);
-    }
-
-    public function fread($handle, $length)
-    {
-        return fread($handle, $length);
     }
 
     public function fsockopen($hostname, $port = -1, &$errno = null, &$errstr = null, $timeout = null)
@@ -63,13 +48,9 @@ class StreamFunctions
         return @pfsockopen($hostname, $port, $errno, $errstr, $timeout);
     }
 
-    public function fwrite($handle, $string, $length = null)
+    public function fwrite($handle, $string)
     {
-        if (isset($length)) {
-            return fwrite($handle, $string, $length);
-        } else {
-            return fwrite($handle, $string);
-        }
+        return fwrite($handle, $string);
     }
 
     public function fclose($handle)
