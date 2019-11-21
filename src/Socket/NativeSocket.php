@@ -72,41 +72,6 @@ class NativeSocket implements Socket
         }
     }
 
-    /* (non-phpdoc)
-     * @see Socket::write()
-     */
-    public function read($length)
-    {
-        $read = 0;
-        $parts = '';
-
-        while ($read < $length && !$this->_wrapper()->feof($this->_socket)) {
-            $data = $this->_wrapper()
-                ->fread($this->_socket, $length - $read);
-
-            if ($data === false) {
-                throw new Exception\SocketException('fread() returned false');
-            }
-
-            $read += strlen($data);
-            $parts .= $data;
-        }
-
-        return $parts;
-    }
-
-    /**
-     * @return \SimpleXMLElement
-     */
-    public function recv()
-    {
-        $response = "";
-        while ($recv = $this->_wrapper()->fread($this->_socket, 1600)) {
-            $response .= $recv;
-        }
-        return $response;
-    }
-
     /**
      * Request a socket until the returned datas are a valid xml string
      * @param null $length

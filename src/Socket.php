@@ -23,13 +23,6 @@ interface Socket
     public function write($data);
 
     /**
-     * Reads up to $length bytes from the socket.
-     *
-     * @return string
-     */
-    public function read($length);
-
-    /**
      * Reads up to the next new-line, or $length - 1 bytes.
      * Trailing whitespace is trimmed.
      *

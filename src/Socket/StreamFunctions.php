@@ -27,22 +27,6 @@ class StreamFunctions
         return self::$_instance;
     }
 
-    /**
-     * Sets an alternative or mocked instance.
-     */
-    public function setInstance($instance)
-    {
-        self::$_instance = $instance;
-    }
-
-    /**
-     * Unsets the instance, so a new one will be created.
-     */
-    public function unsetInstance()
-    {
-        self::$_instance = null;
-    }
-
     // ----------------------------------------
 
     public function feof($handle)
