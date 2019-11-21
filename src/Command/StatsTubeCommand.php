@@ -3,8 +3,6 @@
 namespace Pheanstalk\Command;
 
 use Pheanstalk\Structure\Tube;
-use Pheanstalk\XmlResponseParser;
-use Pheanstalk\YamlResponseParser;
 
 /**
  * The 'stats-tube' command.

@@ -2,9 +2,6 @@
 
 namespace Pheanstalk\Command;
 
-use Pheanstalk\XmlResponseParser;
-use Pheanstalk\YamlResponseParser;
-
 /**
  * The 'stats' command.
  *

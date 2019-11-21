@@ -2,11 +2,9 @@
 
 namespace Pheanstalk\Command;
 
-use Pheanstalk\Exception;
+use Pheanstalk\Parser\RequestOkResponseParser;
 use Pheanstalk\Structure\TaskInstance;
-use Pheanstalk\Structure\Workflow;
 use Pheanstalk\Structure\WorkflowInstance;
-use Pheanstalk\XmlResponseParser;
 
 /**
  * The 'Kill' command.
@@ -18,7 +16,7 @@ use Pheanstalk\XmlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class KillCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class KillCommand extends AbstractCommand
 {
 
     /** @var WorkflowInstance $workflowInstance */
@@ -70,14 +68,6 @@ class KillCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
      */
     public function getResponseParser()
     {
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function parseResponse($responseLine, $responseData)
-    {
-        return $responseLine === 'OK';
+        return new RequestOkResponseParser();
     }
 }

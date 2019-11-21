@@ -2,9 +2,7 @@
 
 namespace Pheanstalk\Command;
 
-use Pheanstalk\Exception;
 use Pheanstalk\Structure\Workflow;
-use Pheanstalk\XmlResponseParser;
 
 /**
  * The 'put' command.

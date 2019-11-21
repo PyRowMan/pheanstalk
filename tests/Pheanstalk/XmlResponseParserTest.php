@@ -2,6 +2,7 @@
 
 namespace Pheanstalk;
 
+use Pheanstalk\Parser\XmlResponseParser;
 use Pheanstalk\Response\ArrayResponse;
 use PHPUnit\Framework\TestCase;
 

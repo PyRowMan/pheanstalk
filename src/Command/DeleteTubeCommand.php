@@ -2,8 +2,8 @@
 
 namespace Pheanstalk\Command;
 
+use Pheanstalk\Parser\RequestOkResponseParser;
 use Pheanstalk\Structure\Tube;
-use Pheanstalk\Structure\Workflow;
 
 /**
  * The 'deleteTube' command.
@@ -14,7 +14,7 @@ use Pheanstalk\Structure\Workflow;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class DeleteTubeCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class DeleteTubeCommand extends AbstractCommand
 {
     /** @var Tube $tube */
     private $tube;
@@ -58,15 +58,6 @@ class DeleteTubeCommand extends AbstractCommand implements \Pheanstalk\ResponseP
      */
     public function getResponseParser()
     {
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     * @return bool
-     */
-    public function parseResponse($responseLine, $responseData)
-    {
-        return $responseLine === 'OK';
+        return new RequestOkResponseParser();
     }
 }

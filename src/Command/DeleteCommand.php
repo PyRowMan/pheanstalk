@@ -2,8 +2,7 @@
 
 namespace Pheanstalk\Command;
 
-use Pheanstalk\Exception;
-use Pheanstalk\Response;
+use Pheanstalk\Parser\RequestOkResponseParser;
 use Pheanstalk\Structure\Workflow;
 
 /**
@@ -15,7 +14,7 @@ use Pheanstalk\Structure\Workflow;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class DeleteCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class DeleteCommand extends AbstractCommand
 {
     /** @var Workflow $workflow */
     private $workflow;
@@ -59,15 +58,6 @@ class DeleteCommand extends AbstractCommand implements \Pheanstalk\ResponseParse
      */
     public function getResponseParser()
     {
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     * @return bool
-     */
-    public function parseResponse($responseLine, $responseData)
-    {
-        return $responseLine === 'OK';
+        return new RequestOkResponseParser();
     }
 }

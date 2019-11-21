@@ -2,10 +2,8 @@
 
 namespace Pheanstalk\Command;
 
-use Pheanstalk\Exception;
-use Pheanstalk\Structure\Workflow;
+use Pheanstalk\Parser\RequestOkResponseParser;
 use Pheanstalk\Structure\WorkflowInstance;
-use Pheanstalk\XmlResponseParser;
 
 /**
  * The 'Cancel' command.
@@ -17,7 +15,7 @@ use Pheanstalk\XmlResponseParser;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class CancelCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
+class CancelCommand extends AbstractCommand
 {
 
     /** @var WorkflowInstance $workflowInstance */
@@ -64,14 +62,6 @@ class CancelCommand extends AbstractCommand implements \Pheanstalk\ResponseParse
      */
     public function getResponseParser()
     {
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function parseResponse($responseLine, $responseData)
-    {
-        return $responseLine === 'OK';
+        return new RequestOkResponseParser();
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
-namespace Pheanstalk;
+namespace Pheanstalk\Parser;
+
+use Pheanstalk\ResponseParser;
 
 /**
  * A response parser for commands that return a subset of XML.
@@ -12,25 +14,17 @@ namespace Pheanstalk;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class XmlResponseParser implements \Pheanstalk\ResponseParser
+class RequestOkResponseParser implements ResponseParser
 {
 
     /**
      * @param string $responseLine
      * @param array $responseData
      *
-     * @throws Exception\ServerException
-     * @return array
+     * @return bool
      */
     public function parseResponse($responseLine, $responseData)
     {
-        if ($responseLine == Response::RESPONSE_NOT_FOUND) {
-            throw new Exception\ServerException(sprintf(
-                'Server reported %s',
-                $responseLine
-            ));
-        }
-        unset($responseData['@attributes']);
-        return $responseData;
+        return $responseLine === 'OK';
     }
 }
