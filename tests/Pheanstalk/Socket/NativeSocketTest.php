@@ -3,6 +3,7 @@
 namespace {
     // This allow us to configure the behavior of the "global mock"
     $mockWrite = false;
+    $mockRead = false;
 }
 
 namespace Pheanstalk\Socket {
@@ -18,6 +19,15 @@ namespace Pheanstalk\Socket {
             return 0;
         } else {
             return call_user_func_array('\fwrite', func_get_args());
+        }
+    }
+    function fgets()
+    {
+        global $mockRead;
+        if (isset($mockRead) && $mockRead === true) {
+            return "notxml";
+        } else {
+            return call_user_func_array('\fgets', func_get_args());
         }
     }
     use PHPUnit\Framework\TestCase;
@@ -41,6 +51,26 @@ namespace Pheanstalk\Socket {
             global $mockWrite;
             $mockWrite = true;
             $this->object->write('1');
+        }
+
+        /**
+         * @expectedException \Pheanstalk\Exception\SocketException
+         */
+        public function testShouldFailToRead()
+        {
+            global $mockWrite;
+            $mockWrite = true;
+            $this->object->getLine('1');
+        }
+
+        /**
+         * @expectedException \Pheanstalk\Exception\SocketException
+         */
+        public function testShouldFailToReadInTimeout()
+        {
+            global $mockRead;
+            $mockRead = true;
+            $this->object->getLine('1');
         }
     }
 }
