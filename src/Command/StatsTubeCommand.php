@@ -9,7 +9,7 @@ use Pheanstalk\Structure\Tube;
  *
  * Gives statistical information about the specified tube if it exists.
  *
- * @author  Paul Annesley
+ * @author  Valentin Corre
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */

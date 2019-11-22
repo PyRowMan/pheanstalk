@@ -10,7 +10,7 @@ use Pheanstalk\Structure\Tube;
  *
  * Permanently deletes a tube.
  *
- * @author  Paul Annesley
+ * @author  Valentin Corre
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */

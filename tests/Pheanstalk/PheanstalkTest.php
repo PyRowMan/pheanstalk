@@ -134,6 +134,8 @@ class PheanstalkTest extends TestCase
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
         $workflowSchedule = $this->pheanstalk->createSchedule($workflow, new TimeSchedule());
         $this->assertIsInt($workflowSchedule);
+//        $this->pheanstalk->getSchedule($workflowSchedule);
+        $this->assertTrue($this->pheanstalk->deleteSchedule($workflowSchedule));
     }
 
     public function testUpdateTube()

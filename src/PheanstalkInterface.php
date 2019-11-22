@@ -49,6 +49,15 @@ interface PheanstalkInterface
     // ----------------------------------------
 
     /**
+     * Permanently deletes a scheduled workflow.
+     *
+     * @param int $scheduleId
+     *
+     * @return bool
+     */
+    public function deleteSchedule(int $scheduleId);
+
+    /**
      * Permanently deletes a job.
      *
      * @param Workflow $workflow
@@ -75,6 +84,16 @@ interface PheanstalkInterface
      * @return bool|Workflow If exists, the workflow
      */
     public function workflowExists($name);
+
+    /**
+     * Retrieve a workflow by its id, if there isn't for
+     * the id given in the construct, returns false
+     *
+     * @param int $scheduleId The scheduled workflow Id researched
+     *
+     * @return bool|Workflow If exists, the worflow
+     */
+    public function getSchedule(int $scheduleId);
 
     /**
      * Retrieve a workflow by its id, if there isn't for

@@ -11,7 +11,7 @@ use Pheanstalk\Structure\Tube;
  *
  * List all existing tubes.
  *
- * @author  Paul Annesley
+ * @author  Valentin Corre
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */

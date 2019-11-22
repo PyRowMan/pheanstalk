@@ -7,7 +7,7 @@ namespace Pheanstalk\Command;
  *
  * Statistical information about the system as a whole.
  *
- * @author  Paul Annesley
+ * @author  Valentin Corre
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */

@@ -12,7 +12,7 @@ use Pheanstalk\ResponseParser;
  * The peek commands let the client inspect a job in the system. There are four
  * variations. All but the first (peek) operate only on the currently used tube.
  *
- * @author  Paul Annesley
+ * @author  Valentin Corre
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */

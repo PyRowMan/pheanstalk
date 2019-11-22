@@ -98,6 +98,14 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
+    public function deleteSchedule(int $scheduleId)
+    {
+        return $this->_dispatch(new Command\DeleteScheduleCommand($scheduleId));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function delete(Workflow $workflow)
     {
         return $this->_dispatch(new Command\DeleteCommand($workflow));
@@ -121,6 +129,14 @@ class Pheanstalk implements PheanstalkInterface
             return $this->getCurrentClass()->getWorkflow($workflow);
         }
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSchedule(int $scheduleId)
+    {
+        return $this->_dispatch(new Command\GetScheduleCommand($scheduleId));
     }
 
     /**
