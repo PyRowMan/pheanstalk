@@ -5,7 +5,9 @@ namespace Pheanstalk\Command;
 use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\ResponseParser;
 use Pheanstalk\Structure\Job;
+use Pheanstalk\Structure\Schedule;
 use Pheanstalk\Structure\Task;
+use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Workflow;
 
 /**
@@ -72,21 +74,17 @@ class GetScheduleCommand extends AbstractCommand implements ResponseParser
      */
     public function parseResponse($responseLine, $responseData)
     {
-        var_dump($responseData);exit;
-//        $workflow = $responseData['workflow'];
-//        $jobs = $workflow['workflow']['subjobs'];
-//        $workflow = $workflow['@attributes'] ?? $workflow;
-//        $jobObjects = [];
-//        foreach ($jobs as $job) {
-//            $taskObjects = [];
-//            foreach ($job['tasks'] as $task) {
-//                $task = $task['@attributes'];
-//                $taskObjects[] = new Task($task['path'], $task['queue'], $task['use-agent'], $task['user'], $task['host'], $task['output-method'], $task['parameters-mode']);
-//            }
-//            $jobObjects[] = new Job(new ArrayCollection($taskObjects));
-//        }
-//        $this->workflow->setJobs(new ArrayCollection($jobObjects));
-//
-//        return $this->workflow;
+        $scheduleDatas = $responseData['workflow_schedule'];
+        $scheduleDatas = $scheduleDatas['@attributes'] ?? $scheduleDatas;
+        return new Schedule(
+            (int) $scheduleDatas['workflow_id'],
+            (new TimeSchedule())->__fromString($scheduleDatas['schedule']),
+            $scheduleDatas['onfailure'],
+            $scheduleDatas['active'],
+            $scheduleDatas['comment'],
+            $scheduleDatas['user'],
+            $scheduleDatas['host'],
+            $scheduleDatas['node']
+        );
     }
 }

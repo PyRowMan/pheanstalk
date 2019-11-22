@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Pheanstalk\Command\CreateScheduleCommand;
 use Pheanstalk\Command\GetWorkflowInstancesCommand;
+use Pheanstalk\Structure\Schedule;
 use Pheanstalk\Structure\TaskInstance;
 use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Tube;
@@ -51,11 +52,11 @@ interface PheanstalkInterface
     /**
      * Permanently deletes a scheduled workflow.
      *
-     * @param int $scheduleId
+     * @param Schedule $schedule
      *
      * @return bool
      */
-    public function deleteSchedule(int $scheduleId);
+    public function deleteSchedule(Schedule $schedule);
 
     /**
      * Permanently deletes a job.
@@ -89,11 +90,11 @@ interface PheanstalkInterface
      * Retrieve a workflow by its id, if there isn't for
      * the id given in the construct, returns false
      *
-     * @param int $scheduleId The scheduled workflow Id researched
+     * @param int $schedule The scheduled id researched
      *
-     * @return bool|Workflow If exists, the worflow
+     * @return Schedule If exists, the Schedule
      */
-    public function getSchedule(int $scheduleId);
+    public function getSchedule(int $schedule);
 
     /**
      * Retrieve a workflow by its id, if there isn't for
@@ -192,15 +193,11 @@ interface PheanstalkInterface
     public function update(Workflow $workflow):Workflow;
 
     /**
-     * @param Workflow      $workflow
-     * @param TimeSchedule  $schedule
-     * @param string|null   $onFailure
-     * @param bool|null     $active
-     * @param null          $comment
+     * @param Schedule $schedule
      *
-     * @return mixed
+     * @return Schedule The workflow schedule
      */
-    public function createSchedule(Workflow $workflow, TimeSchedule $schedule, $onFailure = CreateScheduleCommand::FAILURE_TYPE_CONTINUE, $active = true, $comment = null);
+    public function createSchedule(Schedule $schedule);
 
     /**
      * @param string        $name                   The name of the linked workflow

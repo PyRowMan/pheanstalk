@@ -15,6 +15,7 @@ use Pheanstalk\Command\UpdateTubeCommand;
 use Pheanstalk\Command\WorkflowExistsCommand;
 use Pheanstalk\Exception\ServerDuplicateEntryException;
 use Pheanstalk\Structure\Job;
+use Pheanstalk\Structure\Schedule;
 use Pheanstalk\Structure\Task;
 use Pheanstalk\Structure\TaskInstance;
 use Pheanstalk\Structure\TimeSchedule;
@@ -98,9 +99,9 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteSchedule(int $scheduleId)
+    public function deleteSchedule(Schedule $schedule)
     {
-        return $this->_dispatch(new Command\DeleteScheduleCommand($scheduleId));
+        return $this->_dispatch(new Command\DeleteScheduleCommand($schedule));
     }
 
     /**
@@ -298,10 +299,10 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
-    public function createSchedule(Workflow $workflow, TimeSchedule $schedule, $onFailure = CreateScheduleCommand::FAILURE_TYPE_CONTINUE, $active = true, $comment = null)
+    public function createSchedule(Schedule $schedule)
     {
         $workflowSchedule = $this->_dispatch(
-            new Command\CreateScheduleCommand($workflow, $schedule, $onFailure, $active, $comment)
+            new Command\CreateScheduleCommand($schedule)
         );
         return $workflowSchedule;
     }

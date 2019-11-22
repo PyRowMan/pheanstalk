@@ -3,6 +3,7 @@
 namespace Pheanstalk\Command;
 
 use Pheanstalk\ResponseParser;
+use Pheanstalk\Structure\Schedule;
 use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Workflow;
 
@@ -22,35 +23,18 @@ class CreateScheduleCommand extends AbstractCommand implements ResponseParser
     const FAILURE_TYPE_CONTINUE = "CONTINUE";
     const FAILURE_TYPE_SUSPEND = "SUSPEND";
 
-    /** @var Workflow $workflow */
-    private $workflow;
-
+    /** @var Schedule $schedule */
     private $schedule;
 
-    private $onFailure;
-
-    /** @var bool $active */
-    private $active;
-
-    /** @var string|null $comment */
-    private $comment;
 
     /**
      * CreateScheduleCommand constructor.
      *
-     * @param Workflow     $workflow
-     * @param TimeSchedule $schedule
-     * @param string       $onFailure
-     * @param bool         $active
-     * @param string|null         $comment
+     * @param Schedule     $schedule
      */
-    public function __construct(Workflow $workflow, TimeSchedule $schedule, $onFailure = self::FAILURE_TYPE_CONTINUE, $active = true, $comment = null)
+    public function __construct(Schedule $schedule)
     {
-        $this->workflow = $workflow;
         $this->schedule = $schedule;
-        $this->onFailure = $onFailure ?? self::FAILURE_TYPE_CONTINUE;
-        $this->active = $active ?? true;
-        $this->comment = $comment ?? $this->workflow->getComment();
     }
 
     /**
@@ -75,12 +59,12 @@ class CreateScheduleCommand extends AbstractCommand implements ResponseParser
     public function getFilters(): array
     {
         return[
-            'workflow_id' => $this->workflow->getId(),
-            'schedule' => $this->schedule->__toString(),
-            "onfailure" => $this->onFailure,
-            'active' => $this->active,
-            'comment' => $this->comment,
-            'node' => "any"
+            'workflow_id' => $this->schedule->getWorkflow(),
+            'schedule' => $this->schedule->getSchedule()->__toString(),
+            "onfailure" => $this->schedule->getOnFailure(),
+            'active' => $this->schedule->isActive(),
+            'comment' => $this->schedule->getComment(),
+            'node' => $this->schedule->getNode()
         ];
     }
 
@@ -97,6 +81,7 @@ class CreateScheduleCommand extends AbstractCommand implements ResponseParser
      */
     public function parseResponse($responseLine, $responseData)
     {
-        return (int) $responseData['@attributes']['schedule-id'];
+        $this->schedule->setId((int) $responseData['@attributes']['schedule-id']);
+        return $this->schedule;
     }
 }

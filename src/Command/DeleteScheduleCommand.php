@@ -3,6 +3,7 @@
 namespace Pheanstalk\Command;
 
 use Pheanstalk\Parser\RequestOkResponseParser;
+use Pheanstalk\Structure\Schedule;
 use Pheanstalk\Structure\Workflow;
 
 /**
@@ -16,15 +17,15 @@ use Pheanstalk\Structure\Workflow;
  */
 class DeleteScheduleCommand extends AbstractCommand
 {
-    /** @var int $scheduleId */
-    private $scheduleId;
+    /** @var Schedule $schedule */
+    private $schedule;
 
     /**
-     * @param int $scheduleId
+     * @param Schedule $schedule
      */
-    public function __construct(int $scheduleId)
+    public function __construct(Schedule $schedule)
     {
-        $this->scheduleId = $scheduleId;
+        $this->schedule = $schedule;
     }
 
     /**
@@ -49,7 +50,7 @@ class DeleteScheduleCommand extends AbstractCommand
     public function getFilters(): array
     {
         return [
-            'id' => $this->scheduleId
+            'id' => $this->schedule->getId()
         ];
     }
 

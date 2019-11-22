@@ -5,6 +5,7 @@ namespace Pheanstalk;
 use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\Command\GetWorkflowInstancesCommand;
 use Pheanstalk\Structure\JobInstance;
+use Pheanstalk\Structure\Schedule;
 use Pheanstalk\Structure\Task;
 use Pheanstalk\Structure\Job;
 use Pheanstalk\Structure\TimeSchedule;
@@ -132,10 +133,12 @@ class PheanstalkTest extends TestCase
     public function testCreateSchedule()
     {
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
-        $workflowSchedule = $this->pheanstalk->createSchedule($workflow, new TimeSchedule());
-        $this->assertIsInt($workflowSchedule);
-//        $this->pheanstalk->getSchedule($workflowSchedule);
-        $this->assertTrue($this->pheanstalk->deleteSchedule($workflowSchedule));
+        $schedule = new Schedule($workflow->getId(), new TimeSchedule());
+        $this->pheanstalk->createSchedule($schedule);
+        $this->assertNotNull($schedule->getId());
+        $recoveredSchedule = $this->pheanstalk->getSchedule($schedule->getId());
+        $this->assertSame($schedule->getId(), $recoveredSchedule->getId());
+        $this->assertTrue($this->pheanstalk->deleteSchedule($schedule));
     }
 
     public function testUpdateTube()
