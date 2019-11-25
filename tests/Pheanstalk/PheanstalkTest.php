@@ -9,6 +9,7 @@ use Pheanstalk\Structure\JobInstance;
 use Pheanstalk\Structure\Schedule;
 use Pheanstalk\Structure\Task;
 use Pheanstalk\Structure\Job;
+use Pheanstalk\Structure\TaskInstance;
 use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Tube;
 use Pheanstalk\Structure\Workflow;
@@ -182,6 +183,28 @@ class PheanstalkTest extends TestCase
         $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 10');
         $this->pheanstalk->put($workflow);
         $this->killFirstRunningInstance($workflow);
+    }
+
+    /**
+     * @expectedException \Pheanstalk\Exception\ServerException
+     */
+    public function testShouldFailWithNoPid()
+    {
+        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 10');
+        $this->pheanstalk->put($workflow);
+        $instances = $this->pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
+        $this->assertFalse($instances->isEmpty());
+        /** @var WorkflowInstance $workflowInstance */
+        $workflowInstance = $instances->filter(function(WorkflowInstance $instance) {
+            return $instance->getStatus() === 'RUNNING';
+        })->first();
+        /** @var JobInstance $jobInstance */
+        $jobInstance = $workflowInstance->getJobInstances()->first();
+        $taskInstance = $jobInstance->getTaskInstances()->first();
+        /** @var$taskInstance TaskInstance */
+        $taskInstance->setPid(0);
+
+        $this->pheanstalk->kill($workflowInstance, $taskInstance);
     }
 
     protected function killFirstRunningInstance(Workflow $workflow)
