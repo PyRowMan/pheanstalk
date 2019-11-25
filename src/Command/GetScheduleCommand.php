@@ -76,7 +76,7 @@ class GetScheduleCommand extends AbstractCommand implements ResponseParser
     {
         $scheduleDatas = $responseData['workflow_schedule'];
         $scheduleDatas = $scheduleDatas['@attributes'] ?? $scheduleDatas;
-        return new Schedule(
+        return (new Schedule(
             (int) $scheduleDatas['workflow_id'],
             (new TimeSchedule())->__fromString($scheduleDatas['schedule']),
             $scheduleDatas['onfailure'],
@@ -85,6 +85,6 @@ class GetScheduleCommand extends AbstractCommand implements ResponseParser
             $scheduleDatas['user'],
             $scheduleDatas['host'],
             $scheduleDatas['node']
-        );
+        ))->setId($this->scheduleId);
     }
 }
