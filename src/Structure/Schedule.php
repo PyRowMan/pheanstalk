@@ -45,8 +45,7 @@ class Schedule
         $user = null,
         $host = null,
         $node = "any"
-    )
-    {
+    ) {
         $this->workflow = $workflow;
         $this->schedule = $schedule;
         $this->onFailure = $onFailure;

@@ -194,7 +194,7 @@ class TimeSchedule
     {
         $times = explode(';', $time);
         $arrayOfTimes = [];
-        foreach($times as $time) {
+        foreach ($times as $time) {
             $arrayOfTimes[] = (empty($time)) ? [] : explode(',', $time);
         }
         $this->__construct($arrayOfTimes[0], $arrayOfTimes[1], $arrayOfTimes[2], $arrayOfTimes[3], $arrayOfTimes[4], $arrayOfTimes[5]);

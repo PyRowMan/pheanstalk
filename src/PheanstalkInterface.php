@@ -99,7 +99,7 @@ interface PheanstalkInterface
     /**
      * The Scheduled workflow.
      *
-     * @return ArrayCollection[Queue]
+     * @return ArrayCollection[Schedule]
      */
     public function listSchedules();
 
