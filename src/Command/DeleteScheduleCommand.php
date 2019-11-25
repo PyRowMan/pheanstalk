@@ -3,10 +3,11 @@
 namespace Pheanstalk\Command;
 
 use Pheanstalk\Parser\RequestOkResponseParser;
+use Pheanstalk\Structure\Schedule;
 use Pheanstalk\Structure\Workflow;
 
 /**
- * The 'delete' command.
+ * The 'deleteSchedule' command.
  *
  * Permanently deletes an already-reserved job.
  *
@@ -14,17 +15,17 @@ use Pheanstalk\Structure\Workflow;
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class DeleteCommand extends AbstractCommand
+class DeleteScheduleCommand extends AbstractCommand
 {
-    /** @var Workflow $workflow */
-    private $workflow;
+    /** @var Schedule $schedule */
+    private $schedule;
 
     /**
-     * @param Workflow $workflow
+     * @param Schedule $schedule
      */
-    public function __construct(Workflow $workflow)
+    public function __construct(Schedule $schedule)
     {
-        $this->workflow = $workflow;
+        $this->schedule = $schedule;
     }
 
     /**
@@ -32,7 +33,7 @@ class DeleteCommand extends AbstractCommand
      */
     public function getGroup(): string
     {
-        return 'workflow';
+        return 'workflow_schedule';
     }
 
     /**
@@ -49,7 +50,7 @@ class DeleteCommand extends AbstractCommand
     public function getFilters(): array
     {
         return [
-            'id' => $this->workflow->getId()
+            'id' => $this->schedule->getId()
         ];
     }
 

@@ -15,6 +15,7 @@ use Pheanstalk\Command\UpdateTubeCommand;
 use Pheanstalk\Command\WorkflowExistsCommand;
 use Pheanstalk\Exception\ServerDuplicateEntryException;
 use Pheanstalk\Structure\Job;
+use Pheanstalk\Structure\Schedule;
 use Pheanstalk\Structure\Task;
 use Pheanstalk\Structure\TaskInstance;
 use Pheanstalk\Structure\TimeSchedule;
@@ -98,6 +99,14 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
+    public function deleteSchedule(Schedule $schedule)
+    {
+        return $this->_dispatch(new Command\DeleteScheduleCommand($schedule));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function delete(Workflow $workflow)
     {
         return $this->_dispatch(new Command\DeleteCommand($workflow));
@@ -121,6 +130,22 @@ class Pheanstalk implements PheanstalkInterface
             return $this->getCurrentClass()->getWorkflow($workflow);
         }
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSchedule(int $scheduleId)
+    {
+        return $this->_dispatch(new Command\GetScheduleCommand($scheduleId));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function listSchedules()
+    {
+        return $this->_dispatch(new Command\ListSchedulesCommand());
     }
 
     /**
@@ -282,10 +307,19 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
-    public function createSchedule(Workflow $workflow, TimeSchedule $schedule, $onFailure = CreateScheduleCommand::FAILURE_TYPE_CONTINUE, $active = true, $comment = null)
+    public function updateSchedule(Schedule $schedule): Schedule
+    {
+        $schedule = $this->_dispatch(new Command\UpdateScheduleCommand($schedule));
+        return $schedule;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createSchedule(Schedule $schedule)
     {
         $workflowSchedule = $this->_dispatch(
-            new Command\CreateScheduleCommand($workflow, $schedule, $onFailure, $active, $comment)
+            new Command\CreateScheduleCommand($schedule)
         );
         return $workflowSchedule;
     }

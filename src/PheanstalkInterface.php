@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Pheanstalk\Command\CreateScheduleCommand;
 use Pheanstalk\Command\GetWorkflowInstancesCommand;
+use Pheanstalk\Structure\Schedule;
 use Pheanstalk\Structure\TaskInstance;
 use Pheanstalk\Structure\TimeSchedule;
 use Pheanstalk\Structure\Tube;
@@ -49,6 +50,15 @@ interface PheanstalkInterface
     // ----------------------------------------
 
     /**
+     * Permanently deletes a scheduled workflow.
+     *
+     * @param Schedule $schedule
+     *
+     * @return bool
+     */
+    public function deleteSchedule(Schedule $schedule);
+
+    /**
      * Permanently deletes a job.
      *
      * @param Workflow $workflow
@@ -75,6 +85,23 @@ interface PheanstalkInterface
      * @return bool|Workflow If exists, the workflow
      */
     public function workflowExists($name);
+
+    /**
+     * Retrieve a workflow by its id, if there isn't for
+     * the id given in the construct, returns false
+     *
+     * @param int $schedule The scheduled id researched
+     *
+     * @return Schedule If exists, the Schedule
+     */
+    public function getSchedule(int $schedule);
+
+    /**
+     * The Scheduled workflow.
+     *
+     * @return ArrayCollection[Schedule]
+     */
+    public function listSchedules();
 
     /**
      * Retrieve a workflow by its id, if there isn't for
@@ -164,24 +191,29 @@ interface PheanstalkInterface
     public function create(Workflow $data, $force = false): Workflow;
 
     /**
-     * Updates a workflow.
+     * Updates a Workflow.
      *
-     * @param Workflow  $data     The workflow to create
+     * @param Workflow  $workflow     The workflow to update
      *
      * @return Workflow The updated workflow
      */
-    public function update(Workflow $workflow):Workflow;
+    public function update(Workflow $workflow): Workflow;
 
     /**
-     * @param Workflow      $workflow
-     * @param TimeSchedule  $schedule
-     * @param string|null   $onFailure
-     * @param bool|null     $active
-     * @param null          $comment
+     * Updates a Schedule.
      *
-     * @return mixed
+     * @param Schedule  $schedule     The Schedule to update
+     *
+     * @return Schedule The updated Schedule
      */
-    public function createSchedule(Workflow $workflow, TimeSchedule $schedule, $onFailure = CreateScheduleCommand::FAILURE_TYPE_CONTINUE, $active = true, $comment = null);
+    public function updateSchedule(Schedule $schedule): Schedule;
+
+    /**
+     * @param Schedule $schedule
+     *
+     * @return Schedule The workflow schedule
+     */
+    public function createSchedule(Schedule $schedule);
 
     /**
      * @param string        $name                   The name of the linked workflow

@@ -96,9 +96,9 @@ class TaskInstance extends Task
     }
 
     /**
-     * @return int
+     * @return null|int
      */
-    public function getPid(): int
+    public function getPid(): ?int
     {
         return $this->pid;
     }

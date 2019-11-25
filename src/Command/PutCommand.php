@@ -11,7 +11,7 @@ use Pheanstalk\Structure\Workflow;
  *
  * @see UseCommand
  *
- * @author  Paul Annesley
+ * @author  Valentin Corre
  * @package Pheanstalk
  * @license http://www.opensource.org/licenses/mit-license.php
  */
