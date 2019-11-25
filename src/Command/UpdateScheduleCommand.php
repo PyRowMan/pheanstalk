@@ -17,7 +17,7 @@ use Pheanstalk\Structure\Workflow;
  */
 class UpdateScheduleCommand extends AbstractCommand implements ResponseParser
 {
-    /** @var Workflow $workflow */
+    /** @var Schedule $schedule */
     private $schedule;
 
     /**
