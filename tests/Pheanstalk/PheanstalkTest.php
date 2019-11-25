@@ -196,6 +196,7 @@ class PheanstalkTest extends TestCase
             /** @var JobInstance $jobInstance */
             $jobInstance = $workflowInstance->getJobInstances()->first();
             $taskInstance = $jobInstance->getTaskInstances()->first();
+
             $this->assertTrue($this->pheanstalk->kill($workflowInstance, $taskInstance));
         } catch(ServerException $e){
             $this->killFirstRunningInstance($workflow);

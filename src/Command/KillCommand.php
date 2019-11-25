@@ -2,6 +2,7 @@
 
 namespace Pheanstalk\Command;
 
+use Pheanstalk\Exception\ServerException;
 use Pheanstalk\Parser\RequestOkResponseParser;
 use Pheanstalk\Structure\TaskInstance;
 use Pheanstalk\Structure\WorkflowInstance;
@@ -57,9 +58,13 @@ class KillCommand extends AbstractCommand
      */
     public function getFilters(): array
     {
+        $pid = $this->taskInstance->getPid();
+        if (empty($pid)) {
+            throw new ServerException("Pid Should not be empty");
+        }
         return [
             'id' => $this->workflowInstance->getId(),
-            'pid' => $this->taskInstance->getPid(),
+            'pid' => $pid,
         ];
     }
 
