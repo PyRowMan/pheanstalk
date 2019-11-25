@@ -136,8 +136,10 @@ class PheanstalkTest extends TestCase
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
         $schedule = new Schedule($workflow->getId(), new TimeSchedule());
         $this->pheanstalk->createSchedule($schedule);
+        $this->pheanstalk->createSchedule($schedule);
         $this->assertNotNull($schedule->getId());
         $recoveredSchedule = $this->pheanstalk->getSchedule($schedule->getId());
+        $this->pheanstalk->listSchedules();
         $this->assertSame($schedule->getId(), $recoveredSchedule->getId());
         $this->assertTrue($this->pheanstalk->deleteSchedule($schedule));
     }
@@ -151,7 +153,7 @@ class PheanstalkTest extends TestCase
 
     public function testCancel()
     {
-        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 999999');
+        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 10');
         $this->pheanstalk->put($workflow);
         $this->cancelFirstRunningInstance($workflow);
     }
@@ -170,7 +172,7 @@ class PheanstalkTest extends TestCase
 
     public function testKill()
     {
-        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 999999');
+        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 10');
         $this->pheanstalk->put($workflow);
         $this->killFirstRunningInstance($workflow);
     }
@@ -198,7 +200,6 @@ class PheanstalkTest extends TestCase
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
         $this->assertTrue($this->pheanstalk->delete($workflow));
     }
-
 
     public function testDeleteTube()
     {

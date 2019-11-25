@@ -97,6 +97,13 @@ interface PheanstalkInterface
     public function getSchedule(int $schedule);
 
     /**
+     * The Scheduled workflow.
+     *
+     * @return ArrayCollection[Queue]
+     */
+    public function listSchedules();
+
+    /**
      * Retrieve a workflow by its id, if there isn't for
      * the id given in the construct, returns false
      *

@@ -143,6 +143,14 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
+    public function listSchedules()
+    {
+        return $this->_dispatch(new Command\ListSchedulesCommand());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getWorkflow(Workflow $workflow)
     {
         return $this->_dispatch(new Command\GetWorkflowCommand($workflow));

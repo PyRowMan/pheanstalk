@@ -23,7 +23,7 @@ class GetScheduleCommand extends AbstractCommand implements ResponseParser
 {
 
     /** @var int $scheduleId */
-    private $scheduleId;
+    protected $scheduleId;
 
     /**
      * GetWorkflowCommand constructor.
@@ -76,14 +76,24 @@ class GetScheduleCommand extends AbstractCommand implements ResponseParser
     {
         $scheduleDatas = $responseData['workflow_schedule'];
         $scheduleDatas = $scheduleDatas['@attributes'] ?? $scheduleDatas;
+        return $this->createScheduleFromArray($scheduleDatas);
+    }
+
+    /**
+     * @param array $scheduleDatas
+     *
+     * @return Schedule
+     */
+    protected function createScheduleFromArray($scheduleDatas)
+    {
         return (new Schedule(
             (int) $scheduleDatas['workflow_id'],
             (new TimeSchedule())->__fromString($scheduleDatas['schedule']),
             $scheduleDatas['onfailure'],
             $scheduleDatas['active'],
             $scheduleDatas['comment'],
-            $scheduleDatas['user'],
-            $scheduleDatas['host'],
+            $scheduleDatas['user'] ?? '',
+            $scheduleDatas['host'] ?? 'localhost',
             $scheduleDatas['node']
         ))->setId($this->scheduleId);
     }
