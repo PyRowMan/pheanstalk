@@ -4,6 +4,7 @@ namespace Pheanstalk;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Pheanstalk\Command\GetWorkflowInstancesCommand;
+use Pheanstalk\Exception\ServerException;
 use Pheanstalk\Structure\JobInstance;
 use Pheanstalk\Structure\Schedule;
 use Pheanstalk\Structure\Task;
@@ -150,28 +151,46 @@ class PheanstalkTest extends TestCase
 
     public function testCancel()
     {
-        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 3');
+        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 999999');
         $this->pheanstalk->put($workflow);
-        $instances = $this->pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
-        $this->assertFalse($instances->isEmpty());
-        $workflowInstance = $instances->first();
-        $this->assertTrue($this->pheanstalk->cancel($workflowInstance));
+        $this->cancelFirstRunningInstance($workflow);
+    }
+
+    protected function cancelFirstRunningInstance(Workflow $workflow)
+    {
+        try{
+            $instances = $this->pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
+            $this->assertFalse($instances->isEmpty());
+            $workflowInstance = $instances->first();
+            $this->assertTrue($this->pheanstalk->cancel($workflowInstance));
+        } catch(ServerException $e){
+            $this->cancelFirstRunningInstance($workflow);
+        }
     }
 
     public function testKill()
     {
-        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 500');
+        $workflow = $this->pheanstalk->createTask('testSleep', 'testGroup', '/bin/sleep 999999');
         $this->pheanstalk->put($workflow);
-        $instances = $this->pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
-        $this->assertFalse($instances->isEmpty());
-        /** @var WorkflowInstance $workflowInstance */
-        $workflowInstance = $instances->filter(function(WorkflowInstance $instance) {
-            return $instance->getStatus() === 'RUNNING';
-        })->first();
-        /** @var JobInstance $jobInstance */
-        $jobInstance = $workflowInstance->getJobInstances()->first();
-        $taskInstance = $jobInstance->getTaskInstances()->first();
-        $this->assertTrue($this->pheanstalk->kill($workflowInstance, $taskInstance));
+        $this->killFirstRunningInstance($workflow);
+    }
+
+    protected function killFirstRunningInstance(Workflow $workflow)
+    {
+        try{
+            $instances = $this->pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
+            $this->assertFalse($instances->isEmpty());
+            /** @var WorkflowInstance $workflowInstance */
+            $workflowInstance = $instances->filter(function(WorkflowInstance $instance) {
+                return $instance->getStatus() === 'RUNNING';
+            })->first();
+            /** @var JobInstance $jobInstance */
+            $jobInstance = $workflowInstance->getJobInstances()->first();
+            $taskInstance = $jobInstance->getTaskInstances()->first();
+            $this->assertTrue($this->pheanstalk->kill($workflowInstance, $taskInstance));
+        } catch(ServerException $e){
+            $this->killFirstRunningInstance($workflow);
+        }
     }
 
     public function testDelete()
