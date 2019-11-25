@@ -135,13 +135,20 @@ class PheanstalkTest extends TestCase
     {
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
         $schedule = new Schedule($workflow->getId(), new TimeSchedule());
+        $schedule2 = new Schedule($workflow->getId(), new TimeSchedule());
         $this->pheanstalk->createSchedule($schedule);
-        $this->pheanstalk->createSchedule($schedule);
+        $this->pheanstalk->createSchedule($schedule2);
+        $this->assertSame(2, $this->pheanstalk->listSchedules()->count());
         $this->assertNotNull($schedule->getId());
+        $time = $schedule->getSchedule();
+        $time->setSeconds([1,2,3]);
+        $schedule->setSchedule($time);
+        $this->pheanstalk->updateSchedule($schedule);
         $recoveredSchedule = $this->pheanstalk->getSchedule($schedule->getId());
-        $this->pheanstalk->listSchedules();
         $this->assertSame($schedule->getId(), $recoveredSchedule->getId());
+        $this->assertEquals([1,2,3], $recoveredSchedule->getSchedule()->getSeconds());
         $this->assertTrue($this->pheanstalk->deleteSchedule($schedule));
+        $this->assertTrue($this->pheanstalk->deleteSchedule($schedule2));
     }
 
     public function testUpdateTube()

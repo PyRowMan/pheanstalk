@@ -307,6 +307,15 @@ class Pheanstalk implements PheanstalkInterface
     /**
      * {@inheritdoc}
      */
+    public function updateSchedule(Schedule $schedule): Schedule
+    {
+        $schedule = $this->_dispatch(new Command\UpdateScheduleCommand($schedule));
+        return $schedule;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function createSchedule(Schedule $schedule)
     {
         $workflowSchedule = $this->_dispatch(

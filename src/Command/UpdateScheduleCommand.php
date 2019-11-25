@@ -57,7 +57,8 @@ class UpdateScheduleCommand extends AbstractCommand implements ResponseParser
             'user' => $this->schedule->getUser(),
             'host' => $this->schedule->getHost(),
             'active' => $this->schedule->isActive(),
-            "comment" => $this->schedule->getComment()
+            "comment" => $this->schedule->getComment(),
+            'node' => $this->schedule->getNode()
         ];
     }
 
@@ -74,7 +75,6 @@ class UpdateScheduleCommand extends AbstractCommand implements ResponseParser
      */
     public function parseResponse($responseLine, $responseData)
     {
-        var_dump($responseData);
         return $this->schedule;
     }
 }
