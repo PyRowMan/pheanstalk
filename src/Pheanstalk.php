@@ -264,27 +264,11 @@ class Pheanstalk implements PheanstalkInterface
     public function create(Workflow $workflow, $force = false): Workflow
     {
         try {
-            $tubes = [];
-            /** @var Job $job */
-            foreach ($workflow->getJobs() as $job) {
-                /** @var Task $task */
-                foreach ($job->getTasks() as $task) {
-                    $tubes = array_merge($tubes, [$task->getQueue()]);
-                }
-            }
-            foreach ($tubes as $tube) {
-                if (!$this->getCurrentClass()->tubeExists($tube)) {
-                    $this->getCurrentClass()->createTube(new Tube($tube, 1));
-                };
-            }
+            $this->checkAndCreateTubes($workflow);
             $workflow = $this->_dispatch(new Command\CreateCommand($workflow));
         } catch (ServerDuplicateEntryException $e) {
             if ($force) {
-                $workflows = $this->_dispatch(new Command\ListWorkflowsCommand());
-                $workflowToDelete = $workflows->filter(function(Workflow $listedWorkflow) use ($workflow) {
-                    return $listedWorkflow->getName() === $workflow->getName()
-                        && $listedWorkflow->getGroup() === $workflow->getGroup();
-                })->first();
+                $workflowToDelete = $this->findWorkflow($workflow);
                 $this->getCurrentClass()->delete($workflowToDelete);
 
                 return $this->getCurrentClass()->create($workflow);
@@ -293,6 +277,43 @@ class Pheanstalk implements PheanstalkInterface
         }
 
         return $workflow;
+    }
+
+    /**
+     * @param Workflow $workflow
+     *
+     * @return Workflow|bool
+     * @throws Exception\ClientException
+     */
+    public function findWorkflow(Workflow $workflow)
+    {
+        $workflows = $this->_dispatch(new Command\ListWorkflowsCommand());
+        return $workflows->filter(function(Workflow $listedWorkflow) use ($workflow) {
+            return $listedWorkflow->getName() === $workflow->getName()
+                && $listedWorkflow->getGroup() === $workflow->getGroup();
+        })->first();
+    }
+
+    /**
+     * @param Workflow $workflow
+     *
+     * @throws Exception\ClientException
+     */
+    public function checkAndCreateTubes(Workflow $workflow)
+    {
+        $tubes = [];
+        /** @var Job $job */
+        foreach ($workflow->getJobs() as $job) {
+            /** @var Task $task */
+            foreach ($job->getTasks() as $task) {
+                $tubes = array_merge($tubes, [$task->getQueue()]);
+            }
+        }
+        foreach ($tubes as $tube) {
+            if (!$this->getCurrentClass()->tubeExists($tube)) {
+                $this->getCurrentClass()->createTube(new Tube($tube, 1));
+            };
+        }
     }
 
     /**

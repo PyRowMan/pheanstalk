@@ -186,6 +186,7 @@ interface PheanstalkInterface
      * @param Workflow  $data     The workflow to create
      * @param null|bool (optional) $force Will erase already existent old workflow if already exists
      *
+     * @throws Exception\ClientException
      * @return Workflow The newly created workflow
      */
     public function create(Workflow $data, $force = false): Workflow;
