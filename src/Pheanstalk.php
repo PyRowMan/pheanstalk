@@ -164,20 +164,33 @@ class Pheanstalk implements PheanstalkInterface
         $paramsStatus = empty($status) ? GetWorkflowInstancesDetailCommand::FILTERS : [$status];
         $instances = new ArrayCollection([]);
         foreach ($paramsStatus as $stat) {
-            $instances[strtolower($stat)] = $this->_dispatch(new Command\GetWorkflowInstancesCommand($workflow, $stat));
-                /** @var ArrayCollection $workflowCollection */
-                $workflowCollection = $instances[strtolower($stat)]->get('workflow_instances');
-            if (!empty($workflowCollection)) {
-                foreach ($workflowCollection as $instance) {
-                    $this->getCurrentClass()->getWorkflowInstancesDetails($instance);
-                }
-            }
+            $instances[strtolower($stat)] = $this->getStatusInstance($stat, $workflow);
         }
         if (!is_null($status)) {
             return $instances->get(strtolower($status))->get('workflow_instances');
         }
 
         return $instances;
+    }
+
+    /**
+     * @param               $stat
+     * @param Workflow|null $workflow
+     *
+     * @return ArrayCollection
+     * @throws Exception\ClientException
+     */
+    protected function getStatusInstance($stat, ?Workflow $workflow)
+    {
+        $workflowInstances = $this->_dispatch(new Command\GetWorkflowInstancesCommand($workflow, $stat));
+        /** @var ArrayCollection $workflowCollection */
+        $workflowCollection = $workflowInstances->get('workflow_instances');
+        if (!empty($workflowCollection)) {
+            foreach ($workflowCollection as $instance) {
+                $this->getCurrentClass()->getWorkflowInstancesDetails($instance);
+            }
+        }
+        return $workflowInstances;
     }
 
     /**
