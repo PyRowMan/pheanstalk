@@ -35,7 +35,7 @@ class Job
      */
     public function setTasks(ArrayCollection $tasks): Job
     {
-        $this->tasks = $tasks->filter(function(Task $task) {
+        $this->tasks = $tasks->filter(function (Task $task) {
             return true;
         });
         return $this;

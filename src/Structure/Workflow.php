@@ -138,7 +138,7 @@ class Workflow
      */
     public function setJobs(ArrayCollection $jobs): Workflow
     {
-        $this->jobs = $jobs->filter(function(Job $job) {
+        $this->jobs = $jobs->filter(function (Job $job) {
             return true;
         });
         return $this;

@@ -3,7 +3,6 @@
 
 namespace Pheanstalk\Structure;
 
-
 class Schedule
 {
     const FAILURE_TYPE_CONTINUE = "CONTINUE";
@@ -226,5 +225,4 @@ class Schedule
         $this->workflow = $workflow;
         return $this;
     }
-
 }

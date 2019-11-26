@@ -70,7 +70,7 @@ class PheanstalkTest extends TestCase
     {
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
         $instances = $this->pheanstalk->getWorkflowInstances($workflow);
-        foreach(GetWorkflowInstancesCommand::FILTERS as $filter) {
+        foreach (GetWorkflowInstancesCommand::FILTERS as $filter) {
             $this->assertNotNull($FilterInstances = $instances->get(strtolower($filter)));
             $workflowInstances = $FilterInstances->get('workflow_instances');
             $this->assertNull($workflowInstances);
@@ -88,11 +88,11 @@ class PheanstalkTest extends TestCase
         $workflow = $this->pheanstalk->workflowExists('testWorkflow');
         $id = (int) $this->pheanstalk->put($workflow);
         $instances = $this->pheanstalk->getWorkflowInstances($workflow);
-        foreach(GetWorkflowInstancesCommand::FILTERS as $filter) {
+        foreach (GetWorkflowInstancesCommand::FILTERS as $filter) {
             $this->assertNotNull($FilterInstances = $instances->get(strtolower($filter)));
             $workflowInstances = $FilterInstances->get('workflow_instances');
             /** @var ArrayCollection $workflowInstances */
-            if(!is_null($workflowInstances)) {
+            if (!is_null($workflowInstances)) {
                 $this->assertFalse($workflowInstances->isEmpty());
             }
         }
@@ -101,8 +101,8 @@ class PheanstalkTest extends TestCase
     public function testListTubes()
     {
         $tubes = $this->pheanstalk->listTubes();
-        $tubes = $tubes->filter(function(Tube $tube) {
-           return $tube->getName() === 'testTube';
+        $tubes = $tubes->filter(function (Tube $tube) {
+            return $tube->getName() === 'testTube';
         });
         $this->assertFalse($tubes->isEmpty());
     }
@@ -168,12 +168,12 @@ class PheanstalkTest extends TestCase
 
     protected function cancelFirstRunningInstance(Workflow $workflow)
     {
-        try{
+        try {
             $instances = $this->pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
             $this->assertFalse($instances->isEmpty());
             $workflowInstance = $instances->first();
             $this->assertTrue($this->pheanstalk->cancel($workflowInstance));
-        } catch(ServerException $e){
+        } catch (ServerException $e) {
             $this->cancelFirstRunningInstance($workflow);
         }
     }
@@ -195,7 +195,7 @@ class PheanstalkTest extends TestCase
         $instances = $this->pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
         $this->assertFalse($instances->isEmpty());
         /** @var WorkflowInstance $workflowInstance */
-        $workflowInstance = $instances->filter(function(WorkflowInstance $instance) {
+        $workflowInstance = $instances->filter(function (WorkflowInstance $instance) {
             return $instance->getStatus() === 'RUNNING';
         })->first();
         /** @var JobInstance $jobInstance */
@@ -209,11 +209,11 @@ class PheanstalkTest extends TestCase
 
     protected function killFirstRunningInstance(Workflow $workflow)
     {
-        try{
+        try {
             $instances = $this->pheanstalk->getWorkflowInstances($workflow, GetWorkflowInstancesCommand::FILTER_EXECUTING);
             $this->assertFalse($instances->isEmpty());
             /** @var WorkflowInstance $workflowInstance */
-            $workflowInstance = $instances->filter(function(WorkflowInstance $instance) {
+            $workflowInstance = $instances->filter(function (WorkflowInstance $instance) {
                 return $instance->getStatus() === 'RUNNING';
             })->first();
             /** @var JobInstance $jobInstance */
@@ -221,7 +221,7 @@ class PheanstalkTest extends TestCase
             $taskInstance = $jobInstance->getTaskInstances()->first();
 
             $this->assertTrue($this->pheanstalk->kill($workflowInstance, $taskInstance));
-        } catch(ServerException $e){
+        } catch (ServerException $e) {
             $this->killFirstRunningInstance($workflow);
         }
     }

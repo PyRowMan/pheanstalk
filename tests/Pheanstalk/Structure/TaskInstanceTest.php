@@ -58,5 +58,4 @@ class TaskInstanceTest extends TestCase
         $this->object->setTid(1);
         $this->assertSame(1, $this->object->getTid());
     }
-
 }

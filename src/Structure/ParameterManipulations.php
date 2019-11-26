@@ -3,7 +3,6 @@
 
 namespace Pheanstalk\Structure;
 
-
 use Doctrine\Common\Collections\ArrayCollection;
 
 class ParameterManipulations

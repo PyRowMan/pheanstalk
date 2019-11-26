@@ -288,7 +288,7 @@ class Pheanstalk implements PheanstalkInterface
     public function findWorkflow(Workflow $workflow)
     {
         $workflows = $this->_dispatch(new Command\ListWorkflowsCommand());
-        return $workflows->filter(function(Workflow $listedWorkflow) use ($workflow) {
+        return $workflows->filter(function (Workflow $listedWorkflow) use ($workflow) {
             return $listedWorkflow->getName() === $workflow->getName()
                 && $listedWorkflow->getGroup() === $workflow->getGroup();
         })->first();

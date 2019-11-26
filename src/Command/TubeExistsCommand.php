@@ -46,7 +46,7 @@ class TubeExistsCommand extends ListTubesCommand
         $tubes = parent::parseResponse($responseLine, $responseData);
 
         $name = $this->name;
-        $matchingTubes = $tubes->filter(function(Tube $tube) use ($name) {
+        $matchingTubes = $tubes->filter(function (Tube $tube) use ($name) {
             return $tube->getName() === $name;
         });
 
