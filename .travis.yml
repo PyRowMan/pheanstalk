@@ -21,6 +21,10 @@ addons:
 
 services: mysql
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 before_install:
   - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS evqueue;'
   - sudo mysql -e "CREATE USER 'evqueue'@'localhost' IDENTIFIED BY 'password';"
