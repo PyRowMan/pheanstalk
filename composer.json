@@ -33,7 +33,6 @@
         "phpunit": "docker-compose run --rm phpunit",
         "test": [
             "@composer install",
-            "@phpunit"
-        ]
+            "@phpunit"]
     }
 }
