@@ -49,16 +49,18 @@ class ListWorkflowsCommand extends AbstractCommand implements ResponseParser
     public function parseResponse($responseLine, $responseData)
     {
         $workflows = [];
-        foreach ($responseData['workflow'] as $workflow) {
-            $workflow = $workflow['@attributes'] ?? $workflow;
-            $object = new Workflow($workflow['name'], $workflow['group'], new ArrayCollection([]), $workflow['comment']);
-            $object
-                ->setId($workflow['id'])
-                ->setBoundToSchedule((int) $workflow['bound-to-schedule'])
-                ->setLastcommit((int) $workflow['lastcommit'])
-                ->setModified((int) $workflow['modified'])
-            ;
-            $workflows[] = $object;
+        if (isset($responseData['workflow'])) {
+            foreach ($responseData['workflow'] as $workflow) {
+                $workflow = $workflow['@attributes'] ?? $workflow;
+                $object = new Workflow($workflow['name'], $workflow['group'], new ArrayCollection([]), $workflow['comment']);
+                $object
+                    ->setId($workflow['id'])
+                    ->setBoundToSchedule((int) $workflow['bound-to-schedule'])
+                    ->setLastcommit((int) $workflow['lastcommit'])
+                    ->setModified((int) $workflow['modified'])
+                ;
+                $workflows[] = $object;
+            }
         }
         return new ArrayCollection($workflows);
     }
